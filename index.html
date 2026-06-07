@@ -758,8 +758,13 @@ footer em { color: var(--blue-mid); font-style: italic; }
   marks: none;
 }
 @media print {
+  @page {
+    margin: 0 !important;
+    size: auto;
+  }
   header, .info-strip, .acta-hero, .panel, .stats, .export-bar, footer { display: none !important; }
   .tpanel { box-shadow: none; border: none; }
+  body { margin: 12px !important; }
 }
 </style>
 </head>
@@ -2150,6 +2155,63 @@ function nlAgregar() {
 function nlEliminar(i) {
   noLayher.splice(i, 1);
   nlRender();
+}
+
+// ═══════════════════════════════════════════════════════════
+// INTERCEPTAR CTRL+P → IMPRIMIR SIN ENCABEZADOS DEL NAVEGADOR
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+    e.preventDefault();
+    imprimirSinEncabezados();
+  }
+});
+
+function imprimirSinEncabezados() {
+  // Capturar todos los estilos de la página actual
+  var estilos = '';
+  for (var i = 0; i < document.styleSheets.length; i++) {
+    try {
+      var rules = document.styleSheets[i].cssRules || document.styleSheets[i].rules;
+      if (rules) {
+        for (var j = 0; j < rules.length; j++) {
+          estilos += rules[j].cssText + '\n';
+        }
+      }
+    } catch(ex) {
+      // Hojas externas (CORS) — las enlazamos por href
+      if (document.styleSheets[i].href) {
+        estilos += '@import url("' + document.styleSheets[i].href + '");\n';
+      }
+    }
+  }
+
+  var contenido = document.body.innerHTML;
+
+  var ventana = window.open('', '_blank', 'width=900,height=700');
+  ventana.document.open();
+  ventana.document.write(
+    '<!DOCTYPE html><html lang="es"><head>' +
+    '<meta charset="UTF-8">' +
+    '<style>' +
+    estilos +
+    '@page { margin: 0 !important; size: auto; }' +
+    '* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }' +
+    'body { margin: 12px !important; }' +
+    'header, .info-strip, .acta-hero, .panel, .stats, .export-bar, footer { display: none !important; }' +
+    '.tpanel { box-shadow: none !important; border: none !important; }' +
+    '</style>' +
+    '</head><body>' +
+    contenido +
+    '</body></html>'
+  );
+  ventana.document.close();
+
+  ventana.onload = function() {
+    ventana.focus();
+    ventana.print();
+    ventana.close();
+  };
 }
 </script>
 </body>
