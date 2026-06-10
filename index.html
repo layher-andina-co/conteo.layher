@@ -805,13 +805,55 @@ footer em { color: var(--blue-mid); font-style: italic; }
   marks: none;
 }
 @media print {
+  /* ── Tamaño y márgenes físicos de página ── */
   @page {
-    margin: 0 !important;
-    size: auto;
+    size: letter portrait;
+    margin: 2cm 1.5cm 2cm 1.5cm;
   }
-  header, .info-strip, .acta-hero, .panel, .stats, .export-bar, footer { display: none !important; }
-  .tpanel { box-shadow: none; border: none; }
-  body { margin: 12px !important; }
+
+  /* ── Ocultar chrome de la app ── */
+  header, .info-strip, .acta-hero, .panel, .stats, .export-bar, footer {
+    display: none !important;
+  }
+
+  /* ── Reset de contenedores para flujo limpio ── */
+  html, body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    /* Evita que body cree un bloque que rompa el flujo de impresión */
+    overflow: visible !important;
+  }
+
+  /* ── Tabla: ancho completo, bordes colapsados ── */
+  .tpanel table,
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: auto !important;
+  }
+
+  /* ── Evitar corte de filas entre páginas ── */
+  tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* ── Repetir encabezado en cada hoja ── */
+  thead {
+    display: table-header-group !important;
+  }
+
+  /* ── Evitar corte del pie de tabla ── */
+  tfoot {
+    display: table-footer-group !important;
+  }
+
+  /* ── Eliminar sombras e innecesarios para impresión ── */
+  .tpanel {
+    box-shadow: none !important;
+    border: none !important;
+  }
 }
 </style>
 </head>
@@ -1763,7 +1805,17 @@ function confirmarGuardar() {
     nombre, obs, fecha,
     items: listado.length,
     pesoTotal: totP.toFixed(2),
-    listado: JSON.parse(JSON.stringify(listado))
+    listado: JSON.parse(JSON.stringify(listado)),
+    noLayher: JSON.parse(JSON.stringify(noLayher)),
+    acta: {
+      cliente: document.getElementById('actaCliente').value,
+      obra:    document.getElementById('actaObra').value,
+      fecha:   document.getElementById('actaFecha').value,
+      nombre:  document.getElementById('actaNombre').value,
+      cedula:  document.getElementById('actaCedula').value,
+      bodega:  document.getElementById('actaBodega') ? document.getElementById('actaBodega').value : '',
+      cargo:   document.getElementById('actaCargo')  ? document.getElementById('actaCargo').value  : ''
+    }
   });
   saveHist();
   renderHist();
@@ -1807,7 +1859,24 @@ function verListado(i) {
 document.getElementById('btnCargarHist').addEventListener('click', () => {
   if (viewingIdx < 0) return;
   if (listado.length && !confirm('¿Reemplazar el listado actual?')) return;
-  listado = JSON.parse(JSON.stringify(historial[viewingIdx].listado));
+  const h = historial[viewingIdx];
+  listado = JSON.parse(JSON.stringify(h.listado));
+
+  // Restaurar piezas No Layher si existen
+  noLayher = h.noLayher ? JSON.parse(JSON.stringify(h.noLayher)) : [];
+  nlRender();
+
+  // Restaurar datos del acta si existen
+  if (h.acta) {
+    if (document.getElementById('actaCliente')) document.getElementById('actaCliente').value = h.acta.cliente || '';
+    if (document.getElementById('actaObra'))    document.getElementById('actaObra').value    = h.acta.obra    || '';
+    if (document.getElementById('actaFecha'))   document.getElementById('actaFecha').value   = h.acta.fecha   || '';
+    if (document.getElementById('actaNombre'))  document.getElementById('actaNombre').value  = h.acta.nombre  || '';
+    if (document.getElementById('actaCedula'))  document.getElementById('actaCedula').value  = h.acta.cedula  || '';
+    if (document.getElementById('actaBodega'))  document.getElementById('actaBodega').value  = h.acta.bodega  || '';
+    if (document.getElementById('actaCargo'))   document.getElementById('actaCargo').value   = h.acta.cargo   || '';
+  }
+
   render();
   closeModal('modalView');
 });
@@ -1893,14 +1962,14 @@ document.getElementById('btnPDF').addEventListener('click', () => {
 <link rel="shortcut icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAAlklEQVR4nO3QQRHAMADDsKz8OXcw9KiFwOdv293Djg7QGqADtAboAK0BOkBrgA7QGqADtAboAK0BOkBrgA7QGqADtAboAK0BOkBrgA7QGqADtAboAK0BOkBrgA7QGqADtAboAK0BOkBrgA7QGqADtAboAK0BOkBrgA7QGqADtAboAK0BOkBrgA7QGqADtAboAK0BOkD7AVC0AX8AKmT5AAAAAElFTkSuQmCC">
   <title>Layher — Acta de Conteo</title>
   <style>
-    body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:0;color:#0D1B2E;font-size:12px}
-    .header{background:#FFFFFF;color:#0D1B2E;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #003087;position:relative}
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:28px 40px;color:#0D1B2E;font-size:12px;box-sizing:border-box}
+    .header{background:#FFFFFF;color:#0D1B2E;padding:22px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #003087;position:relative}
     .header-logo{display:flex;align-items:center;justify-content:center;position:absolute;left:50%;transform:translateX(-50%)}
     .header-logo img{height:90px;object-fit:contain;display:block}
     .header-right{text-align:right;font-size:10px;color:#546E7A}
     .header-right strong{display:block;font-size:13px;color:#001533;margin-bottom:2px;font-weight:700}
     .blue-bar{display:none}
-    .body{padding:24px 30px}
+    .body{padding:24px 0}
     .meta{display:flex;gap:30px;margin-bottom:20px;padding:12px 16px;background:#F0F5FF;border-radius:8px;border-left:4px solid #003087}
     .meta-item .lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#546E7A;font-weight:700}
     .meta-item .val{font-size:14px;font-weight:900;color:#003087}
@@ -2069,6 +2138,36 @@ document.getElementById('btnPDF').addEventListener('click', () => {
 
       await new Promise(r => setTimeout(r, 600));
 
+      // ── Márgenes físicos en mm ──
+      const mTop    = 15;
+      const mBottom = 15;
+      const mLeft   = 12;
+      const mRight  = 12;
+
+      // ── Dimensiones PDF (Letter) ──
+      const { jsPDF } = window.jspdf;
+      const pdf   = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
+      const pdfW  = pdf.internal.pageSize.getWidth();   // 215.9 mm
+      const pdfH  = pdf.internal.pageSize.getHeight();  // 279.4 mm
+      const printW = pdfW - mLeft - mRight;
+      const printH = pdfH - mTop - mBottom;
+
+      // ── Escala: px del iframe → mm en PDF ──
+      // El iframe tiene width:794px, printW mm → factor de conversión
+      const pxToMm = printW / 794;
+
+      // ── Recolectar posiciones Y seguras (bordes INFERIORES de cada <tr>) ──
+      // Un "corte seguro" es cualquier punto entre el bottom de una fila y el top de la siguiente.
+      // Nunca cortamos dentro de una fila.
+      const allRows = Array.from(iDoc.querySelectorAll('tr'));
+      // Posiciones en mm relativas al top del body
+      const rowBreaks = allRows.map(tr => {
+        const rect = tr.getBoundingClientRect();
+        const bodyRect = iBody.getBoundingClientRect();
+        // bottom del row en mm
+        return (rect.bottom - bodyRect.top) * pxToMm;
+      });
+
       const canvas = await html2canvas(iBody, {
         scale: 2,
         useCORS: true,
@@ -2080,22 +2179,60 @@ document.getElementById('btnPDF').addEventListener('click', () => {
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-      const pdfW = pdf.internal.pageSize.getWidth();
-      const pdfH = pdf.internal.pageSize.getHeight();
-      const imgH = (canvas.height * pdfW) / canvas.width;
+      // Altura total de la imagen en mm (escalada al ancho útil)
+      const imgH = (canvas.height * printW) / canvas.width;
 
-      let posY = 0;
-      let remaining = imgH;
+      // ── Función: dado un yOffset (mm consumidos), encuentra el próximo corte seguro
+      // que NO exceda yOffset + printH, pero sí sea el mayor posible (máximo contenido por página)
+      function nextSafeCut(yOffset) {
+        const pageEnd = yOffset + printH; // hasta dónde llegaría el corte matemático
+        if (pageEnd >= imgH) return imgH; // última página: cortar al final
 
-      while (remaining > 0) {
-        pdf.addImage(imgData, 'JPEG', 0, posY, pdfW, imgH);
-        remaining -= pdfH;
-        if (remaining > 0) {
+        // Buscar la última fila cuyo bottom <= pageEnd
+        // Si ninguna fila cabe, forzar el corte matemático (fila muy alta, caso extremo)
+        let safeCut = yOffset; // fallback: no avanzar (evita loop, ver abajo)
+        for (let i = 0; i < rowBreaks.length; i++) {
+          if (rowBreaks[i] <= pageEnd) {
+            safeCut = rowBreaks[i];
+          } else {
+            break;
+          }
+        }
+        // Si no encontramos ningún break menor que pageEnd (fila más alta que página entera),
+        // usamos el corte matemático para no quedar en loop infinito
+        if (safeCut <= yOffset) return pageEnd;
+        return safeCut;
+      }
+
+      let yOffset = 0;
+      let pageCount = 0;
+
+      while (yOffset < imgH) {
+        const cutPoint = nextSafeCut(yOffset);
+        const sliceH   = cutPoint - yOffset; // altura real de esta página en mm
+
+        // Dibuja la imagen completa desplazada: el rectángulo blanco inferior
+        // tapa todo lo que queda fuera del slice de esta página
+        pdf.addImage(
+          imgData, 'JPEG',
+          mLeft,
+          mTop - yOffset,   // desplaza la imagen hacia arriba según páginas anteriores
+          printW, imgH
+        );
+
+        // ── Rectángulos blancos = márgenes físicos + tapar contenido fuera del slice ──
+        pdf.setFillColor(255, 255, 255);
+        pdf.rect(0, 0,           pdfW, mTop,                       'F'); // margen superior
+        pdf.rect(0, mTop + sliceH, pdfW, pdfH - mTop - sliceH,    'F'); // margen inferior + contenido sobrante
+        pdf.rect(0, 0,           mLeft, pdfH,                      'F'); // margen izquierdo
+        pdf.rect(pdfW - mRight, 0, mRight, pdfH,                   'F'); // margen derecho
+
+        yOffset = cutPoint;
+        pageCount++;
+
+        if (yOffset < imgH) {
           pdf.addPage();
-          posY -= pdfH;
         }
       }
 
