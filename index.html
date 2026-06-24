@@ -1689,22 +1689,24 @@ document.getElementById('btnCSV').addEventListener('click', () => {
   const s4=[]; s4[0]=L('BODEGA LAYHER:'); s4[1]=D(bodega); rows.push(s4);
 
   // Ancho dinámico para descripción; observaciones fijo en 20 con wrap
-  // Factor de conversión: ~1 unidad Excel ≈ 1 carácter Calibri 11
-  const CW = 1.0;
+  // En Excel (Calibri 11), 1 unidad de ancho ≈ 1 carácter + margen de padding interno
+  // Usamos un factor de 1.2 y sumamos 2 de margen
+  function excelColWidth(text) {
+    return Math.ceil(String(text).length * 1.2) + 2;
+  }
 
-  // Calcular ancho según el contenido más largo de cada columna
-  // Partimos del ancho del propio encabezado como mínimo
-  let maxQty  = 'TOTAL UDS.'.length  + 2;
-  let maxRef  = 'REFERENCIA'.length  + 2;
-  let maxDesc = 'DESCRIPCIÓN'.length + 4;
+  // Mínimo = ancho del encabezado de cada columna
+  let maxQty  = excelColWidth('TOTAL UDS.');
+  let maxRef  = excelColWidth('REFERENCIA');
+  let maxDesc = excelColWidth('DESCRIPCIÓN');
 
   listado.forEach(r => {
-    if (r.qty  != null) maxQty  = Math.max(maxQty,  Math.ceil(String(r.qty).length  * CW) + 2);
-    if (r.ref)          maxRef  = Math.max(maxRef,  Math.ceil(String(r.ref).length  * CW) + 2);
-    if (r.desc)         maxDesc = Math.max(maxDesc, Math.ceil(String(r.desc).length * CW) + 2);
+    if (r.qty  != null) maxQty  = Math.max(maxQty,  excelColWidth(r.qty));
+    if (r.ref)          maxRef  = Math.max(maxRef,  excelColWidth(r.ref));
+    if (r.desc)         maxDesc = Math.max(maxDesc, excelColWidth(r.desc));
   });
 
-  // Límites razonables
+  // Límites máximos razonables
   maxQty  = Math.min(maxQty,  15);
   maxRef  = Math.min(maxRef,  25);
   maxDesc = Math.min(maxDesc, 80);
