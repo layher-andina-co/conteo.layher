@@ -566,8 +566,8 @@ footer em { color: var(--blue-mid); font-style: italic; }
 /* ── NOTAS ── */
 .nota-btn{background:none;border:1px dashed var(--border);border-radius:4px;cursor:pointer;color:var(--muted);font-size:.75rem;padding:2px 7px;transition:all .15s;white-space:nowrap}
 .nota-btn:hover{border-color:var(--blue-mid);color:var(--blue-mid);background:#EEF4FF}
-.nota-btn.has-nota{border-color:#F59E0B;color:#B45309;background:#FFFBEB}
-.nota-input{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;outline:none;margin-top:4px;transition:border-color .15s}
+.nota-btn.has-nota{border-color:var(--blue-mid);color:var(--blue-mid);background:#EEF4FF}
+.nota-input{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;outline:none;transition:border-color .15s}
 .nota-input:focus{border-color:var(--blue-mid)}
 
 /* ── MODALS ── */
@@ -1117,6 +1117,18 @@ footer em { color: var(--blue-mid); font-style: italic; }
   </div>
 </div>
 
+<!-- MODAL CONFIRMAR ELIMINAR PIEZA -->
+<div class="modal-bg hidden" id="modalDelItem">
+  <div class="modal" style="max-width:400px">
+    <h3>Eliminar pieza</h3>
+    <p id="modalDelItemText" style="font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">¿Estás seguro de eliminar esta referencia del listado?</p>
+    <div class="modal-btns">
+      <button class="modal-btns btn-cancel" onclick="closeModal('modalDelItem')">Cancelar</button>
+      <button class="btn-confirm" style="background:#C62828" onclick="confirmarRmItem()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL FIRMA DIGITAL -->
 <div class="modal-bg hidden" id="modalFirma">
   <div class="modal" style="max-width:760px;width:97vw;padding:1.5rem">
@@ -1132,6 +1144,14 @@ footer em { color: var(--blue-mid); font-style: italic; }
       </div>
     </div>
     <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+      <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:6px;">Nombre del Cliente</label>
+      <input id="firmaNombre" type="text" maxlength="60"
+        placeholder="NOMBRE COMPLETO"
+        style="width:100%;height:42px;border:1.5px solid var(--border);border-radius:7px;padding:0 .9rem;font-size:1rem;font-weight:700;letter-spacing:1px;font-family:inherit;color:var(--text);background:var(--off-white);outline:none;transition:all .2s;text-transform:uppercase;margin-bottom:.75rem;"
+        oninput="this.value=this.value.toUpperCase()"
+        onfocus="this.style.borderColor='var(--blue-mid)';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(0,71,187,.08)'"
+        onblur="this.style.borderColor='';this.style.background='';this.style.boxShadow=''"
+      />
       <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:6px;">Cédula del Cliente</label>
       <input id="firmaCedula" type="tel" inputmode="numeric" maxlength="10"
         placeholder="N° DE CEDULA"
@@ -1473,7 +1493,24 @@ function addItem() {
 
 function chQty(i,d){ listado[i].qty = Math.max(1,listado[i].qty+d); render(); }
 function setQty(i,v){ const n=parseInt(v); listado[i].qty = (isNaN(n)||n<1)?1:n; render(); }
-function rmItem(i){ listado.splice(i,1); render(); }
+let _pendingRmIndex = null;
+function rmItem(i){
+  _pendingRmIndex = i;
+  const item = listado[i];
+  const ref = item ? (item.ref || '') : '';
+  const nombre = item ? (item.desc || '') : '';
+  const detalle = ref ? (ref + (nombre ? ' - ' + nombre : '')) : 'esta referencia';
+  document.getElementById('modalDelItemText').textContent = '¿Estás seguro de eliminar ' + detalle + ' del listado? Esta acción no se puede deshacer.';
+  openModal('modalDelItem');
+}
+function confirmarRmItem(){
+  if (_pendingRmIndex !== null) {
+    listado.splice(_pendingRmIndex, 1);
+    _pendingRmIndex = null;
+    render();
+  }
+  closeModal('modalDelItem');
+}
 
 document.getElementById('btnClear').addEventListener('click', () => {
   if (!listado.length) return;
@@ -1728,9 +1765,23 @@ document.getElementById('btnCSV').addEventListener('click', () => {
 // ═══════════════════════════════════════════════════════════
 // NOTAS POR REFERENCIA
 // ═══════════════════════════════════════════════════════════
+let editingNotaRefs = new Set();
 function toggleNota(i) {
-  const row = document.getElementById('nota-row-' + i);
-  if (row) { row.classList.toggle('hidden'); if(!row.classList.contains('hidden')) row.querySelector('input').focus(); }
+  const ref = listado[i].ref;
+  if (editingNotaRefs.has(ref)) { editingNotaRefs.delete(ref); } else { editingNotaRefs.add(ref); }
+  render();
+  if (editingNotaRefs.has(ref)) {
+    setTimeout(() => {
+      const inp = document.getElementById('nota-input-' + i);
+      if (inp) { inp.focus(); inp.select(); }
+    }, 0);
+  }
+}
+function guardarNota(i, val) {
+  const ref = listado[i].ref;
+  listado[i].nota = val.toUpperCase().trim();
+  editingNotaRefs.delete(ref);
+  render();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1760,16 +1811,20 @@ function render() {
     const ptCell = item.peso > 0 ? '<td class="num">' + pt.toFixed(2) + '</td>' : '<td class="warn">N/D</td>';
     const notaVal = item.nota || '';
     const hasNota = notaVal.trim().length > 0;
+    const isEditingNota = editingNotaRefs.has(item.ref);
+    const notaCell = isEditingNota
+      ? '<input id="nota-input-' + i + '" class="nota-input" placeholder="Agregar observación..." value="' + notaVal.replace(/"/g,'&quot;') + '" ' +
+          'style="text-transform:uppercase" ' +
+          'onkeydown="if(event.key===\'Enter\'){this.blur();}" ' +
+          'oninput="this.value=this.value.toUpperCase()" ' +
+          'onblur="guardarNota(' + i + ',this.value)" />'
+      : '<button class="nota-btn' + (hasNota?' has-nota':'') + '" title="' + notaVal.replace(/"/g,'&quot;') + '" onclick="toggleNota(' + i + ')">' +
+          (hasNota ? '📝 ' + notaVal.substring(0,18) + (notaVal.length>18?'…':'') : '+ Observación') + '</button>';
     tr.innerHTML = '<td class="ref">' + item.ref + '</td>' +
       '<td>' + item.desc + '</td>' + pwCell +
       '<td class="num"><input class="qty-input" type="text" inputmode="numeric" maxlength="5" value="' + item.qty + '" onchange="setQty(' + i + ',this.value)" oninput="this.value=this.value.replace(/[^0-9]/,\'\')" /></td>' +
       ptCell +
-      '<td><button class="nota-btn' + (hasNota?' has-nota':'') + '" onclick="toggleNota(' + i + ')">' + (hasNota ? '📝 '+notaVal.substring(0,15)+(notaVal.length>15?'…':'') : '+ Observación') + '</button>' +
-        '<div id="nota-row-' + i + '" class="' + (hasNota?'':'hidden') + '">' +
-          '<input class="nota-input" placeholder="Agregar observación..." value="' + notaVal.replace(/"/g,'&quot;') + '" ' +
-          'style="text-transform:uppercase" ' +
-          'onchange="listado[' + i + '].nota=this.value.toUpperCase();render()" ' +
-          'oninput="this.value=this.value.toUpperCase();listado[' + i + '].nota=this.value" /></div></td>' +
+      '<td>' + notaCell + '</td>' +
       '<td class="ctr"><button class="btnx" onclick="rmItem(' + i + ')">✕</button></td>';
     tbody.appendChild(tr);
   }
@@ -2142,6 +2197,7 @@ document.getElementById('btnPDF').addEventListener('click', () => {
                   ${firmaDataURL ? `<img src="${firmaDataURL}" style="max-width:180px;max-height:60px;display:block;margin-bottom:2px;" />` : '<div style="height:60px"></div>'}
                   <div style="border-top:1.5px solid #0D1B2E;padding-top:4px;margin-top:0">
                     <div style="font-size:9px;color:#546E7A">Firma y Cédula Cliente</div>
+                    ${firmaNombreCliente ? `<div style="font-size:9px;font-weight:700;color:#0D1B2E;margin-top:2px">${firmaNombreCliente}</div>` : ''}
                     ${firmaCedulaCliente ? `<div style="font-size:9px;font-weight:700;color:#0D1B2E;margin-top:2px;letter-spacing:1px">CC: ${firmaCedulaCliente}</div>` : ''}
                   </div>
                 </div>
@@ -2196,10 +2252,11 @@ document.getElementById('btnPDF').addEventListener('click', () => {
       // El iframe tiene width:794px, printW mm → factor de conversión
       const pxToMm = printW / 794;
 
-      // ── Recolectar posiciones Y seguras (bordes INFERIORES de cada <tr>) ──
+      // ── Recolectar posiciones Y seguras (bordes INFERIORES de cada <tr>, más el footer) ──
       // Un "corte seguro" es cualquier punto entre el bottom de una fila y el top de la siguiente.
-      // Nunca cortamos dentro de una fila.
-      const allRows = Array.from(iDoc.querySelectorAll('tr'));
+      // Nunca cortamos dentro de una fila. El footer (fuera de las tablas) también se agrega
+      // como punto de corte válido para que no quede huérfano en la siguiente página cuando sí cabe.
+      const allRows = Array.from(iDoc.querySelectorAll('tr, .footer'));
       // Posiciones en mm relativas al top del body
       const rowBreaks = allRows.map(tr => {
         const rect = tr.getBoundingClientRect();
@@ -2300,6 +2357,7 @@ document.getElementById('btnPDF').addEventListener('click', () => {
 // ═══════════════════════════════════════════════════════════
 let firmaDataURL = null;
 let firmaCedulaCliente = '';
+let firmaNombreCliente = '';
 let firmaDrawing = false;
 let firmaCanvas, firmaCtx;
 
@@ -2317,6 +2375,8 @@ function abrirModalFirma() {
     img.onload = () => firmaCtx.drawImage(img, 0, 0);
     img.src = firmaDataURL;
   }
+  document.getElementById('firmaNombre').value = firmaNombreCliente;
+  document.getElementById('firmaCedula').value = firmaCedulaCliente;
 }
 
 function getPos(e) {
@@ -2356,6 +2416,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     firmaDataURL = firmaCanvas.toDataURL('image/png');
+    firmaNombreCliente = document.getElementById('firmaNombre').value.trim();
     firmaCedulaCliente = document.getElementById('firmaCedula').value.trim();
     closeModal('modalFirma');
     const btn = document.getElementById('btnFirmar');
