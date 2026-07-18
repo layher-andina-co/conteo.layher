@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <style>
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2777,6 +2778,22 @@ function abrirFotosDB() {
   });
 }
 
+async function convertirSiEsHEIC(file) {
+  const nombre = file.name || '';
+  const esHeic = /\.(heic|heif)$/i.test(nombre) || file.type === 'image/heic' || file.type === 'image/heif';
+  if (!esHeic) return file;
+  if (typeof heic2any === 'undefined') {
+    throw new Error('No se pudo cargar el conversor de imágenes HEIC/HEIF (' + nombre + ')');
+  }
+  try {
+    const convertido = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 });
+    const blob = Array.isArray(convertido) ? convertido[0] : convertido;
+    return new File([blob], nombre.replace(/\.(heic|heif)$/i, '.jpg'), { type: 'image/jpeg' });
+  } catch (err) {
+    throw new Error('No se pudo convertir la imagen HEIC/HEIF (' + nombre + ')');
+  }
+}
+
 async function comprimirImagen(file, maxDim, calidad) {
   // createImageBitmap decodifica el archivo directamente (sin pasar por base64),
   // es más eficiente y maneja mejor archivos provenientes de proveedores externos
@@ -2841,7 +2858,10 @@ async function subirFotos(files) {
     // reportan tipos genéricos o vacíos aunque el archivo sí sea una imagen válida.
     // Dejamos que el propio decodificador determine si puede abrirse o no.
     try {
-      const dataURL = await comprimirImagen(file, 1400, 0.75);
+      const esHeic = /\.(heic|heif)$/i.test(file.name || '') || file.type === 'image/heic' || file.type === 'image/heif';
+      if (esHeic && btn) btn.textContent = 'Convirtiendo HEIC ' + (idx + 1) + ' de ' + total + '...';
+      const archivoProcesado = await convertirSiEsHEIC(file);
+      const dataURL = await comprimirImagen(archivoProcesado, 1400, 0.75);
       await new Promise((resolve, reject) => {
         const tx = db.transaction('fotos', 'readwrite');
         tx.objectStore('fotos').add({
