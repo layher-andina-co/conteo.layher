@@ -2777,12 +2777,38 @@ function abrirFotosDB() {
   });
 }
 
-function comprimirImagen(file, maxDim, calidad) {
+async function comprimirImagen(file, maxDim, calidad) {
+  // createImageBitmap decodifica el archivo directamente (sin pasar por base64),
+  // es más eficiente y maneja mejor archivos provenientes de proveedores externos
+  // (galería de WhatsApp, Google Fotos, etc). Si el navegador no lo soporta,
+  // usamos el método anterior (FileReader + <img>) como respaldo.
+  if (window.createImageBitmap) {
+    try {
+      const bitmap = await createImageBitmap(file);
+      let w = bitmap.width, h = bitmap.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+      if (bitmap.close) bitmap.close();
+      return canvas.toDataURL('image/jpeg', calidad);
+    } catch (err) {
+      console.warn('createImageBitmap falló, usando método alterno:', err);
+      // Cae al método de respaldo abajo
+    }
+  }
+  return comprimirImagenFallback(file, maxDim, calidad);
+}
+
+function comprimirImagenFallback(file, maxDim, calidad) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const reader = new FileReader();
     reader.onload = (e) => { img.src = e.target.result; };
-    reader.onerror = reject;
+    reader.onerror = () => reject(new Error('No se pudo leer el archivo (' + file.name + ')'));
     img.onload = () => {
       let w = img.width, h = img.height;
       if (w > maxDim || h > maxDim) {
@@ -2794,7 +2820,7 @@ function comprimirImagen(file, maxDim, calidad) {
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       resolve(canvas.toDataURL('image/jpeg', calidad));
     };
-    img.onerror = reject;
+    img.onerror = () => reject(new Error('No se pudo decodificar la imagen (' + file.name + ')'));
     reader.readAsDataURL(file);
   });
 }
@@ -2806,16 +2832,14 @@ async function subirFotos(files) {
   const total = files.length;
   const btn = document.getElementById('btnSubirFotos');
   const originalText = btn ? btn.textContent : null;
-  let ok = 0, fallidas = 0;
+  let ok = 0, fallidas = 0, primerError = null;
 
   for (let idx = 0; idx < total; idx++) {
     const file = files[idx];
     if (btn) btn.textContent = 'Subiendo ' + (idx + 1) + ' de ' + total + '...';
-    // Algunas apps (ej. galería de WhatsApp en Android) no reportan el tipo MIME del
-    // archivo. Solo descartamos si el tipo viene explícito y NO es imagen; si viene
-    // vacío, dejamos que el navegador intente decodificarla igual.
-    const esImagenValida = !file.type || file.type.startsWith('image/');
-    if (!esImagenValida) { fallidas++; continue; }
+    // No filtramos por tipo MIME: algunos proveedores (galería de WhatsApp, etc.)
+    // reportan tipos genéricos o vacíos aunque el archivo sí sea una imagen válida.
+    // Dejamos que el propio decodificador determine si puede abrirse o no.
     try {
       const dataURL = await comprimirImagen(file, 1400, 0.75);
       await new Promise((resolve, reject) => {
@@ -2835,6 +2859,7 @@ async function subirFotos(files) {
       await actualizarContadoresFotos();
     } catch (err) {
       console.error('Error al procesar imagen:', file.name, err);
+      if (!primerError) primerError = (err && err.message) ? err.message : String(err);
       fallidas++;
     }
   }
@@ -2842,7 +2867,7 @@ async function subirFotos(files) {
   document.getElementById('fotoInput').value = '';
   if (btn) btn.textContent = originalText;
   if (fallidas > 0) {
-    alert('Se subieron ' + ok + ' de ' + total + ' fotos. ' + fallidas + ' no se pudieron procesar (revisa que sean imágenes válidas).');
+    alert('Se subieron ' + ok + ' de ' + total + ' fotos. ' + fallidas + ' no se pudieron procesar.' + (primerError ? '\n\nDetalle: ' + primerError : ' (revisa que sean imágenes válidas)'));
   }
 }
 
