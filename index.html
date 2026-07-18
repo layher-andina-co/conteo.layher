@@ -987,7 +987,8 @@ footer em { color: var(--blue-mid); font-style: italic; }
     <div class="acta-grid">
       <div class="acta-field">
         <label>Cliente / Empresa</label>
-        <input type="text" id="actaCliente" placeholder="Nombre del cliente..." style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" />
+        <input type="text" id="actaCliente" list="dl_cliente" placeholder="Nombre del cliente..." style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" />
+        <datalist id="dl_cliente"></datalist>
       </div>
       <div class="acta-field">
         <label>Obra / Proyecto</label>
@@ -999,11 +1000,13 @@ footer em { color: var(--blue-mid); font-style: italic; }
       </div>
       <div class="acta-field">
         <label>Nombre del responsable</label>
-        <input type="text" id="actaNombre" placeholder="Quién realiza el conteo..." style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" />
+        <input type="text" id="actaNombre" list="dl_nombre" placeholder="Quién realiza el conteo..." style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" />
+        <datalist id="dl_nombre"></datalist>
       </div>
       <div class="acta-field">
         <label>Cédula del responsable</label>
-        <input type="text" id="actaCedula" placeholder="N° DE CEDULA..." inputmode="numeric" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)" onblur="if(this.value.length>0&&this.value.length<6){this.style.borderColor='#e53935';this.title='Mínimo 6 dígitos';}else{this.style.borderColor='';this.title='';}" />
+        <input type="text" id="actaCedula" list="dl_cedula" placeholder="N° DE CEDULA..." inputmode="numeric" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)" onblur="if(this.value.length>0&&this.value.length<6){this.style.borderColor='#e53935';this.title='Mínimo 6 dígitos';}else{this.style.borderColor='';this.title='';}" />
+        <datalist id="dl_cedula"></datalist>
       </div>
       <div class="acta-field">
         <label>Bodega Layher</label>
@@ -2024,6 +2027,7 @@ function confirmarGuardar() {
   const nombre = document.getElementById('saveNombre').value.trim();
   if (!nombre) { document.getElementById('saveNombre').focus(); return; }
   const obs = document.getElementById('saveObs').value.trim();
+  registrarSugerenciasActa();
   const totP = listado.reduce((s,r) => s + r.peso*r.qty, 0);
   const now = new Date();
   const fecha = now.toLocaleDateString('es-CO', {day:'2-digit',month:'2-digit',year:'numeric'}) +
@@ -2161,6 +2165,7 @@ function generarNumeroActa(bodega) {
 document.getElementById('btnPDF').addEventListener('click', () => {
   if (!validarCamposObligatorios()) return;
   if (!listado.length) return;
+  registrarSugerenciasActa();
   const cliente = document.getElementById('actaCliente').value.trim() || '—';
   const obra    = document.getElementById('actaObra').value.trim()    || '—';
   const fecha   = document.getElementById('actaFecha').value ? new Date(document.getElementById('actaFecha').value + 'T12:00:00').toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'}) : new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'});
@@ -2902,6 +2907,33 @@ function listarFotos(categoria) {
   });
 }
 
+function construirSeccionFotosPDF(fotosPorCategoria) {
+  const categorias = Object.keys(FOTOS_LABELS).filter(cat => fotosPorCategoria[cat] && fotosPorCategoria[cat].length);
+  if (!categorias.length) return '';
+  let html = '<div style="margin-top:26px;padding-top:16px;border-top:2px solid #003087">' +
+    '<div style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#003087;font-weight:900;margin-bottom:4px">Anexo Fotográfico</div>';
+  categorias.forEach(cat => {
+    const fotos = fotosPorCategoria[cat];
+    html += '<h3 style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#003087;margin:14px 0 8px;font-weight:700;border-bottom:1.5px solid #C8D9EE;padding-bottom:4px">' +
+      FOTOS_LABELS[cat] + ' (' + fotos.length + ')</h3>';
+    html += '<table style="width:100%;border-collapse:collapse;margin-bottom:6px"><tbody>';
+    for (let i = 0; i < fotos.length; i += 4) {
+      const grupo = fotos.slice(i, i + 4);
+      html += '<tr>';
+      grupo.forEach(f => {
+        html += '<td style="width:25%;padding:4px;vertical-align:top">' +
+          '<img src="' + f.dataURL + '" style="width:100%;height:105px;object-fit:cover;border-radius:4px;border:1px solid #D0DAE8;display:block" />' +
+          '</td>';
+      });
+      for (let j = grupo.length; j < 4; j++) html += '<td style="width:25%;padding:4px"></td>';
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+  });
+  html += '</div>';
+  return html;
+}
+
 async function renderFotosGrid(categoria) {
   const fotos = await listarFotos(categoria);
   const grid = document.getElementById('fotosGrid');
@@ -2965,6 +2997,39 @@ function nuevaSesionFotos() {
 }
 
 actualizarContadoresFotos();
+
+// ═══════════════════════════════════════════════════════════
+// AUTOCOMPLETADO — Cliente, Nombre y Cédula (basado en uso previo)
+// ═══════════════════════════════════════════════════════════
+function poblarDatalist(campo, arr) {
+  const dl = document.getElementById('dl_' + campo);
+  if (!dl) return;
+  dl.innerHTML = arr.map(v => '<option value="' + v.replace(/"/g,'&quot;') + '"></option>').join('');
+}
+
+function obtenerSugerencias(campo) {
+  try { return JSON.parse(localStorage.getItem('layher_sug_' + campo) || '[]'); }
+  catch(e) { return []; }
+}
+
+function registrarSugerencia(campo, valor) {
+  valor = (valor || '').trim();
+  if (!valor) return;
+  let arr = obtenerSugerencias(campo);
+  arr = arr.filter(v => v !== valor);
+  arr.unshift(valor);
+  arr = arr.slice(0, 50);
+  localStorage.setItem('layher_sug_' + campo, JSON.stringify(arr));
+  poblarDatalist(campo, arr);
+}
+
+function registrarSugerenciasActa() {
+  registrarSugerencia('cliente', document.getElementById('actaCliente').value);
+  registrarSugerencia('nombre',  document.getElementById('actaNombre').value);
+  registrarSugerencia('cedula',  document.getElementById('actaCedula').value);
+}
+
+['cliente', 'nombre', 'cedula'].forEach(campo => poblarDatalist(campo, obtenerSugerencias(campo)));
 </script>
 </body>
 </html>
