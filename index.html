@@ -195,6 +195,70 @@ header {
 .nolayher-empty {
   display: none;
 }
+
+/* ── FOTOS DEL CONTEO ── */
+.fotos-section {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--white);
+}
+.fotos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .75rem;
+  padding: 1rem;
+}
+.foto-folder {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 1rem .5rem;
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  background: var(--off-white);
+  cursor: pointer;
+  position: relative;
+  transition: all .15s;
+  font-family: inherit;
+}
+.foto-folder:hover { border-color: var(--blue-mid); background: #EEF4FF; }
+.foto-folder-ico { font-size: 1.6rem; }
+.foto-folder-label { font-size: .74rem; font-weight: 700; color: var(--text); text-align: center; line-height: 1.25; }
+.foto-folder-count {
+  position: absolute; top: 6px; right: 8px;
+  background: var(--blue-mid); color: white;
+  font-size: .65rem; font-weight: 700;
+  min-width: 18px; height: 18px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 4px;
+}
+.fotos-view-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: .6rem;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.foto-thumb-wrap {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: var(--off-white);
+}
+.foto-thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: pointer; }
+.foto-thumb-del {
+  position: absolute; top: 4px; right: 4px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(198,40,40,.92); color: white;
+  border: none; cursor: pointer;
+  font-size: .75rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .fotos-grid { grid-template-columns: repeat(2, 1fr); }
+}
 .nolayher-table {
   width: 100%; border-collapse: collapse;
   font-size: .78rem;
@@ -1059,6 +1123,72 @@ footer em { color: var(--blue-mid); font-style: italic; }
     </table>
   </div>
 
+  <!-- FOTOS DEL CONTEO — 4 carpetas -->
+  <div class="fotos-section" style="margin-top:1.5rem;">
+    <div class="nolayher-header">
+      <div class="nolayher-header-left">
+        <span class="nolayher-title">Fotos del <strong>Conteo</strong></span>
+        <span class="nolayher-sub">Evidencia fotográfica del conteo físico</span>
+      </div>
+    </div>
+    <div class="fotos-grid">
+      <button class="foto-folder" onclick="abrirFotos('conteo')">
+        <span class="foto-folder-ico">📷</span>
+        <span class="foto-folder-label">Fotos del Conteo</span>
+        <span class="foto-folder-count" id="fcount-conteo">0</span>
+      </button>
+      <button class="foto-folder" onclick="abrirFotos('danos')">
+        <span class="foto-folder-ico">⚠️</span>
+        <span class="foto-folder-label">Daños</span>
+        <span class="foto-folder-count" id="fcount-danos">0</span>
+      </button>
+      <button class="foto-folder" onclick="abrirFotos('no_layher')">
+        <span class="foto-folder-ico">🔧</span>
+        <span class="foto-folder-label">Piezas No Layher</span>
+        <span class="foto-folder-count" id="fcount-no_layher">0</span>
+      </button>
+      <button class="foto-folder" onclick="abrirFotos('limpieza')">
+        <span class="foto-folder-ico">🧹</span>
+        <span class="foto-folder-label">Piezas por Limpieza</span>
+        <span class="foto-folder-count" id="fcount-limpieza">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL GALERÍA DE FOTOS -->
+  <div class="modal-bg hidden" id="modalFotos">
+    <div class="modal" style="max-width:640px">
+      <h3 id="modalFotosTitle">Fotos</h3>
+      <input type="file" id="fotoInput" accept="image/*" multiple style="display:none" onchange="subirFotos(this.files)">
+      <button class="nolayher-add-btn" id="btnSubirFotos" style="margin-bottom:1rem" onclick="document.getElementById('fotoInput').click()">+ Subir fotos</button>
+      <div id="fotosGrid" class="fotos-view-grid"></div>
+      <div id="fotosEmpty" class="nolayher-empty hidden">Sin fotos en esta categoría</div>
+      <div class="modal-btns" style="margin-top:1.25rem">
+        <button class="modal-btns btn-cancel" onclick="closeModal('modalFotos')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL VISOR DE FOTO EN GRANDE -->
+  <div class="modal-bg hidden" id="modalFotoView" onclick="if(event.target===this) closeModal('modalFotoView')">
+    <div style="max-width:92vw;max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:.75rem;">
+      <img id="fotoViewImg" src="" style="max-width:92vw;max-height:82vh;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.4);" />
+      <button class="modal-btns btn-cancel" style="background:white" onclick="closeModal('modalFotoView')">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRMAR ELIMINAR FOTO -->
+  <div class="modal-bg hidden" id="modalDelFoto">
+    <div class="modal" style="max-width:380px">
+      <h3>Eliminar foto</h3>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">¿Estás seguro de eliminar esta foto? Esta acción no se puede deshacer.</p>
+      <div class="modal-btns">
+        <button class="modal-btns btn-cancel" onclick="closeModal('modalDelFoto')">Cancelar</button>
+        <button class="btn-confirm" style="background:#C62828" onclick="confirmarEliminarFoto()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ESTADÍSTICAS — resumen después del listado -->
   <div class="stats" style="margin-top:1.5rem;margin-bottom:0;">
     <div class="stat"><div class="lbl">Referencias en listado</div><div class="val r" id="sRefs">0</div></div>
@@ -1521,6 +1651,7 @@ function confirmarLimpiar() {
   listado = [];
   render();
   closeModal('modalClear');
+  nuevaSesionFotos();
 }
 
 function validarCamposObligatorios() {
@@ -1902,6 +2033,7 @@ function confirmarGuardar() {
     pesoTotal: totP.toFixed(2),
     listado: JSON.parse(JSON.stringify(listado)),
     noLayher: JSON.parse(JSON.stringify(noLayher)),
+    fotoSesion: fotoSesionActual,
     acta: {
       cliente: document.getElementById('actaCliente').value,
       obra:    document.getElementById('actaObra').value,
@@ -1974,6 +2106,15 @@ document.getElementById('btnCargarHist').addEventListener('click', () => {
 
   render();
   closeModal('modalView');
+
+  // Restaurar sesión de fotos asociada a este listado histórico
+  if (h.fotoSesion) {
+    fotoSesionActual = h.fotoSesion;
+    localStorage.setItem('layher_foto_sesion_actual', fotoSesionActual);
+  } else {
+    nuevaSesionFotos();
+  }
+  actualizarContadoresFotos();
 });
 
 function eliminarHist(i) {
@@ -2600,6 +2741,185 @@ function imprimirSinEncabezados() {
     ventana.close();
   };
 }
+
+// ═══════════════════════════════════════════════════════════
+// FOTOS DEL CONTEO — almacenadas en IndexedDB (no en localStorage)
+// ═══════════════════════════════════════════════════════════
+const FOTOS_LABELS = {
+  conteo:    'Fotos del Conteo',
+  danos:     'Daños',
+  no_layher: 'Piezas No Layher',
+  limpieza:  'Piezas por Limpieza'
+};
+
+let fotosDB = null;
+let fotoSesionActual = localStorage.getItem('layher_foto_sesion_actual');
+if (!fotoSesionActual) {
+  fotoSesionActual = 'S' + Date.now() + Math.random().toString(36).slice(2, 8);
+  localStorage.setItem('layher_foto_sesion_actual', fotoSesionActual);
+}
+let fotosCategoriaActual = null;
+let fotoPendienteEliminar = null;
+
+function abrirFotosDB() {
+  return new Promise((resolve, reject) => {
+    if (fotosDB) return resolve(fotosDB);
+    const req = indexedDB.open('layher_fotos_db', 1);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('fotos')) {
+        const store = db.createObjectStore('fotos', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('sesion_categoria', ['sesion', 'categoria'], { unique: false });
+      }
+    };
+    req.onsuccess = (e) => { fotosDB = e.target.result; resolve(fotosDB); };
+    req.onerror = (e) => reject(e);
+  });
+}
+
+function comprimirImagen(file, maxDim, calidad) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = (e) => { img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', calidad));
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function subirFotos(files) {
+  if (!files || !files.length) return;
+  const db = await abrirFotosDB();
+  const categoria = fotosCategoriaActual;
+  const total = files.length;
+  const btn = document.getElementById('btnSubirFotos');
+  const originalText = btn ? btn.textContent : null;
+  let ok = 0, fallidas = 0;
+
+  for (let idx = 0; idx < total; idx++) {
+    const file = files[idx];
+    if (btn) btn.textContent = 'Subiendo ' + (idx + 1) + ' de ' + total + '...';
+    // Algunas apps (ej. galería de WhatsApp en Android) no reportan el tipo MIME del
+    // archivo. Solo descartamos si el tipo viene explícito y NO es imagen; si viene
+    // vacío, dejamos que el navegador intente decodificarla igual.
+    const esImagenValida = !file.type || file.type.startsWith('image/');
+    if (!esImagenValida) { fallidas++; continue; }
+    try {
+      const dataURL = await comprimirImagen(file, 1400, 0.75);
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction('fotos', 'readwrite');
+        tx.objectStore('fotos').add({
+          sesion: fotoSesionActual,
+          categoria,
+          dataURL,
+          fecha: new Date().toISOString()
+        });
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+      });
+      ok++;
+      // Refrescar la vista después de cada foto para dar retroalimentación inmediata
+      await renderFotosGrid(categoria);
+      await actualizarContadoresFotos();
+    } catch (err) {
+      console.error('Error al procesar imagen:', file.name, err);
+      fallidas++;
+    }
+  }
+
+  document.getElementById('fotoInput').value = '';
+  if (btn) btn.textContent = originalText;
+  if (fallidas > 0) {
+    alert('Se subieron ' + ok + ' de ' + total + ' fotos. ' + fallidas + ' no se pudieron procesar (revisa que sean imágenes válidas).');
+  }
+}
+
+function listarFotos(categoria) {
+  return new Promise(async (resolve) => {
+    const db = await abrirFotosDB();
+    const tx = db.transaction('fotos', 'readonly');
+    const idx = tx.objectStore('fotos').index('sesion_categoria');
+    const req = idx.getAll([fotoSesionActual, categoria]);
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => resolve([]);
+  });
+}
+
+async function renderFotosGrid(categoria) {
+  const fotos = await listarFotos(categoria);
+  const grid = document.getElementById('fotosGrid');
+  const empty = document.getElementById('fotosEmpty');
+  if (!fotos.length) {
+    grid.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  grid.innerHTML = fotos.map(f =>
+    '<div class="foto-thumb-wrap">' +
+      '<img src="' + f.dataURL + '" onclick="verFotoGrande(this.src)" />' +
+      '<button class="foto-thumb-del" onclick="pedirEliminarFoto(' + f.id + ')">✕</button>' +
+    '</div>'
+  ).join('');
+}
+
+function verFotoGrande(src) {
+  document.getElementById('fotoViewImg').src = src;
+  openModal('modalFotoView');
+}
+
+async function actualizarContadoresFotos() {
+  for (const cat of Object.keys(FOTOS_LABELS)) {
+    const fotos = await listarFotos(cat);
+    const el = document.getElementById('fcount-' + cat);
+    if (el) el.textContent = fotos.length;
+  }
+}
+
+function abrirFotos(categoria) {
+  fotosCategoriaActual = categoria;
+  document.getElementById('modalFotosTitle').textContent = FOTOS_LABELS[categoria];
+  renderFotosGrid(categoria);
+  openModal('modalFotos');
+}
+
+function pedirEliminarFoto(id) {
+  fotoPendienteEliminar = id;
+  openModal('modalDelFoto');
+}
+
+async function confirmarEliminarFoto() {
+  if (fotoPendienteEliminar === null) return closeModal('modalDelFoto');
+  const db = await abrirFotosDB();
+  const tx = db.transaction('fotos', 'readwrite');
+  tx.objectStore('fotos').delete(fotoPendienteEliminar);
+  tx.oncomplete = async () => {
+    fotoPendienteEliminar = null;
+    closeModal('modalDelFoto');
+    await renderFotosGrid(fotosCategoriaActual);
+    await actualizarContadoresFotos();
+  };
+}
+
+function nuevaSesionFotos() {
+  fotoSesionActual = 'S' + Date.now() + Math.random().toString(36).slice(2, 8);
+  localStorage.setItem('layher_foto_sesion_actual', fotoSesionActual);
+  actualizarContadoresFotos();
+}
+
+actualizarContadoresFotos();
 </script>
 </body>
 </html>
