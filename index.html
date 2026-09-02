@@ -976,6 +976,44 @@ footer em { color: var(--blue-mid); font-style: italic; }
 }
 .hdr-user .rolebadge { background:#C62828; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.68rem; text-transform:uppercase; }
 .hdr-user button { background:none; border:1px solid #003087; color:#003087; border-radius:14px; padding:.2rem .6rem; font-size:.72rem; cursor:pointer; }
+
+/* ═══ MÓVIL: login, portal de cliente y header ═══ */
+@media (max-width: 640px) {
+  #loginGate { padding: 0; }
+  .login-card {
+    max-width: 100%; width: 100%; min-height: 100vh;
+    border-radius: 0; padding: 2.2rem 1.3rem;
+    display: flex; flex-direction: column; justify-content: center;
+    box-shadow: none;
+  }
+  .login-card .login-logo { height: 90px; margin-bottom: 1.4rem; }
+  .login-actions { flex-direction: column; align-items: stretch; gap: .7rem; }
+  .login-card button#btnLogin { width: 100%; padding: .8rem; font-size: .92rem; }
+  .login-forgot { text-align: center; }
+  .login-guest-row { margin-top: 1.2rem; }
+  .login-guest-row button { font-size: .85rem; }
+  .login-field input { font-size: 16px; }
+
+  #clientPortalRoot { padding: 0; }
+  #clientPortalRoot > div { max-width: 100%; border-radius: 0; min-height: 100vh; padding: 1.5rem 1.1rem !important; box-shadow: none; }
+  #portalLogoImg { height: 46px; }
+
+  .hdr-inner { flex-wrap: wrap; height: auto; padding: .7rem 1rem; }
+  .hdr-user { flex-wrap: wrap; gap: 6px; padding: .3rem .5rem; width: 100%; justify-content: flex-end; }
+  .hdr-user button { font-size: .66rem; padding: .18rem .5rem; }
+  .hdr-user > span { font-size: .72rem; }
+
+  .fotos-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  .admin-table { display: block; }
+  #adminTableWrap, #clientesTableWrap, #verConteosWrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .admin-table { min-width: 560px; }
+
+  #imgPreview { flex-direction: column; padding: 1rem !important; }
+  #imgPreview img { width: 160px !important; height: 160px !important; }
+
+  .modal { padding: 1.3rem; max-height: 92vh; }
+}
 .pieza-thumb { width:34px; height:34px; object-fit:contain; border-radius:5px; border:1px solid var(--border); background:#fafafa; vertical-align:middle; margin-right:.4rem; }
 .preview-thumb { width:56px; height:56px; object-fit:contain; border-radius:7px; border:1px solid var(--border); background:#fafafa; float:left; margin-right:.7rem; }
 .solo-admin { display: none; }
@@ -3683,17 +3721,6 @@ async function abrirPanelClientes() {
           '<input id="nuevoClienteNombre" placeholder="Nombre del cliente (igual al que usas en \'Cliente\' al guardar el acta)" style="flex:1;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:7px;font-size:.85rem;font-family:inherit" />' +
           '<button id="btnCrearCliente" class="btn-add">＋ Crear</button>' +
         '</div>' +
-        '<details style="margin-bottom:1rem">' +
-          '<summary style="cursor:pointer;font-size:.82rem;font-weight:700;color:var(--blue-mid)">¿Tienes muchos clientes? Créalos todos de una vez ›</summary>' +
-          '<div style="margin-top:.6rem">' +
-            '<textarea id="clientesMasivo" rows="5" placeholder="Pega aquí un nombre de cliente por línea, por ejemplo:\nConstructora ABC\nInmobiliaria XYZ\nGrupo Andino S.A.S" style="width:100%;box-sizing:border-box;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:7px;font-size:.82rem;font-family:inherit"></textarea>' +
-            '<button id="btnCrearClientesMasivo" class="btn-add" style="margin-top:.5rem">＋ Crear todos</button>' +
-          '</div>' +
-        '</details>' +
-        '<div style="display:flex;justify-content:space-between;margin-bottom:.5rem;gap:.5rem">' +
-          '<button id="btnGenerarClientes" style="background:var(--blue-mid);color:#fff;border:none;border-radius:6px;padding:.4rem .9rem;font-size:.78rem;cursor:pointer">🔄 Generar automáticamente desde mis actas guardadas</button>' +
-          '<button id="btnExportarClientes" style="background:var(--green);color:#fff;border:none;border-radius:6px;padding:.4rem .9rem;font-size:.78rem;cursor:pointer">⬇ Exportar lista a Excel</button>' +
-        '</div>' +
         '<div id="clientesTableWrap">Cargando...</div>' +
         '<div class="modal-btns" style="margin-top:1.25rem"><button class="modal-btns btn-cancel" onclick="closeModal(\'modalClientes\')">Cerrar</button></div>' +
       '</div>';
@@ -3701,43 +3728,7 @@ async function abrirPanelClientes() {
   }
   openModal('modalClientes');
   document.getElementById('btnCrearCliente').onclick = crearCliente;
-  document.getElementById('btnCrearClientesMasivo').onclick = crearClientesMasivo;
-  document.getElementById('btnExportarClientes').onclick = exportarClientesExcel;
-  document.getElementById('btnGenerarClientes').onclick = generarClientesDesdeActas;
   await cargarListaClientes();
-}
-
-async function generarClientesDesdeActas() {
-  const btn = document.getElementById('btnGenerarClientes');
-  btn.disabled = true; btn.textContent = 'Revisando actas...';
-  try {
-    const { data: actas, error: errActas } = await sb.from('actas').select('cliente');
-    if (errActas) throw errActas;
-    const { data: existentes, error: errCli } = await sb.from('clientes').select('nombre');
-    if (errCli) throw errCli;
-
-    const existentesSet = new Set((existentes || []).map(c => c.nombre.trim().toLowerCase()));
-    const nombresUnicos = new Map();
-    (actas || []).forEach(a => {
-      const nombre = (a.cliente || '').trim();
-      if (!nombre) return;
-      const key = nombre.toLowerCase();
-      if (!existentesSet.has(key) && !nombresUnicos.has(key)) nombresUnicos.set(key, nombre);
-    });
-
-    const nuevos = Array.from(nombresUnicos.values());
-    if (!nuevos.length) {
-      alert('No hay clientes nuevos por crear — ya están todos generados.');
-    } else {
-      const { error: errInsert } = await sb.from('clientes').insert(nuevos.map(nombre => ({ nombre })));
-      if (errInsert) throw errInsert;
-      alert('Se crearon ' + nuevos.length + ' clientes nuevos a partir de tus actas guardadas.');
-    }
-    await cargarListaClientes();
-  } catch (err) {
-    alert('Error generando clientes: ' + err.message);
-  }
-  btn.disabled = false; btn.textContent = '🔄 Generar automáticamente desde mis actas guardadas';
 }
 
 async function crearCliente() {
@@ -3750,37 +3741,21 @@ async function crearCliente() {
   await cargarListaClientes();
 }
 
-async function crearClientesMasivo() {
-  const textarea = document.getElementById('clientesMasivo');
-  const btn = document.getElementById('btnCrearClientesMasivo');
-  const nombres = textarea.value.split('\n').map(n => n.trim()).filter(Boolean);
-  if (!nombres.length) return;
-  btn.disabled = true; btn.textContent = 'Creando...';
-  const filas = nombres.map(nombre => ({ nombre }));
-  const { error } = await sb.from('clientes').insert(filas);
-  btn.disabled = false; btn.textContent = '＋ Crear todos';
-  if (error) { alert('Error creando clientes: ' + error.message); return; }
-  textarea.value = '';
+async function editarCliente(id, nombreActual) {
+  const nuevoNombre = prompt('Editar nombre del cliente:', nombreActual);
+  if (nuevoNombre === null) return;
+  const limpio = nuevoNombre.trim();
+  if (!limpio) return;
+  const { error } = await sb.from('clientes').update({ nombre: limpio }).eq('id', id);
+  if (error) { alert('Error editando cliente: ' + error.message); return; }
   await cargarListaClientes();
 }
 
-let _ultimosClientes = [];
-
-function exportarClientesExcel() {
-  if (!_ultimosClientes.length) { alert('No hay clientes para exportar todavía.'); return; }
-  const baseUrl = location.origin + location.pathname;
-  const filas = [['Nombre del cliente', 'Link de acceso', 'Activo']];
-  _ultimosClientes.forEach(c => {
-    filas.push([c.nombre, baseUrl + '?cliente=' + c.token, c.activo ? 'Sí' : 'No']);
-  });
-  const csv = filas.map(f => f.map(v => '"' + String(v).replace(/"/g,'""') + '"').join(',')).join('\r\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'clientes_links_layher.csv';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+async function eliminarCliente(id, nombre) {
+  if (!confirm('¿Eliminar al cliente "' + nombre + '"? Su link dejará de funcionar. Las actas guardadas no se borran.')) return;
+  const { error } = await sb.from('clientes').delete().eq('id', id);
+  if (error) { alert('Error eliminando cliente: ' + error.message); return; }
+  await cargarListaClientes();
 }
 
 async function cargarListaClientes() {
@@ -3789,7 +3764,6 @@ async function cargarListaClientes() {
   const { data: clientes, error } = await sb.from('clientes').select('*').order('creado_en', { ascending: false });
   if (error) { wrap.textContent = 'Error: ' + error.message; return; }
   if (!clientes.length) { wrap.textContent = 'Aún no has creado ningún cliente.'; return; }
-  _ultimosClientes = clientes;
   const baseUrl = location.origin + location.pathname;
   wrap.innerHTML = '<table class="admin-table"><thead><tr><th>Cliente</th><th>Link</th><th>Activo</th><th></th></tr></thead><tbody>' +
     clientes.map(c => {
@@ -3798,7 +3772,9 @@ async function cargarListaClientes() {
         '<td>' + c.nombre + '</td>' +
         '<td><input readonly value="' + link + '" style="width:100%;font-size:.72rem;border:1px solid var(--border);border-radius:5px;padding:.3rem .4rem;background:#fafbfc" onclick="this.select()" /></td>' +
         '<td><button class="prio-star" data-id="' + c.id + '" data-val="' + c.activo + '">' + (c.activo ? '✅' : '🚫') + '</button></td>' +
-        '<td><button class="btn-copy-link" data-link="' + link + '" style="background:var(--blue-mid);color:#fff;border:none;border-radius:5px;padding:.3rem .6rem;font-size:.72rem;cursor:pointer">Copiar</button></td>' +
+        '<td style="white-space:nowrap"><button class="btn-copy-link" data-link="' + link + '" style="background:var(--blue-mid);color:#fff;border:none;border-radius:5px;padding:.3rem .5rem;font-size:.72rem;cursor:pointer;margin-right:4px">Copiar</button>' +
+        '<button class="btn-edit-cliente" data-id="' + c.id + '" data-nombre="' + c.nombre.replace(/"/g,'&quot;') + '" style="background:#F9A825;color:#fff;border:none;border-radius:5px;padding:.3rem .5rem;font-size:.72rem;cursor:pointer;margin-right:4px">Editar</button>' +
+        '<button class="btn-del-cliente" data-id="' + c.id + '" data-nombre="' + c.nombre.replace(/"/g,'&quot;') + '" style="background:#C62828;color:#fff;border:none;border-radius:5px;padding:.3rem .5rem;font-size:.72rem;cursor:pointer">Eliminar</button></td>' +
         '</tr>';
     }).join('') + '</tbody></table>';
   wrap.querySelectorAll('.btn-copy-link').forEach(btn => {
@@ -3807,6 +3783,12 @@ async function cargarListaClientes() {
       btn.textContent = '¡Copiado!';
       setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
     });
+  });
+  wrap.querySelectorAll('.btn-edit-cliente').forEach(btn => {
+    btn.addEventListener('click', () => editarCliente(btn.dataset.id, btn.dataset.nombre));
+  });
+  wrap.querySelectorAll('.btn-del-cliente').forEach(btn => {
+    btn.addEventListener('click', () => eliminarCliente(btn.dataset.id, btn.dataset.nombre));
   });
   wrap.querySelectorAll('.prio-star').forEach(btn => {
     btn.addEventListener('click', async () => {
