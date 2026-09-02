@@ -977,6 +977,26 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .hdr-user .rolebadge { background:#C62828; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.68rem; text-transform:uppercase; }
 .hdr-user button { background:none; border:1px solid #003087; color:#003087; border-radius:14px; padding:.2rem .6rem; font-size:.72rem; cursor:pointer; }
 
+.hdr-menu-wrap { position: relative; }
+#hdrMenuToggle {
+  background: none; border: 1px solid #003087; color: #003087;
+  border-radius: 14px; width: 30px; height: 26px; font-size: 1rem;
+  line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.hdr-menu-dropdown {
+  display: none; position: absolute; top: calc(100% + 6px); right: 0;
+  background: #fff; border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.15); min-width: 190px; z-index: 250;
+  flex-direction: column; overflow: hidden;
+}
+.hdr-menu-dropdown.open { display: flex; }
+.hdr-menu-dropdown button {
+  background: none; border: none; text-align: left; color: var(--text) !important;
+  padding: .65rem .9rem; font-size: .8rem; cursor: pointer; border-radius: 0 !important;
+}
+.hdr-menu-dropdown button:hover { background: var(--off-white); }
+.hdr-menu-dropdown button + button { border-top: 1px solid var(--border); }
+
 /* ═══ MÓVIL: login, portal de cliente y header ═══ */
 @media (max-width: 640px) {
   #loginGate { padding: 0; }
@@ -999,15 +1019,21 @@ footer em { color: var(--blue-mid); font-style: italic; }
   #portalLogoImg { height: 46px; }
 
   .hdr-inner { flex-wrap: wrap; height: auto; padding: .7rem 1rem; }
-  .hdr-user { flex-wrap: wrap; gap: 6px; padding: .3rem .5rem; width: 100%; justify-content: flex-end; }
+  .hdr-user { flex-wrap: nowrap; gap: 6px; padding: .3rem .5rem; }
+  .hdr-user-name { display: none; }
   .hdr-user button { font-size: .66rem; padding: .18rem .5rem; }
   .hdr-user > span { font-size: .72rem; }
 
   .fotos-grid { grid-template-columns: repeat(2, 1fr) !important; }
 
   .admin-table { display: block; }
-  #adminTableWrap, #clientesTableWrap, #verConteosWrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .admin-table { min-width: 560px; }
+  #adminTableWrap, #verConteosWrap { overflow-x: visible; }
+  #adminTableWrap table, #verConteosWrap table { min-width: 0; width: 100%; }
+  .admin-table thead { display: none; }
+  .admin-table tbody, .admin-table tr { display: block; width: 100%; }
+  .admin-table tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: .6rem; padding: .5rem .8rem; }
+  .admin-table td { display: flex; justify-content: space-between; align-items: center; gap: .6rem; border: none !important; padding: .35rem 0 !important; text-align: right; font-size: .78rem; }
+  .admin-table td::before { content: attr(data-label); font-weight: 700; font-size: .68rem; color: var(--muted); text-align: left; }
 
   #imgPreview { flex-direction: column; padding: 1rem !important; }
   #imgPreview img { width: 160px !important; height: 160px !important; }
@@ -1021,6 +1047,13 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .admin-table th, .admin-table td { padding:.5rem .6rem; border-bottom:1px solid var(--border); text-align:left; }
 .admin-table th { background:#f4f6f8; }
 .prio-star { cursor:pointer; font-size:1.1rem; background:none; border:none; }
+
+.cliente-card { border:1px solid var(--border); border-radius:8px; padding:.75rem .9rem; margin-bottom:.6rem; background:#fff; }
+.cliente-card-top { display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.5rem; font-size:.88rem; font-weight:700; }
+.cliente-card-top .prio-star { font-size:.75rem; white-space:nowrap; }
+.cliente-card input { width:100%; box-sizing:border-box; font-size:.72rem; border:1px solid var(--border); border-radius:5px; padding:.35rem .5rem; background:#fafbfc; margin-bottom:.55rem; }
+.cliente-card-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.cliente-card-actions button { flex:1; min-width:70px; border:none; border-radius:5px; padding:.4rem .5rem; font-size:.74rem; cursor:pointer; color:#fff; }
 </style>
 </head>
 <body>
@@ -1084,7 +1117,6 @@ footer em { color: var(--blue-mid); font-style: italic; }
         <span class="dot"></span>
         <span id="dbFooter">—</span> referencias
       </div>
-      <div class="hdr-pill">🏗 Andamios &amp; Scaffolding</div>
     </div>
   </div>
 </header>
@@ -3376,21 +3408,33 @@ function pintarBadgeUsuario() {
     const hdrRight = document.querySelector('.hdr-right');
     if (hdrRight) hdrRight.appendChild(badge);
   }
+
+  const acciones = [];
+  if (usuarioActual.rol === 'admin') acciones.push({ id: 'btnAbrirAdmin', label: 'Panel admin', fn: abrirPanelAdmin });
+  if (usuarioActual.rol === 'admin') acciones.push({ id: 'btnAbrirClientes', label: 'Clientes', fn: abrirPanelClientes });
+  if (usuarioActual.rol === 'admin' || usuarioActual.rol === 'invitado') acciones.push({ id: 'btnVerConteos', label: 'Ver conteos guardados', fn: abrirVerConteos });
+  acciones.push({ id: 'btnLogout', label: 'Salir', fn: async () => { await sb.auth.signOut(); location.reload(); } });
+
   badge.innerHTML =
-    '<span>👤 ' + usuarioActual.nombre + '</span>' +
+    '<span class="hdr-user-name">👤 ' + usuarioActual.nombre + '</span>' +
     '<span class="rolebadge">' + usuarioActual.rol + '</span>' +
-    (usuarioActual.rol === 'admin' ? '<button id="btnAbrirAdmin">Panel admin</button>' : '') +
-    (usuarioActual.rol === 'admin' ? '<button id="btnAbrirClientes">Clientes</button>' : '') +
-    ((usuarioActual.rol === 'admin' || usuarioActual.rol === 'invitado') ? '<button id="btnVerConteos">Ver conteos guardados</button>' : '') +
-    '<button id="btnLogout">Salir</button>';
-  document.getElementById('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
-  if (usuarioActual.rol === 'admin') {
-    document.getElementById('btnAbrirAdmin').addEventListener('click', abrirPanelAdmin);
-    document.getElementById('btnAbrirClientes').addEventListener('click', abrirPanelClientes);
-  }
-  if (usuarioActual.rol === 'admin' || usuarioActual.rol === 'invitado') {
-    document.getElementById('btnVerConteos').addEventListener('click', abrirVerConteos);
-  }
+    '<div class="hdr-menu-wrap">' +
+      '<button id="hdrMenuToggle" aria-label="Menú">⋮</button>' +
+      '<div id="hdrMenuDropdown" class="hdr-menu-dropdown">' +
+        acciones.map(a => '<button data-id="' + a.id + '">' + a.label + '</button>').join('') +
+      '</div>' +
+    '</div>';
+
+  const dropdown = document.getElementById('hdrMenuDropdown');
+  document.getElementById('hdrMenuToggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', () => dropdown.classList.remove('open'));
+  dropdown.querySelectorAll('button').forEach(btn => {
+    const accion = acciones.find(a => a.id === btn.dataset.id);
+    btn.addEventListener('click', () => { dropdown.classList.remove('open'); accion.fn(); });
+  });
 }
 
 function aplicarRestriccionesRol() {
@@ -3673,7 +3717,7 @@ async function mostrarDetalleActa(actaId) {
     '<br>Registrado por ' + (acta.profiles ? acta.profiles.nombre : '—') + ' el ' + new Date(acta.creado_en).toLocaleDateString('es-CO') + '</p>';
 
   html += '<table class="admin-table" style="margin-bottom:1.5rem"><thead><tr><th>Referencia</th><th>Descripción</th><th>Cantidad</th><th>Peso (kg)</th></tr></thead><tbody>' +
-    (items || []).map(it => '<tr><td>' + it.referencia + '</td><td>' + (it.descripcion||'') + '</td><td>' + it.cantidad + '</td><td>' + Number(it.peso_unitario * it.cantidad).toFixed(2) + '</td></tr>').join('') +
+    (items || []).map(it => '<tr><td data-label="Referencia">' + it.referencia + '</td><td data-label="Descripción">' + (it.descripcion||'') + '</td><td data-label="Cantidad">' + it.cantidad + '</td><td data-label="Peso (kg)">' + Number(it.peso_unitario * it.cantidad).toFixed(2) + '</td></tr>').join('') +
     '</tbody></table>';
 
   html += '<div id="verConteosFotos"></div>';
@@ -3765,18 +3809,20 @@ async function cargarListaClientes() {
   if (error) { wrap.textContent = 'Error: ' + error.message; return; }
   if (!clientes.length) { wrap.textContent = 'Aún no has creado ningún cliente.'; return; }
   const baseUrl = location.origin + location.pathname;
-  wrap.innerHTML = '<table class="admin-table"><thead><tr><th>Cliente</th><th>Link</th><th>Activo</th><th></th></tr></thead><tbody>' +
-    clientes.map(c => {
-      const link = baseUrl + '?cliente=' + c.token;
-      return '<tr>' +
-        '<td>' + c.nombre + '</td>' +
-        '<td><input readonly value="' + link + '" style="width:100%;font-size:.72rem;border:1px solid var(--border);border-radius:5px;padding:.3rem .4rem;background:#fafbfc" onclick="this.select()" /></td>' +
-        '<td><button class="prio-star" data-id="' + c.id + '" data-val="' + c.activo + '">' + (c.activo ? '✅' : '🚫') + '</button></td>' +
-        '<td style="white-space:nowrap"><button class="btn-copy-link" data-link="' + link + '" style="background:var(--blue-mid);color:#fff;border:none;border-radius:5px;padding:.3rem .5rem;font-size:.72rem;cursor:pointer;margin-right:4px">Copiar</button>' +
-        '<button class="btn-edit-cliente" data-id="' + c.id + '" data-nombre="' + c.nombre.replace(/"/g,'&quot;') + '" style="background:#F9A825;color:#fff;border:none;border-radius:5px;padding:.3rem .5rem;font-size:.72rem;cursor:pointer;margin-right:4px">Editar</button>' +
-        '<button class="btn-del-cliente" data-id="' + c.id + '" data-nombre="' + c.nombre.replace(/"/g,'&quot;') + '" style="background:#C62828;color:#fff;border:none;border-radius:5px;padding:.3rem .5rem;font-size:.72rem;cursor:pointer">Eliminar</button></td>' +
-        '</tr>';
-    }).join('') + '</tbody></table>';
+  wrap.innerHTML = clientes.map(c => {
+    const link = baseUrl + '?cliente=' + c.token;
+    const nombreEsc = c.nombre.replace(/"/g,'&quot;');
+    return '<div class="cliente-card">' +
+      '<div class="cliente-card-top"><span>' + c.nombre + '</span>' +
+        '<button class="prio-star" data-id="' + c.id + '" data-val="' + c.activo + '">' + (c.activo ? '✅ Activo' : '🚫 Inactivo') + '</button></div>' +
+      '<input readonly value="' + link + '" onclick="this.select()" />' +
+      '<div class="cliente-card-actions">' +
+        '<button class="btn-copy-link" data-link="' + link + '" style="background:var(--blue-mid)">Copiar</button>' +
+        '<button class="btn-edit-cliente" data-id="' + c.id + '" data-nombre="' + nombreEsc + '" style="background:#F9A825">Editar</button>' +
+        '<button class="btn-del-cliente" data-id="' + c.id + '" data-nombre="' + nombreEsc + '" style="background:#C62828">Eliminar</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
   wrap.querySelectorAll('.btn-copy-link').forEach(btn => {
     btn.addEventListener('click', () => {
       navigator.clipboard.writeText(btn.dataset.link);
@@ -3827,15 +3873,15 @@ async function abrirPanelAdmin() {
     '<th>Prioridad</th><th>Usuario</th><th>Acta</th><th>Cliente</th><th>Obra</th><th>Bodega</th><th>Items</th><th>Peso (kg)</th><th>Fecha</th>' +
     '</tr></thead><tbody>' +
     actas.map(a => '<tr>' +
-      '<td><button class="prio-star" data-id="' + a.id + '" data-val="' + a.prioridad + '">' + (a.prioridad ? '⭐' : '☆') + '</button></td>' +
-      '<td>' + (a.profiles ? a.profiles.nombre : '—') + '</td>' +
-      '<td>' + a.nombre + '</td>' +
-      '<td>' + (a.cliente || '—') + '</td>' +
-      '<td>' + (a.obra || '—') + '</td>' +
-      '<td>' + (a.bodega || '—') + '</td>' +
-      '<td>' + a.total_items + '</td>' +
-      '<td>' + Number(a.peso_total).toFixed(2) + '</td>' +
-      '<td>' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</td>' +
+      '<td data-label="Prioridad"><button class="prio-star" data-id="' + a.id + '" data-val="' + a.prioridad + '">' + (a.prioridad ? '⭐' : '☆') + '</button></td>' +
+      '<td data-label="Usuario">' + (a.profiles ? a.profiles.nombre : '—') + '</td>' +
+      '<td data-label="Acta">' + a.nombre + '</td>' +
+      '<td data-label="Cliente">' + (a.cliente || '—') + '</td>' +
+      '<td data-label="Obra">' + (a.obra || '—') + '</td>' +
+      '<td data-label="Bodega">' + (a.bodega || '—') + '</td>' +
+      '<td data-label="Items">' + a.total_items + '</td>' +
+      '<td data-label="Peso (kg)">' + Number(a.peso_total).toFixed(2) + '</td>' +
+      '<td data-label="Fecha">' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</td>' +
       '</tr>').join('') +
     '</tbody></table>';
   wrap.querySelectorAll('.prio-star').forEach(btn => {
