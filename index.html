@@ -11,6 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.1/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -222,7 +223,8 @@ header {
   font-family: inherit;
 }
 .foto-folder:hover { border-color: var(--blue-mid); background: #EEF4FF; }
-.foto-folder-ico { font-size: 1.6rem; }
+.foto-folder-ico { font-size: 1.6rem; color: var(--blue-mid); display:flex; align-items:center; justify-content:center; }
+.foto-folder-ico svg { width: 28px; height: 28px; }
 .foto-folder-label { font-size: .74rem; font-weight: 700; color: var(--text); text-align: center; line-height: 1.25; }
 .foto-folder-count {
   position: absolute; top: 6px; right: 8px;
@@ -920,9 +922,108 @@ footer em { color: var(--blue-mid); font-style: italic; }
     border: none !important;
   }
 }
+
+/* ═══ LOGIN / ROLES / ADMIN ═══ */
+#loginGate {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #E8EAED;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+#loginGate.hidden { display: none; }
+.login-card {
+  background: #fff; border-radius: 6px; padding: 2.6rem 2.6rem 2.2rem;
+  max-width: 400px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,.12);
+  text-align: center;
+}
+.login-card .login-logo { height: 130px; object-fit: contain; margin-bottom: 1.8rem; }
+.login-field {
+  position: relative; margin-bottom: 1rem; text-align: left;
+}
+.login-field .field-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: #6b7785; pointer-events: none; display:flex;
+}
+.login-field .field-icon svg { width: 17px; height: 17px; }
+.login-field input {
+  width: 100%; box-sizing: border-box; padding: .75rem .85rem .75rem 2.3rem;
+  border: 1.5px solid #d8dee4; border-radius: 6px; font-size: .92rem; background:#fafbfc;
+}
+.login-field input:focus { outline: none; border-color: #003087; background:#fff; }
+.login-field .toggle-pass {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: #6b7785; padding: 2px; display:flex;
+}
+.login-field .toggle-pass svg { width: 17px; height: 17px; }
+#loginError { color: #C62828; font-size: .82rem; margin: -.3rem 0 .8rem; display:none; text-align:left; }
+.login-actions { display:flex; align-items:center; justify-content:space-between; margin-top:.4rem; gap: .75rem;}
+.login-card button#btnLogin {
+  padding: .68rem 1.6rem; border: none; border-radius: 6px;
+  background: #003087; color: #fff; font-weight: 600; font-size: .88rem; cursor: pointer; white-space: nowrap;
+}
+.login-card button#btnLogin:disabled { opacity: .6; cursor: default; }
+.login-forgot { font-size: .78rem; color: #009FE3; text-decoration: none; cursor: pointer; background:none; border:none; }
+.login-forgot:hover { text-decoration: underline; }
+.login-guest-row { margin-top: 1rem; text-align: center; }
+.login-guest-row button {
+  background: none; border: none; color: #6b7785; font-size: .8rem; cursor: pointer; text-decoration: underline;
+}
+.login-version { margin-top: 1.2rem; font-size: .7rem; color: #b7bfc7; text-align: right; }
+#appRoot.hidden { display: none; }
+.hdr-user {
+  display:flex; align-items:center; gap:.5rem; background: rgba(0,48,135,.08);
+  padding:.35rem .7rem; border-radius:20px; font-size:.78rem; color:#003087;
+}
+.hdr-user .rolebadge { background:#C62828; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.68rem; text-transform:uppercase; }
+.hdr-user button { background:none; border:1px solid #003087; color:#003087; border-radius:14px; padding:.2rem .6rem; font-size:.72rem; cursor:pointer; }
+.pieza-thumb { width:34px; height:34px; object-fit:contain; border-radius:5px; border:1px solid var(--border); background:#fafafa; vertical-align:middle; margin-right:.4rem; }
+.preview-thumb { width:56px; height:56px; object-fit:contain; border-radius:7px; border:1px solid var(--border); background:#fafafa; float:left; margin-right:.7rem; }
+.solo-admin { display: none; }
+.admin-table { width:100%; border-collapse: collapse; font-size:.85rem; }
+.admin-table th, .admin-table td { padding:.5rem .6rem; border-bottom:1px solid var(--border); text-align:left; }
+.admin-table th { background:#f4f6f8; }
+.prio-star { cursor:pointer; font-size:1.1rem; background:none; border:none; }
 </style>
 </head>
 <body>
+
+<!-- LOGIN GATE -->
+<div id="loginGate">
+  <div class="login-card">
+    <img id="loginLogoImg" class="login-logo" alt="Layher" />
+    <div class="login-field">
+      <span class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+      <input type="email" id="loginEmail" placeholder="Correo electrónico" autocomplete="username" />
+    </div>
+    <div class="login-field">
+      <span class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+      <input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password" />
+      <button type="button" class="toggle-pass" id="btnTogglePass">
+        <svg id="eyeOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg id="eyeClosed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.62 21.62 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>
+      </button>
+    </div>
+    <div id="loginError"></div>
+    <div class="login-actions">
+      <button id="btnLogin">Iniciar sesión</button>
+      <button type="button" class="login-forgot" id="btnForgotPass">Olvidé mi contraseña</button>
+    </div>
+    <div class="login-guest-row">
+      <button type="button" id="btnGuestLogin">Continuar como invitado →</button>
+    </div>
+    <div class="login-version">v.1.0.0</div>
+  </div>
+</div>
+
+<!-- PORTAL DE CLIENTES (link directo, sin login) -->
+<div id="clientPortalRoot" class="hidden" style="min-height:100vh;background:#E8EAED;padding:2.5rem 1rem;">
+  <div style="max-width:760px;margin:0 auto;background:#fff;border-radius:8px;padding:2.2rem 2rem;box-shadow:0 4px 24px rgba(0,0,0,.1)">
+    <img id="portalLogoImg" style="height:60px;object-fit:contain;margin-bottom:1.2rem" alt="Layher" />
+    <div id="portalContent">Cargando...</div>
+  </div>
+</div>
+
+<div id="appRoot" class="hidden">
 
 
 <!-- HEADER -->
@@ -1032,8 +1133,9 @@ footer em { color: var(--blue-mid); font-style: italic; }
   <div class="panel">
     <div class="panel-label">BUSCAR Y AGREGAR PIEZAS AL CONTEO</div>
     <div class="search-tabs">
-      <button class="stab active" id="tabCode" onclick="switchTab('code')">🔢 POR CÓDIGO DE REFERENCIA</button>
-      <button class="stab" id="tabName" onclick="switchTab('name')">🔤 POR NOMBRE DE PIEZA</button>
+      <button class="stab active" id="tabCode" onclick="switchTab('code')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="15" height="15" style="vertical-align:-2px;margin-right:4px"><line x1="3" y1="5" x2="3" y2="19"/><line x1="7" y1="5" x2="7" y2="19" stroke-width="3"/><line x1="11" y1="5" x2="11" y2="19"/><line x1="14" y1="5" x2="14" y2="19" stroke-width="3"/><line x1="18" y1="5" x2="18" y2="19"/><line x1="21" y1="5" x2="21" y2="19" stroke-width="3"/></svg>POR CÓDIGO DE REFERENCIA</button>
+      <button class="stab" id="tabName" onclick="switchTab('name')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-2px;margin-right:4px"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.58a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.82Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>POR NOMBRE DE PIEZA</button>
+      <button class="stab" id="tabImage" onclick="switchTab('image')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-2px;margin-right:4px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>VER IMAGEN DE PIEZA</button>
     </div>
 
     <div class="search-pane active" id="paneCode">
@@ -1065,6 +1167,16 @@ footer em { color: var(--blue-mid); font-style: italic; }
         <button class="btn-add" id="btnAddName" disabled>＋ Agregar</button>
       </div>
       <div class="preview" id="previewName"></div>
+    </div>
+
+    <div class="search-pane" id="paneImage">
+      <div class="search-row">
+        <div class="inp-wrap">
+          <span class="inp-icon">🔍</span>
+          <input type="text" id="imgRefInput" inputmode="numeric" pattern="[0-9]*" placeholder="Código de referencia (ej: 2601207)" maxlength="10" autocomplete="off" />
+        </div>
+      </div>
+      <div id="imgPreview" style="display:none;margin-top:1rem;padding:1.5rem;border:1px solid var(--border);border-radius:10px;background:var(--off-white);align-items:center;justify-content:center;"></div>
     </div>
   </div>
 
@@ -1098,10 +1210,10 @@ footer em { color: var(--blue-mid); font-style: italic; }
       </table>
     </div>
     <div class="export-bar" id="exportBar">
-      <button class="btn-exp" style="background:#7B1FA2" id="btnSave" disabled>Guardar listado</button>
-      <button class="btn-exp g" id="btnCSV" disabled>Exportar Excel</button>
-      <button class="btn-exp" style="background:#C62828" id="btnPDF" disabled>Exportar PDF</button>
-      <button class="btn-exp" id="btnFirmar" style="background:#1565C0;" onclick="abrirModalFirma()">Firmar</button>
+      <button class="btn-exp" style="background:#7B1FA2" id="btnSave" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>Guardar listado</button>
+      <button class="btn-exp g" id="btnCSV" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></svg>Exportar Excel</button>
+      <button class="btn-exp" style="background:#C62828" id="btnPDF" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 11v7"/><path d="m9 15 3 3 3-3"/></svg>Exportar PDF</button>
+      <button class="btn-exp" id="btnFirmar" style="background:#1565C0;" onclick="abrirModalFirma()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>Firmar</button>
     </div>
   </div>
 
@@ -1137,22 +1249,22 @@ footer em { color: var(--blue-mid); font-style: italic; }
     </div>
     <div class="fotos-grid">
       <button class="foto-folder" onclick="abrirFotos('conteo')">
-        <span class="foto-folder-ico">📷</span>
+        <span class="foto-folder-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg></span>
         <span class="foto-folder-label">Fotos del Conteo</span>
         <span class="foto-folder-count" id="fcount-conteo">0</span>
       </button>
       <button class="foto-folder" onclick="abrirFotos('danos')">
-        <span class="foto-folder-ico">⚠️</span>
+        <span class="foto-folder-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
         <span class="foto-folder-label">Daños</span>
         <span class="foto-folder-count" id="fcount-danos">0</span>
       </button>
       <button class="foto-folder" onclick="abrirFotos('no_layher')">
-        <span class="foto-folder-ico">🔧</span>
+        <span class="foto-folder-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94Z"/></svg></span>
         <span class="foto-folder-label">Piezas No Layher</span>
         <span class="foto-folder-count" id="fcount-no_layher">0</span>
       </button>
       <button class="foto-folder" onclick="abrirFotos('limpieza')">
-        <span class="foto-folder-ico">🧹</span>
+        <span class="foto-folder-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h6l2-3h9"/><path d="M20 10v3"/><path d="M14 16l4 6"/><path d="M17 16l3 6"/><path d="M20 16l1.5 5"/></svg></span>
         <span class="foto-folder-label">Piezas por Limpieza</span>
         <span class="foto-folder-count" id="fcount-limpieza">0</span>
       </button>
@@ -1477,14 +1589,125 @@ refInput.addEventListener('blur', () => setTimeout(closeSuggest, 150));
 function switchTab(tab) {
   document.getElementById('tabCode').classList.toggle('active', tab==='code');
   document.getElementById('tabName').classList.toggle('active', tab==='name');
+  document.getElementById('tabImage').classList.toggle('active', tab==='image');
   document.getElementById('paneCode').classList.toggle('active', tab==='code');
   document.getElementById('paneName').classList.toggle('active', tab==='name');
+  document.getElementById('paneImage').classList.toggle('active', tab==='image');
   closeSuggest();
   setTimeout(() => {
     if (tab==='name') document.getElementById('nameInput').focus();
+    else if (tab==='image') document.getElementById('imgRefInput').focus();
     else refInput.focus();
   }, 50);
 }
+
+// ── VER IMAGEN DE PIEZA ──────────────────────────────────────
+const imgRefInput = document.getElementById('imgRefInput');
+const imgPreview = document.getElementById('imgPreview');
+let imgSuggestBox = null;
+let imgActiveIdx = -1;
+let imgSuggestions = [];
+
+function closeImgSuggest() {
+  if (imgSuggestBox) { imgSuggestBox.remove(); imgSuggestBox = null; }
+  imgActiveIdx = -1; imgSuggestions = [];
+}
+
+function showImgPreview(val) {
+  const match = DB[val];
+  if (!match) {
+    imgPreview.style.display = 'flex';
+    imgPreview.innerHTML = '<div style="color:var(--muted)">No se encontró ninguna referencia con el código <strong>' + val + '</strong>.</div>';
+    return;
+  }
+  imgPreview.style.display = 'flex';
+  imgPreview.innerHTML =
+    '<div style="text-align:center">' +
+      '<div style="font-size:.75rem;font-weight:700;color:var(--blue-mid);letter-spacing:.5px">' + val + '</div>' +
+      '<div style="font-weight:700;margin:.25rem 0 .3rem;font-size:1.02rem">' + match.desc + '</div>' +
+      '<div style="font-size:.88rem;color:var(--muted);margin-bottom:1rem">Peso unitario: ' + (match.peso > 0 ? match.peso.toFixed(2) + ' kg/ud' : 'No disponible en tarifa') + '</div>' +
+      '<img src="' + urlFotoReferencia(val) + '" alt="' + match.desc + '" ' +
+      'style="width:220px;height:220px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff" ' +
+      'onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{textContent:\'Sin foto todavía\',style:\'width:220px;height:220px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.85rem;color:var(--muted);border:1px dashed var(--border);border-radius:10px;background:#fff;margin:0 auto\'}))" />' +
+    '</div>';
+}
+
+function selectImgSuggestion(ref) {
+  imgRefInput.value = ref;
+  closeImgSuggest();
+  showImgPreview(ref);
+  setTimeout(() => imgRefInput.focus(), 10);
+}
+
+function buildImgSuggestBox(matches) {
+  closeImgSuggest();
+  if (!matches.length) return;
+  imgSuggestBox = document.createElement('div');
+  imgSuggestBox.className = 'suggest-box';
+  matches.forEach(m => {
+    const item = document.createElement('div');
+    item.className = 'suggest-item';
+    item.innerHTML = '<span class="suggest-ref">' + m.ref + '</span><span class="suggest-desc">' + m.desc + '</span>' +
+      (m.peso > 0 ? '<span class="suggest-peso">' + m.peso.toFixed(2) + ' kg</span>' : '');
+    item.addEventListener('mousedown', e => { e.preventDefault(); selectImgSuggestion(m.ref); });
+    imgSuggestBox.appendChild(item);
+  });
+  if (matches.length >= 8) {
+    const more = document.createElement('div');
+    more.className = 'suggest-more';
+    more.textContent = 'Seguí escribiendo para refinar…';
+    imgSuggestBox.appendChild(more);
+  }
+  imgRefInput.parentNode.appendChild(imgSuggestBox);
+}
+
+imgRefInput.addEventListener('input', () => {
+  const val = imgRefInput.value.replace(/\D/g,'');
+  imgRefInput.value = val;
+  imgActiveIdx = -1;
+  if (!val) { closeImgSuggest(); imgPreview.style.display = 'none'; return; }
+
+  const exact = DB[val];
+  imgSuggestions = [];
+  const keys = Object.keys(DB);
+  for (let k of keys) {
+    if (k.startsWith(val)) imgSuggestions.push({ ref: k, ...DB[k] });
+  }
+  imgSuggestions.sort((a,b) => a.ref.length - b.ref.length || a.ref.localeCompare(b.ref));
+
+  if (exact) showImgPreview(val);
+  else { imgPreview.style.display = 'none'; }
+
+  if (imgSuggestions.length > 0 && val.length >= 2 && !(exact && imgSuggestions.length === 1)) {
+    buildImgSuggestBox(imgSuggestions.slice(0, 8));
+  } else {
+    closeImgSuggest();
+  }
+});
+
+imgRefInput.addEventListener('keydown', e => {
+  if (imgSuggestBox) {
+    const items = imgSuggestBox.querySelectorAll('.suggest-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      imgActiveIdx = Math.min(imgActiveIdx+1, items.length-1);
+      items.forEach((el,i) => el.classList.toggle('active', i===imgActiveIdx));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      imgActiveIdx = Math.max(imgActiveIdx-1, -1);
+      items.forEach((el,i) => el.classList.toggle('active', i===imgActiveIdx));
+    } else if (e.key === 'Enter') {
+      if (imgActiveIdx >= 0 && items[imgActiveIdx]) items[imgActiveIdx].dispatchEvent(new MouseEvent('mousedown'));
+      e.preventDefault();
+    } else if (e.key === 'Escape') {
+      closeImgSuggest();
+    }
+  } else if (e.key === 'Escape') {
+    imgRefInput.value=''; imgPreview.style.display='none';
+  }
+});
+
+imgRefInput.addEventListener('blur', () => setTimeout(closeImgSuggest, 150));
 
 // ── BÚSQUEDA POR NOMBRE ───────────────────────────────────────
 const nameInput = document.getElementById('nameInput');
@@ -3007,6 +3230,642 @@ function registrarSugerenciasActa() {
 }
 
 ['cliente', 'nombre', 'cedula'].forEach(campo => poblarDatalist(campo, obtenerSugerencias(campo)));
+
+// ═══════════════════════════════════════════════════════════
+// SUPABASE — Login, roles, fotos e imágenes de referencia en la nube
+// ═══════════════════════════════════════════════════════════
+const SUPABASE_URL = "https://lchhjadqrjyvdigayrjk.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_2MMGHMBKhxPxciwDfg-ohw_cAyEQMVp";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let usuarioActual = null; // { id, nombre, rol }
+
+function urlFotoReferencia(ref) {
+  return sb.storage.from('referencias-fotos').getPublicUrl(ref + '.jpg').data.publicUrl;
+}
+
+// --- LOGIN ---
+document.getElementById('btnLogin').addEventListener('click', hacerLogin);
+document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') hacerLogin(); });
+
+// Reutilizamos el logo real de Layher que ya está en el encabezado
+(function cargarLogoLogin(){
+  const hdrLogo = document.querySelector('.hdr-logo-img');
+  const loginLogo = document.getElementById('loginLogoImg');
+  if (hdrLogo && loginLogo) loginLogo.src = hdrLogo.src;
+})();
+
+document.getElementById('btnTogglePass').addEventListener('click', () => {
+  const inp = document.getElementById('loginPass');
+  const eyeOpen = document.getElementById('eyeOpen');
+  const eyeClosed = document.getElementById('eyeClosed');
+  if (inp.type === 'password') { inp.type = 'text'; eyeOpen.style.display='none'; eyeClosed.style.display=''; }
+  else { inp.type = 'password'; eyeOpen.style.display=''; eyeClosed.style.display='none'; }
+});
+
+// Cuenta de invitado compartida (créala en Supabase y pega sus datos aquí)
+const GUEST_EMAIL = "invitado@layherandina.com";
+const GUEST_PASSWORD = "1234";
+
+document.getElementById('btnGuestLogin').addEventListener('click', async () => {
+  const errBox = document.getElementById('loginError');
+  const btn = document.getElementById('btnGuestLogin');
+  errBox.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Ingresando...';
+  const { data, error } = await sb.auth.signInWithPassword({ email: GUEST_EMAIL, password: GUEST_PASSWORD });
+  btn.disabled = false; btn.textContent = 'Continuar como invitado →';
+  if (error) {
+    errBox.style.color = '#C62828';
+    errBox.textContent = 'El acceso de invitado no está configurado todavía.';
+    errBox.style.display = 'block';
+    return;
+  }
+  await cargarPerfilYEntrar(data.user);
+});
+
+document.getElementById('btnForgotPass').addEventListener('click', async () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const errBox = document.getElementById('loginError');
+  if (!email) {
+    errBox.textContent = 'Escribe tu correo arriba y luego dale clic a "Olvidé mi contraseña".';
+    errBox.style.display = 'block';
+    return;
+  }
+  const { error } = await sb.auth.resetPasswordForEmail(email);
+  errBox.style.color = error ? '#C62828' : '#1c7a3c';
+  errBox.textContent = error ? 'No se pudo enviar el correo de recuperación.' : 'Te enviamos un correo para restablecer tu contraseña.';
+  errBox.style.display = 'block';
+});
+
+async function hacerLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const errBox = document.getElementById('loginError');
+  const btn = document.getElementById('btnLogin');
+  errBox.style.display = 'none';
+  if (!email || !pass) { errBox.textContent = 'Ingresa correo y contraseña.'; errBox.style.display='block'; return; }
+  btn.disabled = true; btn.textContent = 'Ingresando...';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  btn.disabled = false; btn.textContent = 'Ingresar';
+  if (error) {
+    errBox.textContent = 'Correo o contraseña incorrectos.';
+    errBox.style.display = 'block';
+    return;
+  }
+  await cargarPerfilYEntrar(data.user);
+}
+
+async function cargarPerfilYEntrar(user) {
+  const { data: perfil, error } = await sb.from('profiles').select('*').eq('id', user.id).single();
+  if (error || !perfil) {
+    alert('Tu usuario no tiene un perfil configurado. Contacta al administrador.');
+    await sb.auth.signOut();
+    return;
+  }
+  usuarioActual = { id: user.id, nombre: perfil.nombre, rol: perfil.rol };
+  document.getElementById('loginGate').classList.add('hidden');
+  document.getElementById('appRoot').classList.remove('hidden');
+  pintarBadgeUsuario();
+  aplicarRestriccionesRol();
+}
+
+function pintarBadgeUsuario() {
+  let badge = document.getElementById('hdrUserBadge');
+  if (!badge) {
+    badge = document.createElement('div');
+    badge.id = 'hdrUserBadge';
+    badge.className = 'hdr-user';
+    const hdrRight = document.querySelector('.hdr-right');
+    if (hdrRight) hdrRight.appendChild(badge);
+  }
+  badge.innerHTML =
+    '<span>👤 ' + usuarioActual.nombre + '</span>' +
+    '<span class="rolebadge">' + usuarioActual.rol + '</span>' +
+    (usuarioActual.rol === 'admin' ? '<button id="btnAbrirAdmin">Panel admin</button>' : '') +
+    (usuarioActual.rol === 'admin' ? '<button id="btnAbrirClientes">Clientes</button>' : '') +
+    ((usuarioActual.rol === 'admin' || usuarioActual.rol === 'invitado') ? '<button id="btnVerConteos">Ver conteos guardados</button>' : '') +
+    '<button id="btnLogout">Salir</button>';
+  document.getElementById('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
+  if (usuarioActual.rol === 'admin') {
+    document.getElementById('btnAbrirAdmin').addEventListener('click', abrirPanelAdmin);
+    document.getElementById('btnAbrirClientes').addEventListener('click', abrirPanelClientes);
+  }
+  if (usuarioActual.rol === 'admin' || usuarioActual.rol === 'invitado') {
+    document.getElementById('btnVerConteos').addEventListener('click', abrirVerConteos);
+  }
+}
+
+function aplicarRestriccionesRol() {
+  document.querySelectorAll('.solo-admin').forEach(el => {
+    el.style.display = usuarioActual.rol === 'admin' ? '' : 'none';
+  });
+  if (usuarioActual.rol === 'invitado') {
+    // El invitado puede buscar y explorar, pero no guardar, exportar ni subir fotos
+    const btnSave = document.getElementById('btnSave');
+    if (btnSave) { btnSave.disabled = true; btnSave.title = 'Los usuarios invitados no pueden guardar actas'; }
+    ['btnPDF','btnCSV'].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) { b.disabled = true; b.title = 'Los usuarios invitados no pueden exportar'; }
+    });
+    document.getElementById('btnSubirFotos') && (document.getElementById('btnSubirFotos').style.display = 'none');
+  }
+}
+
+// ── PORTAL DE CLIENTES (acceso por link, sin login) ──────────
+function getClientTokenFromUrl() {
+  return new URLSearchParams(location.search).get('cliente');
+}
+
+async function initClientPortal(token) {
+  document.getElementById('loginGate').classList.add('hidden');
+  const root = document.getElementById('clientPortalRoot');
+  root.classList.remove('hidden');
+  const hdrLogo = document.querySelector('.hdr-logo-img');
+  const portalLogo = document.getElementById('portalLogoImg');
+  if (hdrLogo && portalLogo) portalLogo.src = hdrLogo.src;
+
+  const content = document.getElementById('portalContent');
+  const { data: infoArr, error } = await sb.rpc('portal_cliente_info', { p_token: token });
+  const info = infoArr && infoArr[0];
+  if (error || !info) {
+    content.innerHTML = '<p>Este link no es válido o ya no está activo. Por favor contacta a Layher Andina.</p>';
+    return;
+  }
+  content.innerHTML =
+    '<h2 style="margin:0 0 .3rem;font-size:1.2rem">Hola, ' + info.nombre + '</h2>' +
+    '<p style="color:#6b7785;font-size:.88rem;margin:0 0 1.5rem">Aquí puedes ver los conteos de material registrados por Layher Andina para tu empresa.</p>' +
+    '<div id="portalListaWrap">Cargando conteos…</div>';
+  mostrarListaActasPortal(token, info);
+}
+
+async function mostrarListaActasPortal(token, info) {
+  const wrap = document.getElementById('portalListaWrap');
+  wrap.textContent = 'Cargando...';
+  const { data: actas, error } = await sb.rpc('portal_actas_cliente', { p_token: token });
+  if (error) { wrap.textContent = 'Error cargando tus conteos.'; return; }
+  if (!actas || !actas.length) { wrap.textContent = 'Todavía no hay conteos registrados para tu empresa.'; return; }
+  actas.sort((a,b) => new Date(b.creado_en) - new Date(a.creado_en));
+  wrap.innerHTML = actas.map(a =>
+    '<button class="portal-acta-item" data-id="' + a.id + '" style="display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:.85rem 1rem;margin-bottom:.5rem;border:1px solid #e2e6ea;border-radius:8px;background:#fafbfc;cursor:pointer;font-family:inherit">' +
+      '<span><strong>' + a.nombre + '</strong>' + (a.obra ? ' — ' + a.obra : '') + '<br><span style="font-size:.78rem;color:#6b7785">' + a.total_items + ' piezas · ' + Number(a.peso_total).toFixed(2) + ' kg · ' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</span></span>' +
+      '<span style="color:#003087;font-weight:700">Ver ›</span>' +
+    '</button>'
+  ).join('');
+  wrap.querySelectorAll('.portal-acta-item').forEach(btn => {
+    btn.addEventListener('click', () => mostrarDetalleActaPortal(token, btn.dataset.id, info));
+  });
+}
+
+async function mostrarDetalleActaPortal(token, actaId, info) {
+  const wrap = document.getElementById('portalListaWrap');
+  wrap.textContent = 'Cargando...';
+  const [{ data: actas }, { data: items }, { data: fotos }] = await Promise.all([
+    sb.rpc('portal_actas_cliente', { p_token: token }),
+    sb.rpc('portal_items_cliente', { p_token: token, p_acta_id: actaId }),
+    sb.rpc('portal_fotos_cliente', { p_token: token, p_acta_id: actaId })
+  ]);
+  const acta = (actas || []).find(a => a.id === actaId);
+  if (!acta) { wrap.textContent = 'No se pudo cargar este conteo.'; return; }
+
+  let html = '<button id="portalBtnVolver" style="background:none;border:none;color:#003087;font-weight:700;cursor:pointer;margin-bottom:1rem;font-family:inherit">‹ Volver</button>';
+  html += '<h4 style="margin:.2rem 0">' + acta.nombre + '</h4>';
+  html += '<p style="font-size:.85rem;color:#6b7785;margin:0 0 1rem">' + (acta.obra || '') + ' · ' + (acta.bodega || '') + '<br>' + new Date(acta.creado_en).toLocaleDateString('es-CO') + '</p>';
+  html += '<table style="width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:1.5rem"><thead><tr style="background:#f4f6f8"><th style="padding:.5rem;text-align:left">Referencia</th><th style="padding:.5rem;text-align:left">Descripción</th><th style="padding:.5rem;text-align:right">Cantidad</th></tr></thead><tbody>' +
+    (items || []).map(it => '<tr style="border-bottom:1px solid #eee"><td style="padding:.5rem">' + it.referencia + '</td><td style="padding:.5rem">' + (it.descripcion || '') + '</td><td style="padding:.5rem;text-align:right">' + it.cantidad + '</td></tr>').join('') +
+    '</tbody></table>';
+  html += '<div id="portalFotosWrap"></div>';
+  wrap.innerHTML = html;
+  document.getElementById('portalBtnVolver').addEventListener('click', () => mostrarListaActasPortal(token, info));
+
+  const fotosWrap = document.getElementById('portalFotosWrap');
+  ['conteo','danos','no_layher','limpieza'].forEach(cat => {
+    const fotosCat = (fotos || []).filter(f => f.categoria === cat);
+    const section = document.createElement('div');
+    section.style.marginBottom = '1.25rem';
+    section.innerHTML = '<div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem">' + CATEGORIA_LABEL[cat] + ' (' + fotosCat.length + ')</div>';
+    if (!fotosCat.length) {
+      section.innerHTML += '<p style="font-size:.8rem;color:#6b7785">Sin fotos en esta categoría.</p>';
+    } else {
+      const grid = document.createElement('div');
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.5rem';
+      fotosCat.forEach(f => {
+        const url = sb.storage.from('conteo-fotos').getPublicUrl(f.storage_path).data.publicUrl;
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid #e2e6ea;cursor:pointer';
+        img.onclick = () => window.open(url, '_blank');
+        grid.appendChild(img);
+      });
+      section.appendChild(grid);
+    }
+    fotosWrap.appendChild(section);
+  });
+}
+
+// Revisar si ya hay una sesión activa al recargar la página
+const _clienteToken = getClientTokenFromUrl();
+if (_clienteToken) {
+  initClientPortal(_clienteToken);
+} else {
+  sb.auth.getSession().then(({ data }) => {
+    if (data.session) cargarPerfilYEntrar(data.session.user);
+  });
+}
+
+
+// --- IMAGEN DE LA PIEZA en la vista previa (búsqueda por código) ---
+const _origSelectSuggestion = selectSuggestion;
+selectSuggestion = function(ref, desc, peso) {
+  _origSelectSuggestion(ref, desc, peso);
+  const img = document.createElement('img');
+  img.className = 'preview-thumb';
+  img.src = urlFotoReferencia(ref);
+  img.onerror = function(){ this.style.display='none'; };
+  preview.insertBefore(img, preview.firstChild);
+};
+
+// --- IMAGEN DE LA PIEZA en cada fila del listado ---
+const _origRender = render;
+render = function() {
+  _origRender();
+  const tbody = document.getElementById('tBody');
+  Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+    const refCell = tr.querySelector('td.ref');
+    if (!refCell || refCell.querySelector('img')) return;
+    const ref = refCell.textContent.trim();
+    const img = document.createElement('img');
+    img.className = 'pieza-thumb';
+    img.src = urlFotoReferencia(ref);
+    img.onerror = function(){ this.remove(); };
+    refCell.insertBefore(img, refCell.firstChild);
+  });
+};
+
+
+// --- SUBIR FOTOS también a Supabase (además de guardarlas localmente) ---
+const _origSubirFotos = subirFotos;
+subirFotos = async function(files) {
+  await _origSubirFotos(files);
+  if (!usuarioActual || usuarioActual.rol === 'invitado' || !files || !files.length) return;
+  const categoria = fotosCategoriaActual;
+  for (const file of files) {
+    try {
+      const esHeic = /\.(heic|heif)$/i.test(file.name || '');
+      const procesado = esHeic ? await convertirSiEsHEIC(file) : file;
+      const dataURL = await comprimirImagen(procesado, 1400, 0.75);
+      const blob = await (await fetch(dataURL)).blob();
+      const path = usuarioActual.id + '/' + fotoSesionActual + '/' + categoria + '/' + Date.now() + '_' + Math.random().toString(36).slice(2,8) + '.jpg';
+      const { error: upErr } = await sb.storage.from('conteo-fotos').upload(path, blob, { contentType: 'image/jpeg' });
+      if (upErr) { console.error('Error subiendo a Supabase Storage:', upErr); continue; }
+      await sb.from('acta_fotos').insert({
+        user_id: usuarioActual.id,
+        sesion: fotoSesionActual,
+        categoria,
+        storage_path: path
+      });
+    } catch (err) {
+      console.error('Error subiendo foto a la nube:', err);
+    }
+  }
+};
+
+
+// --- GUARDAR ACTA también en Supabase (además del historial local) ---
+const _origConfirmarGuardar = confirmarGuardar;
+confirmarGuardar = async function() {
+  const nombreAntes = document.getElementById('saveNombre').value.trim();
+  _origConfirmarGuardar();
+  if (!usuarioActual || usuarioActual.rol === 'invitado' || !nombreAntes) return;
+  try {
+    const totP = listado.reduce((s,r) => s + r.peso*r.qty, 0);
+    const { data: acta, error } = await sb.from('actas').insert({
+      user_id: usuarioActual.id,
+      nombre: nombreAntes,
+      obs: document.getElementById('saveObs').value.trim(),
+      cliente: document.getElementById('actaCliente').value,
+      obra: document.getElementById('actaObra').value,
+      fecha_conteo: document.getElementById('actaFecha').value || null,
+      responsable_nombre: document.getElementById('actaNombre').value,
+      responsable_cedula: document.getElementById('actaCedula').value,
+      bodega: document.getElementById('actaCargo') ? document.getElementById('actaCargo').value : '',
+      total_items: listado.length,
+      peso_total: totP
+    }).select().single();
+    if (error) { console.error('Error guardando acta en Supabase:', error); return; }
+    if (listado.length) {
+      const items = listado.map(it => ({
+        acta_id: acta.id, referencia: it.ref, descripcion: it.desc, peso_unitario: it.peso, cantidad: it.qty
+      }));
+      await sb.from('acta_items').insert(items);
+    }
+    // Vincular las fotos que se subieron durante esta sesión con el acta recién creada
+    await sb.from('acta_fotos').update({ acta_id: acta.id }).eq('sesion', fotoSesionActual).is('acta_id', null);
+  } catch (err) {
+    console.error('Error guardando acta en la nube:', err);
+  }
+};
+
+
+// --- VER CONTEOS GUARDADOS (solo lectura, para invitado y admin) ---
+const CATEGORIA_LABEL = {
+  conteo:    'Fotos del Conteo',
+  danos:     'Daños',
+  no_layher: 'Piezas No Layher',
+  limpieza:  'Piezas por Limpieza'
+};
+
+function getVerConteosModal() {
+  let modal = document.getElementById('modalVerConteos');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modalVerConteos';
+    modal.className = 'modal-bg hidden';
+    modal.innerHTML =
+      '<div class="modal" style="max-width:900px;max-height:85vh;overflow:auto;">' +
+        '<h3>📋 Conteos guardados</h3>' +
+        '<div id="verConteosWrap">Cargando...</div>' +
+        '<div class="modal-btns" style="margin-top:1.25rem"><button class="modal-btns btn-cancel" onclick="closeModal(\'modalVerConteos\')">Cerrar</button></div>' +
+      '</div>';
+    document.body.appendChild(modal);
+  }
+  return modal;
+}
+
+async function abrirVerConteos() {
+  getVerConteosModal();
+  openModal('modalVerConteos');
+  await mostrarListaActas();
+}
+
+async function mostrarListaActas() {
+  const wrap = document.getElementById('verConteosWrap');
+  wrap.textContent = 'Cargando...';
+  const { data: actas, error } = await sb
+    .from('actas')
+    .select('id,nombre,cliente,obra,bodega,total_items,peso_total,creado_en,profiles(nombre)')
+    .order('creado_en', { ascending: false });
+  if (error) { wrap.textContent = 'Error cargando conteos: ' + error.message; return; }
+  if (!actas.length) { wrap.textContent = 'Aún no hay conteos guardados.'; return; }
+  wrap.innerHTML = actas.map(a =>
+    '<button class="acta-list-item" data-id="' + a.id + '" style="display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:.85rem 1rem;margin-bottom:.5rem;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-family:inherit">' +
+      '<span><strong>' + a.nombre + '</strong> — ' + (a.cliente || 'Sin cliente') + (a.obra ? ' · ' + a.obra : '') +
+        '<br><span style="font-size:.78rem;color:var(--muted)">' + (a.profiles ? a.profiles.nombre : '—') + ' · ' + a.total_items + ' piezas · ' + Number(a.peso_total).toFixed(2) + ' kg · ' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</span></span>' +
+      '<span style="color:var(--blue-mid);font-weight:700">Ver ›</span>' +
+    '</button>'
+  ).join('');
+  wrap.querySelectorAll('.acta-list-item').forEach(btn => {
+    btn.addEventListener('click', () => mostrarDetalleActa(btn.dataset.id));
+  });
+}
+
+async function mostrarDetalleActa(actaId) {
+  const wrap = document.getElementById('verConteosWrap');
+  wrap.textContent = 'Cargando...';
+
+  const [{ data: acta }, { data: items }, { data: fotos }] = await Promise.all([
+    sb.from('actas').select('*, profiles(nombre)').eq('id', actaId).single(),
+    sb.from('acta_items').select('*').eq('acta_id', actaId),
+    sb.from('acta_fotos').select('*').eq('acta_id', actaId)
+  ]);
+
+  let html = '<button id="btnVolverLista" style="background:none;border:none;color:var(--blue-mid);font-weight:700;cursor:pointer;margin-bottom:1rem;font-family:inherit">‹ Volver a la lista</button>';
+  html += '<h4 style="margin:.2rem 0">' + acta.nombre + '</h4>';
+  html += '<p style="font-size:.85rem;color:var(--muted);margin:0 0 1rem">' +
+    (acta.cliente || 'Sin cliente') + (acta.obra ? ' · ' + acta.obra : '') + ' · ' + (acta.bodega || '') +
+    '<br>Registrado por ' + (acta.profiles ? acta.profiles.nombre : '—') + ' el ' + new Date(acta.creado_en).toLocaleDateString('es-CO') + '</p>';
+
+  html += '<table class="admin-table" style="margin-bottom:1.5rem"><thead><tr><th>Referencia</th><th>Descripción</th><th>Cantidad</th><th>Peso (kg)</th></tr></thead><tbody>' +
+    (items || []).map(it => '<tr><td>' + it.referencia + '</td><td>' + (it.descripcion||'') + '</td><td>' + it.cantidad + '</td><td>' + Number(it.peso_unitario * it.cantidad).toFixed(2) + '</td></tr>').join('') +
+    '</tbody></table>';
+
+  html += '<div id="verConteosFotos"></div>';
+  wrap.innerHTML = html;
+  document.getElementById('btnVolverLista').addEventListener('click', mostrarListaActas);
+
+  const fotosWrap = document.getElementById('verConteosFotos');
+  const categorias = ['conteo','danos','no_layher','limpieza'];
+  for (const cat of categorias) {
+    const fotosCat = (fotos || []).filter(f => f.categoria === cat);
+    const section = document.createElement('div');
+    section.style.marginBottom = '1.25rem';
+    section.innerHTML = '<div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem">' + CATEGORIA_LABEL[cat] + ' (' + fotosCat.length + ')</div>';
+    if (!fotosCat.length) {
+      section.innerHTML += '<p style="font-size:.8rem;color:var(--muted)">Sin fotos en esta categoría.</p>';
+    } else {
+      const grid = document.createElement('div');
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.5rem';
+      for (const f of fotosCat) {
+        const { data: signed } = await sb.storage.from('conteo-fotos').createSignedUrl(f.storage_path, 3600);
+        const img = document.createElement('img');
+        img.src = signed ? signed.signedUrl : '';
+        img.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer';
+        img.onclick = () => window.open(signed.signedUrl, '_blank');
+        grid.appendChild(img);
+      }
+      section.appendChild(grid);
+    }
+    fotosWrap.appendChild(section);
+  }
+}
+
+// --- PANEL CLIENTES: crear clientes y generar su link único ---
+async function abrirPanelClientes() {
+  let modal = document.getElementById('modalClientes');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modalClientes';
+    modal.className = 'modal-bg hidden';
+    modal.innerHTML =
+      '<div class="modal" style="max-width:700px;max-height:85vh;overflow:auto;">' +
+        '<h3>🔗 Clientes — links de acceso</h3>' +
+        '<p style="font-size:.82rem;color:var(--muted);margin-top:-.5rem">Crea un cliente y comparte su link único; él verá solo sus propios conteos y fotos, sin necesitar contraseña.</p>' +
+        '<div style="display:flex;gap:.5rem;margin:1rem 0">' +
+          '<input id="nuevoClienteNombre" placeholder="Nombre del cliente (igual al que usas en \'Cliente\' al guardar el acta)" style="flex:1;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:7px;font-size:.85rem;font-family:inherit" />' +
+          '<button id="btnCrearCliente" class="btn-add">＋ Crear</button>' +
+        '</div>' +
+        '<details style="margin-bottom:1rem">' +
+          '<summary style="cursor:pointer;font-size:.82rem;font-weight:700;color:var(--blue-mid)">¿Tienes muchos clientes? Créalos todos de una vez ›</summary>' +
+          '<div style="margin-top:.6rem">' +
+            '<textarea id="clientesMasivo" rows="5" placeholder="Pega aquí un nombre de cliente por línea, por ejemplo:\nConstructora ABC\nInmobiliaria XYZ\nGrupo Andino S.A.S" style="width:100%;box-sizing:border-box;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:7px;font-size:.82rem;font-family:inherit"></textarea>' +
+            '<button id="btnCrearClientesMasivo" class="btn-add" style="margin-top:.5rem">＋ Crear todos</button>' +
+          '</div>' +
+        '</details>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:.5rem;gap:.5rem">' +
+          '<button id="btnGenerarClientes" style="background:var(--blue-mid);color:#fff;border:none;border-radius:6px;padding:.4rem .9rem;font-size:.78rem;cursor:pointer">🔄 Generar automáticamente desde mis actas guardadas</button>' +
+          '<button id="btnExportarClientes" style="background:var(--green);color:#fff;border:none;border-radius:6px;padding:.4rem .9rem;font-size:.78rem;cursor:pointer">⬇ Exportar lista a Excel</button>' +
+        '</div>' +
+        '<div id="clientesTableWrap">Cargando...</div>' +
+        '<div class="modal-btns" style="margin-top:1.25rem"><button class="modal-btns btn-cancel" onclick="closeModal(\'modalClientes\')">Cerrar</button></div>' +
+      '</div>';
+    document.body.appendChild(modal);
+  }
+  openModal('modalClientes');
+  document.getElementById('btnCrearCliente').onclick = crearCliente;
+  document.getElementById('btnCrearClientesMasivo').onclick = crearClientesMasivo;
+  document.getElementById('btnExportarClientes').onclick = exportarClientesExcel;
+  document.getElementById('btnGenerarClientes').onclick = generarClientesDesdeActas;
+  await cargarListaClientes();
+}
+
+async function generarClientesDesdeActas() {
+  const btn = document.getElementById('btnGenerarClientes');
+  btn.disabled = true; btn.textContent = 'Revisando actas...';
+  try {
+    const { data: actas, error: errActas } = await sb.from('actas').select('cliente');
+    if (errActas) throw errActas;
+    const { data: existentes, error: errCli } = await sb.from('clientes').select('nombre');
+    if (errCli) throw errCli;
+
+    const existentesSet = new Set((existentes || []).map(c => c.nombre.trim().toLowerCase()));
+    const nombresUnicos = new Map();
+    (actas || []).forEach(a => {
+      const nombre = (a.cliente || '').trim();
+      if (!nombre) return;
+      const key = nombre.toLowerCase();
+      if (!existentesSet.has(key) && !nombresUnicos.has(key)) nombresUnicos.set(key, nombre);
+    });
+
+    const nuevos = Array.from(nombresUnicos.values());
+    if (!nuevos.length) {
+      alert('No hay clientes nuevos por crear — ya están todos generados.');
+    } else {
+      const { error: errInsert } = await sb.from('clientes').insert(nuevos.map(nombre => ({ nombre })));
+      if (errInsert) throw errInsert;
+      alert('Se crearon ' + nuevos.length + ' clientes nuevos a partir de tus actas guardadas.');
+    }
+    await cargarListaClientes();
+  } catch (err) {
+    alert('Error generando clientes: ' + err.message);
+  }
+  btn.disabled = false; btn.textContent = '🔄 Generar automáticamente desde mis actas guardadas';
+}
+
+async function crearCliente() {
+  const input = document.getElementById('nuevoClienteNombre');
+  const nombre = input.value.trim();
+  if (!nombre) return;
+  const { error } = await sb.from('clientes').insert({ nombre });
+  if (error) { alert('Error creando cliente: ' + error.message); return; }
+  input.value = '';
+  await cargarListaClientes();
+}
+
+async function crearClientesMasivo() {
+  const textarea = document.getElementById('clientesMasivo');
+  const btn = document.getElementById('btnCrearClientesMasivo');
+  const nombres = textarea.value.split('\n').map(n => n.trim()).filter(Boolean);
+  if (!nombres.length) return;
+  btn.disabled = true; btn.textContent = 'Creando...';
+  const filas = nombres.map(nombre => ({ nombre }));
+  const { error } = await sb.from('clientes').insert(filas);
+  btn.disabled = false; btn.textContent = '＋ Crear todos';
+  if (error) { alert('Error creando clientes: ' + error.message); return; }
+  textarea.value = '';
+  await cargarListaClientes();
+}
+
+let _ultimosClientes = [];
+
+function exportarClientesExcel() {
+  if (!_ultimosClientes.length) { alert('No hay clientes para exportar todavía.'); return; }
+  const baseUrl = location.origin + location.pathname;
+  const filas = [['Nombre del cliente', 'Link de acceso', 'Activo']];
+  _ultimosClientes.forEach(c => {
+    filas.push([c.nombre, baseUrl + '?cliente=' + c.token, c.activo ? 'Sí' : 'No']);
+  });
+  const csv = filas.map(f => f.map(v => '"' + String(v).replace(/"/g,'""') + '"').join(',')).join('\r\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'clientes_links_layher.csv';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+async function cargarListaClientes() {
+  const wrap = document.getElementById('clientesTableWrap');
+  wrap.textContent = 'Cargando...';
+  const { data: clientes, error } = await sb.from('clientes').select('*').order('creado_en', { ascending: false });
+  if (error) { wrap.textContent = 'Error: ' + error.message; return; }
+  if (!clientes.length) { wrap.textContent = 'Aún no has creado ningún cliente.'; return; }
+  _ultimosClientes = clientes;
+  const baseUrl = location.origin + location.pathname;
+  wrap.innerHTML = '<table class="admin-table"><thead><tr><th>Cliente</th><th>Link</th><th>Activo</th><th></th></tr></thead><tbody>' +
+    clientes.map(c => {
+      const link = baseUrl + '?cliente=' + c.token;
+      return '<tr>' +
+        '<td>' + c.nombre + '</td>' +
+        '<td><input readonly value="' + link + '" style="width:100%;font-size:.72rem;border:1px solid var(--border);border-radius:5px;padding:.3rem .4rem;background:#fafbfc" onclick="this.select()" /></td>' +
+        '<td><button class="prio-star" data-id="' + c.id + '" data-val="' + c.activo + '">' + (c.activo ? '✅' : '🚫') + '</button></td>' +
+        '<td><button class="btn-copy-link" data-link="' + link + '" style="background:var(--blue-mid);color:#fff;border:none;border-radius:5px;padding:.3rem .6rem;font-size:.72rem;cursor:pointer">Copiar</button></td>' +
+        '</tr>';
+    }).join('') + '</tbody></table>';
+  wrap.querySelectorAll('.btn-copy-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(btn.dataset.link);
+      btn.textContent = '¡Copiado!';
+      setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
+    });
+  });
+  wrap.querySelectorAll('.prio-star').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const nuevoVal = btn.dataset.val !== 'true';
+      await sb.from('clientes').update({ activo: nuevoVal }).eq('id', id);
+      cargarListaClientes();
+    });
+  });
+}
+
+async function abrirPanelAdmin() {
+  let modal = document.getElementById('modalAdmin');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modalAdmin';
+    modal.className = 'modal-bg hidden';
+    modal.innerHTML =
+      '<div class="modal" style="max-width:900px;max-height:85vh;overflow:auto;">' +
+        '<h3>📊 Panel Admin — Actas de todos los usuarios</h3>' +
+        '<div id="adminTableWrap">Cargando...</div>' +
+        '<div class="modal-btns" style="margin-top:1.25rem"><button class="modal-btns btn-cancel" onclick="closeModal(\'modalAdmin\')">Cerrar</button></div>' +
+      '</div>';
+    document.body.appendChild(modal);
+  }
+  openModal('modalAdmin');
+  const wrap = document.getElementById('adminTableWrap');
+  wrap.textContent = 'Cargando...';
+  const { data: actas, error } = await sb
+    .from('actas')
+    .select('id,nombre,cliente,obra,bodega,total_items,peso_total,prioridad,creado_en,profiles(nombre)')
+    .order('creado_en', { ascending: false });
+  if (error) { wrap.textContent = 'Error cargando actas: ' + error.message; return; }
+  if (!actas.length) { wrap.textContent = 'Aún no hay actas guardadas.'; return; }
+  wrap.innerHTML = '<table class="admin-table"><thead><tr>' +
+    '<th>Prioridad</th><th>Usuario</th><th>Acta</th><th>Cliente</th><th>Obra</th><th>Bodega</th><th>Items</th><th>Peso (kg)</th><th>Fecha</th>' +
+    '</tr></thead><tbody>' +
+    actas.map(a => '<tr>' +
+      '<td><button class="prio-star" data-id="' + a.id + '" data-val="' + a.prioridad + '">' + (a.prioridad ? '⭐' : '☆') + '</button></td>' +
+      '<td>' + (a.profiles ? a.profiles.nombre : '—') + '</td>' +
+      '<td>' + a.nombre + '</td>' +
+      '<td>' + (a.cliente || '—') + '</td>' +
+      '<td>' + (a.obra || '—') + '</td>' +
+      '<td>' + (a.bodega || '—') + '</td>' +
+      '<td>' + a.total_items + '</td>' +
+      '<td>' + Number(a.peso_total).toFixed(2) + '</td>' +
+      '<td>' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</td>' +
+      '</tr>').join('') +
+    '</tbody></table>';
+  wrap.querySelectorAll('.prio-star').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const nuevoVal = btn.dataset.val !== 'true';
+      await sb.from('actas').update({ prioridad: nuevoVal }).eq('id', id);
+      abrirPanelAdmin();
+    });
+  });
+}
 </script>
+</div><!-- /appRoot -->
 </body>
 </html>
