@@ -865,6 +865,50 @@ footer em { color: var(--blue-mid); font-style: italic; }
 
   /* ── FOOTER ── */
   footer { font-size: .65rem; padding: 1.2rem .75rem; line-height: 1.8; }
+
+  /* ── LOGIN ── */
+  #loginGate { padding: 0; }
+  .login-card {
+    max-width: 100%; width: 100%; min-height: 100vh;
+    border-radius: 0; padding: 2.2rem 1.3rem;
+    display: flex; flex-direction: column; justify-content: center;
+    box-shadow: none;
+  }
+  .login-card .login-logo { height: 90px; margin-bottom: 1.4rem; }
+  .login-actions { flex-direction: column; align-items: stretch; gap: .7rem; }
+  .login-card button#btnLogin { width: 100%; padding: .8rem; font-size: .92rem; }
+  .login-forgot { text-align: center; }
+  .login-guest-row { margin-top: 1.2rem; }
+  .login-guest-row button { font-size: .85rem; }
+  .login-field input { font-size: 16px; }
+
+  /* ── HEADER: todo en una sola fila ── */
+  .hdr-inner { flex-wrap: nowrap; height: auto; padding: .6rem .8rem; justify-content: space-between; align-items: center; }
+  .hdr-left { gap: 5px; min-width: 0; }
+  .hdr-logo-img { height: 30px !important; }
+  .hdr-sep { display: none; }
+  .hdr-right { gap: 6px; flex-shrink: 0; }
+  .hdr-pill { font-size: .56rem !important; padding: 3px 6px !important; white-space: nowrap; }
+  .hdr-pill .dot { display: none; }
+  .hdr-pill:last-child { display: none; }
+  .hdr-user { flex-wrap: nowrap; gap: 5px; padding: .25rem .45rem; }
+  .hdr-user > span:first-child { display: none; }
+  .hdr-user .rolebadge { font-size: .6rem; padding: .1rem .4rem; }
+  .hdr-user button { font-size: .62rem; padding: .16rem .45rem; white-space: nowrap; }
+
+  /* ── MODALES Y TABLAS DE PANELES ── */
+  .modal { padding: 1.3rem; max-height: 92vh; }
+  .admin-table { display: block; }
+  #adminTableWrap { overflow-x: visible; }
+  .admin-table thead { display: none; }
+  .admin-table tbody, .admin-table tr { display: block; width: 100%; }
+  .admin-table tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: .6rem; padding: .5rem .8rem; }
+  .admin-table td { display: flex; justify-content: space-between; align-items: center; gap: .6rem; border: none !important; padding: .35rem 0 !important; text-align: right; font-size: .78rem; }
+  .admin-table td::before { content: attr(data-label); font-weight: 700; font-size: .68rem; color: var(--muted); text-align: left; }
+
+  /* ── VER IMAGEN DE PIEZA ── */
+  #imgPreview { flex-direction: column; padding: 1rem !important; }
+  #imgPreview img { width: 160px !important; height: 160px !important; }
 }
 @page {
   margin: 12mm 10mm;
@@ -976,76 +1020,6 @@ footer em { color: var(--blue-mid); font-style: italic; }
 }
 .hdr-user .rolebadge { background:#C62828; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.68rem; text-transform:uppercase; }
 .hdr-user button { background:none; border:1px solid #003087; color:#003087; border-radius:14px; padding:.2rem .6rem; font-size:.72rem; cursor:pointer; }
-
-.hdr-menu-wrap { position: relative; }
-#hdrMenuToggle {
-  background: none; border: 1px solid #003087; color: #003087;
-  border-radius: 14px; width: 30px; height: 26px; font-size: 1rem;
-  line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
-.hdr-menu-dropdown {
-  display: none; position: absolute; top: calc(100% + 6px); right: 0;
-  background: #fff; border: 1px solid var(--border); border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.15); min-width: 190px; z-index: 250;
-  flex-direction: column; overflow: hidden;
-}
-.hdr-menu-dropdown.open { display: flex; }
-.hdr-menu-dropdown button {
-  background: none; border: none; text-align: left; color: var(--text) !important;
-  padding: .65rem .9rem; font-size: .8rem; cursor: pointer; border-radius: 0 !important;
-}
-.hdr-menu-dropdown button:hover { background: var(--off-white); }
-.hdr-menu-dropdown button + button { border-top: 1px solid var(--border); }
-
-/* ═══ MÓVIL: login, portal de cliente y header ═══ */
-@media (max-width: 640px) {
-  #loginGate { padding: 0; }
-  .login-card {
-    max-width: 100%; width: 100%; min-height: 100vh;
-    border-radius: 0; padding: 2.2rem 1.3rem;
-    display: flex; flex-direction: column; justify-content: center;
-    box-shadow: none;
-  }
-  .login-card .login-logo { height: 90px; margin-bottom: 1.4rem; }
-  .login-actions { flex-direction: column; align-items: stretch; gap: .7rem; }
-  .login-card button#btnLogin { width: 100%; padding: .8rem; font-size: .92rem; }
-  .login-forgot { text-align: center; }
-  .login-guest-row { margin-top: 1.2rem; }
-  .login-guest-row button { font-size: .85rem; }
-  .login-field input { font-size: 16px; }
-
-  #clientPortalRoot { padding: 0 !important; }
-  #clientPortalRoot > div { max-width: 100% !important; margin: 0 !important; border-radius: 0; min-height: 100vh; padding: 1.5rem 1.1rem !important; box-shadow: none; }
-  #portalLogoImg { height: 46px; }
-
-  .hdr-inner { flex-wrap: nowrap; height: auto; padding: .6rem .8rem; justify-content: space-between; align-items: center; }
-  .hdr-left { gap: 6px; min-width: 0; }
-  .hdr-logo-img { height: 30px !important; }
-  .hdr-sep { display: none; }
-  .hdr-right { gap: 6px; flex-shrink: 0; }
-  .hdr-pill { font-size: .58rem !important; padding: 3px 6px !important; white-space: nowrap; }
-  .hdr-pill .dot { display: none; }
-  .hdr-user { flex-wrap: nowrap; gap: 5px; padding: .25rem .4rem; }
-  .hdr-user-name { display: none; }
-  .hdr-user button { font-size: .62rem; padding: .16rem .45rem; }
-  .hdr-user > span { font-size: .64rem; padding: .1rem .4rem !important; }
-
-  .fotos-grid { grid-template-columns: repeat(2, 1fr) !important; }
-
-  .admin-table { display: block; }
-  #adminTableWrap, #verConteosWrap { overflow-x: visible; }
-  #adminTableWrap table, #verConteosWrap table { min-width: 0; width: 100%; }
-  .admin-table thead { display: none; }
-  .admin-table tbody, .admin-table tr { display: block; width: 100%; }
-  .admin-table tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: .6rem; padding: .5rem .8rem; }
-  .admin-table td { display: flex; justify-content: space-between; align-items: center; gap: .6rem; border: none !important; padding: .35rem 0 !important; text-align: right; font-size: .78rem; }
-  .admin-table td::before { content: attr(data-label); font-weight: 700; font-size: .68rem; color: var(--muted); text-align: left; }
-
-  #imgPreview { flex-direction: column; padding: 1rem !important; }
-  #imgPreview img { width: 160px !important; height: 160px !important; }
-
-  .modal { padding: 1.3rem; max-height: 92vh; }
-}
 .pieza-thumb { width:34px; height:34px; object-fit:contain; border-radius:5px; border:1px solid var(--border); background:#fafafa; vertical-align:middle; margin-right:.4rem; }
 .preview-thumb { width:56px; height:56px; object-fit:contain; border-radius:7px; border:1px solid var(--border); background:#fafafa; float:left; margin-right:.7rem; }
 .solo-admin { display: none; }
@@ -1053,13 +1027,6 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .admin-table th, .admin-table td { padding:.5rem .6rem; border-bottom:1px solid var(--border); text-align:left; }
 .admin-table th { background:#f4f6f8; }
 .prio-star { cursor:pointer; font-size:1.1rem; background:none; border:none; }
-
-.cliente-card { border:1px solid var(--border); border-radius:8px; padding:.75rem .9rem; margin-bottom:.6rem; background:#fff; }
-.cliente-card-top { display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.5rem; font-size:.88rem; font-weight:700; }
-.cliente-card-top .prio-star { font-size:.75rem; white-space:nowrap; }
-.cliente-card input { width:100%; box-sizing:border-box; font-size:.72rem; border:1px solid var(--border); border-radius:5px; padding:.35rem .5rem; background:#fafbfc; margin-bottom:.55rem; }
-.cliente-card-actions { display:flex; gap:6px; flex-wrap:wrap; }
-.cliente-card-actions button { flex:1; min-width:70px; border:none; border-radius:5px; padding:.4rem .5rem; font-size:.74rem; cursor:pointer; color:#fff; }
 </style>
 </head>
 <body>
@@ -1092,14 +1059,6 @@ footer em { color: var(--blue-mid); font-style: italic; }
   </div>
 </div>
 
-<!-- PORTAL DE CLIENTES (link directo, sin login) -->
-<div id="clientPortalRoot" class="hidden" style="min-height:100vh;background:#E8EAED;padding:2.5rem 1rem;">
-  <div style="max-width:760px;margin:0 auto;background:#fff;border-radius:8px;padding:2.2rem 2rem;box-shadow:0 4px 24px rgba(0,0,0,.1)">
-    <img id="portalLogoImg" style="height:60px;object-fit:contain;margin-bottom:1.2rem" alt="Layher" />
-    <div id="portalContent">Cargando...</div>
-  </div>
-</div>
-
 <div id="appRoot" class="hidden">
 
 
@@ -1123,6 +1082,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
         <span class="dot"></span>
         <span id="dbFooter">—</span> referencias
       </div>
+      <div class="hdr-pill">🏗 Andamios &amp; Scaffolding</div>
     </div>
   </div>
 </header>
@@ -3414,33 +3374,15 @@ function pintarBadgeUsuario() {
     const hdrRight = document.querySelector('.hdr-right');
     if (hdrRight) hdrRight.appendChild(badge);
   }
-
-  const acciones = [];
-  if (usuarioActual.rol === 'admin') acciones.push({ id: 'btnAbrirAdmin', label: 'Panel admin', fn: abrirPanelAdmin });
-  if (usuarioActual.rol === 'admin') acciones.push({ id: 'btnAbrirClientes', label: 'Clientes', fn: abrirPanelClientes });
-  if (usuarioActual.rol === 'admin' || usuarioActual.rol === 'invitado') acciones.push({ id: 'btnVerConteos', label: 'Ver conteos guardados', fn: abrirVerConteos });
-  acciones.push({ id: 'btnLogout', label: 'Salir', fn: async () => { await sb.auth.signOut(); location.reload(); } });
-
   badge.innerHTML =
-    '<span class="hdr-user-name">👤 ' + usuarioActual.nombre + '</span>' +
+    '<span>👤 ' + usuarioActual.nombre + '</span>' +
     '<span class="rolebadge">' + usuarioActual.rol + '</span>' +
-    '<div class="hdr-menu-wrap">' +
-      '<button id="hdrMenuToggle" aria-label="Menú">⋮</button>' +
-      '<div id="hdrMenuDropdown" class="hdr-menu-dropdown">' +
-        acciones.map(a => '<button data-id="' + a.id + '">' + a.label + '</button>').join('') +
-      '</div>' +
-    '</div>';
-
-  const dropdown = document.getElementById('hdrMenuDropdown');
-  document.getElementById('hdrMenuToggle').addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropdown.classList.toggle('open');
-  });
-  document.addEventListener('click', () => dropdown.classList.remove('open'));
-  dropdown.querySelectorAll('button').forEach(btn => {
-    const accion = acciones.find(a => a.id === btn.dataset.id);
-    btn.addEventListener('click', () => { dropdown.classList.remove('open'); accion.fn(); });
-  });
+    (usuarioActual.rol === 'admin' ? '<button id="btnAbrirAdmin">Panel admin</button>' : '') +
+    '<button id="btnLogout">Salir</button>';
+  document.getElementById('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
+  if (usuarioActual.rol === 'admin') {
+    document.getElementById('btnAbrirAdmin').addEventListener('click', abrirPanelAdmin);
+  }
 }
 
 function aplicarRestriccionesRol() {
@@ -3459,106 +3401,10 @@ function aplicarRestriccionesRol() {
   }
 }
 
-// ── PORTAL DE CLIENTES (acceso por link, sin login) ──────────
-function getClientTokenFromUrl() {
-  return new URLSearchParams(location.search).get('cliente');
-}
-
-async function initClientPortal(token) {
-  document.getElementById('loginGate').classList.add('hidden');
-  const root = document.getElementById('clientPortalRoot');
-  root.classList.remove('hidden');
-  const hdrLogo = document.querySelector('.hdr-logo-img');
-  const portalLogo = document.getElementById('portalLogoImg');
-  if (hdrLogo && portalLogo) portalLogo.src = hdrLogo.src;
-
-  const content = document.getElementById('portalContent');
-  const { data: infoArr, error } = await sb.rpc('portal_cliente_info', { p_token: token });
-  const info = infoArr && infoArr[0];
-  if (error || !info) {
-    content.innerHTML = '<p>Este link no es válido o ya no está activo. Por favor contacta a Layher Andina.</p>';
-    return;
-  }
-  content.innerHTML =
-    '<h2 style="margin:0 0 .3rem;font-size:1.2rem">Hola, ' + info.nombre + '</h2>' +
-    '<p style="color:#6b7785;font-size:.88rem;margin:0 0 1.5rem">Aquí puedes ver los conteos de material registrados por Layher Andina para tu empresa.</p>' +
-    '<div id="portalListaWrap">Cargando conteos…</div>';
-  mostrarListaActasPortal(token, info);
-}
-
-async function mostrarListaActasPortal(token, info) {
-  const wrap = document.getElementById('portalListaWrap');
-  wrap.textContent = 'Cargando...';
-  const { data: actas, error } = await sb.rpc('portal_actas_cliente', { p_token: token });
-  if (error) { wrap.textContent = 'Error cargando tus conteos.'; return; }
-  if (!actas || !actas.length) { wrap.textContent = 'Todavía no hay conteos registrados para tu empresa.'; return; }
-  actas.sort((a,b) => new Date(b.creado_en) - new Date(a.creado_en));
-  wrap.innerHTML = actas.map(a =>
-    '<button class="portal-acta-item" data-id="' + a.id + '" style="display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:.85rem 1rem;margin-bottom:.5rem;border:1px solid #e2e6ea;border-radius:8px;background:#fafbfc;cursor:pointer;font-family:inherit">' +
-      '<span><strong>' + a.nombre + '</strong>' + (a.obra ? ' — ' + a.obra : '') + '<br><span style="font-size:.78rem;color:#6b7785">' + a.total_items + ' piezas · ' + Number(a.peso_total).toFixed(2) + ' kg · ' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</span></span>' +
-      '<span style="color:#003087;font-weight:700">Ver ›</span>' +
-    '</button>'
-  ).join('');
-  wrap.querySelectorAll('.portal-acta-item').forEach(btn => {
-    btn.addEventListener('click', () => mostrarDetalleActaPortal(token, btn.dataset.id, info));
-  });
-}
-
-async function mostrarDetalleActaPortal(token, actaId, info) {
-  const wrap = document.getElementById('portalListaWrap');
-  wrap.textContent = 'Cargando...';
-  const [{ data: actas }, { data: items }, { data: fotos }] = await Promise.all([
-    sb.rpc('portal_actas_cliente', { p_token: token }),
-    sb.rpc('portal_items_cliente', { p_token: token, p_acta_id: actaId }),
-    sb.rpc('portal_fotos_cliente', { p_token: token, p_acta_id: actaId })
-  ]);
-  const acta = (actas || []).find(a => a.id === actaId);
-  if (!acta) { wrap.textContent = 'No se pudo cargar este conteo.'; return; }
-
-  let html = '<button id="portalBtnVolver" style="background:none;border:none;color:#003087;font-weight:700;cursor:pointer;margin-bottom:1rem;font-family:inherit">‹ Volver</button>';
-  html += '<h4 style="margin:.2rem 0">' + acta.nombre + '</h4>';
-  html += '<p style="font-size:.85rem;color:#6b7785;margin:0 0 1rem">' + (acta.obra || '') + ' · ' + (acta.bodega || '') + '<br>' + new Date(acta.creado_en).toLocaleDateString('es-CO') + '</p>';
-  html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:1.5rem"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:.85rem"><thead><tr style="background:#f4f6f8"><th style="padding:.5rem;text-align:left">Referencia</th><th style="padding:.5rem;text-align:left">Descripción</th><th style="padding:.5rem;text-align:right">Cantidad</th></tr></thead><tbody>' +
-    (items || []).map(it => '<tr style="border-bottom:1px solid #eee"><td style="padding:.5rem">' + it.referencia + '</td><td style="padding:.5rem">' + (it.descripcion || '') + '</td><td style="padding:.5rem;text-align:right">' + it.cantidad + '</td></tr>').join('') +
-    '</tbody></table></div>';
-  html += '<div id="portalFotosWrap"></div>';
-  wrap.innerHTML = html;
-  document.getElementById('portalBtnVolver').addEventListener('click', () => mostrarListaActasPortal(token, info));
-
-  const fotosWrap = document.getElementById('portalFotosWrap');
-  ['conteo','danos','no_layher','limpieza'].forEach(cat => {
-    const fotosCat = (fotos || []).filter(f => f.categoria === cat);
-    const section = document.createElement('div');
-    section.style.marginBottom = '1.25rem';
-    section.innerHTML = '<div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem">' + CATEGORIA_LABEL[cat] + ' (' + fotosCat.length + ')</div>';
-    if (!fotosCat.length) {
-      section.innerHTML += '<p style="font-size:.8rem;color:#6b7785">Sin fotos en esta categoría.</p>';
-    } else {
-      const grid = document.createElement('div');
-      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.5rem';
-      fotosCat.forEach(f => {
-        const url = sb.storage.from('conteo-fotos').getPublicUrl(f.storage_path).data.publicUrl;
-        const img = document.createElement('img');
-        img.src = url;
-        img.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid #e2e6ea;cursor:pointer';
-        img.onclick = () => window.open(url, '_blank');
-        grid.appendChild(img);
-      });
-      section.appendChild(grid);
-    }
-    fotosWrap.appendChild(section);
-  });
-}
-
 // Revisar si ya hay una sesión activa al recargar la página
-const _clienteToken = getClientTokenFromUrl();
-if (_clienteToken) {
-  initClientPortal(_clienteToken);
-} else {
-  sb.auth.getSession().then(({ data }) => {
-    if (data.session) cargarPerfilYEntrar(data.session.user);
-  });
-}
+sb.auth.getSession().then(({ data }) => {
+  if (data.session) cargarPerfilYEntrar(data.session.user);
+});
 
 
 // --- IMAGEN DE LA PIEZA en la vista previa (búsqueda por código) ---
@@ -3652,205 +3498,6 @@ confirmarGuardar = async function() {
     console.error('Error guardando acta en la nube:', err);
   }
 };
-
-
-// --- VER CONTEOS GUARDADOS (solo lectura, para invitado y admin) ---
-const CATEGORIA_LABEL = {
-  conteo:    'Fotos del Conteo',
-  danos:     'Daños',
-  no_layher: 'Piezas No Layher',
-  limpieza:  'Piezas por Limpieza'
-};
-
-function getVerConteosModal() {
-  let modal = document.getElementById('modalVerConteos');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'modalVerConteos';
-    modal.className = 'modal-bg hidden';
-    modal.innerHTML =
-      '<div class="modal" style="max-width:900px;max-height:85vh;overflow:auto;">' +
-        '<h3>📋 Conteos guardados</h3>' +
-        '<div id="verConteosWrap">Cargando...</div>' +
-        '<div class="modal-btns" style="margin-top:1.25rem"><button class="modal-btns btn-cancel" onclick="closeModal(\'modalVerConteos\')">Cerrar</button></div>' +
-      '</div>';
-    document.body.appendChild(modal);
-  }
-  return modal;
-}
-
-async function abrirVerConteos() {
-  getVerConteosModal();
-  openModal('modalVerConteos');
-  await mostrarListaActas();
-}
-
-async function mostrarListaActas() {
-  const wrap = document.getElementById('verConteosWrap');
-  wrap.textContent = 'Cargando...';
-  const { data: actas, error } = await sb
-    .from('actas')
-    .select('id,nombre,cliente,obra,bodega,total_items,peso_total,creado_en,profiles(nombre)')
-    .order('creado_en', { ascending: false });
-  if (error) { wrap.textContent = 'Error cargando conteos: ' + error.message; return; }
-  if (!actas.length) { wrap.textContent = 'Aún no hay conteos guardados.'; return; }
-  wrap.innerHTML = actas.map(a =>
-    '<button class="acta-list-item" data-id="' + a.id + '" style="display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:.85rem 1rem;margin-bottom:.5rem;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-family:inherit">' +
-      '<span><strong>' + a.nombre + '</strong> — ' + (a.cliente || 'Sin cliente') + (a.obra ? ' · ' + a.obra : '') +
-        '<br><span style="font-size:.78rem;color:var(--muted)">' + (a.profiles ? a.profiles.nombre : '—') + ' · ' + a.total_items + ' piezas · ' + Number(a.peso_total).toFixed(2) + ' kg · ' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</span></span>' +
-      '<span style="color:var(--blue-mid);font-weight:700">Ver ›</span>' +
-    '</button>'
-  ).join('');
-  wrap.querySelectorAll('.acta-list-item').forEach(btn => {
-    btn.addEventListener('click', () => mostrarDetalleActa(btn.dataset.id));
-  });
-}
-
-async function mostrarDetalleActa(actaId) {
-  const wrap = document.getElementById('verConteosWrap');
-  wrap.textContent = 'Cargando...';
-
-  const [{ data: acta }, { data: items }, { data: fotos }] = await Promise.all([
-    sb.from('actas').select('*, profiles(nombre)').eq('id', actaId).single(),
-    sb.from('acta_items').select('*').eq('acta_id', actaId),
-    sb.from('acta_fotos').select('*').eq('acta_id', actaId)
-  ]);
-
-  let html = '<button id="btnVolverLista" style="background:none;border:none;color:var(--blue-mid);font-weight:700;cursor:pointer;margin-bottom:1rem;font-family:inherit">‹ Volver a la lista</button>';
-  html += '<h4 style="margin:.2rem 0">' + acta.nombre + '</h4>';
-  html += '<p style="font-size:.85rem;color:var(--muted);margin:0 0 1rem">' +
-    (acta.cliente || 'Sin cliente') + (acta.obra ? ' · ' + acta.obra : '') + ' · ' + (acta.bodega || '') +
-    '<br>Registrado por ' + (acta.profiles ? acta.profiles.nombre : '—') + ' el ' + new Date(acta.creado_en).toLocaleDateString('es-CO') + '</p>';
-
-  html += '<table class="admin-table" style="margin-bottom:1.5rem"><thead><tr><th>Referencia</th><th>Descripción</th><th>Cantidad</th><th>Peso (kg)</th></tr></thead><tbody>' +
-    (items || []).map(it => '<tr><td data-label="Referencia">' + it.referencia + '</td><td data-label="Descripción">' + (it.descripcion||'') + '</td><td data-label="Cantidad">' + it.cantidad + '</td><td data-label="Peso (kg)">' + Number(it.peso_unitario * it.cantidad).toFixed(2) + '</td></tr>').join('') +
-    '</tbody></table>';
-
-  html += '<div id="verConteosFotos"></div>';
-  wrap.innerHTML = html;
-  document.getElementById('btnVolverLista').addEventListener('click', mostrarListaActas);
-
-  const fotosWrap = document.getElementById('verConteosFotos');
-  const categorias = ['conteo','danos','no_layher','limpieza'];
-  for (const cat of categorias) {
-    const fotosCat = (fotos || []).filter(f => f.categoria === cat);
-    const section = document.createElement('div');
-    section.style.marginBottom = '1.25rem';
-    section.innerHTML = '<div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem">' + CATEGORIA_LABEL[cat] + ' (' + fotosCat.length + ')</div>';
-    if (!fotosCat.length) {
-      section.innerHTML += '<p style="font-size:.8rem;color:var(--muted)">Sin fotos en esta categoría.</p>';
-    } else {
-      const grid = document.createElement('div');
-      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.5rem';
-      for (const f of fotosCat) {
-        const { data: signed } = await sb.storage.from('conteo-fotos').createSignedUrl(f.storage_path, 3600);
-        const img = document.createElement('img');
-        img.src = signed ? signed.signedUrl : '';
-        img.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer';
-        img.onclick = () => window.open(signed.signedUrl, '_blank');
-        grid.appendChild(img);
-      }
-      section.appendChild(grid);
-    }
-    fotosWrap.appendChild(section);
-  }
-}
-
-// --- PANEL CLIENTES: crear clientes y generar su link único ---
-async function abrirPanelClientes() {
-  let modal = document.getElementById('modalClientes');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'modalClientes';
-    modal.className = 'modal-bg hidden';
-    modal.innerHTML =
-      '<div class="modal" style="max-width:700px;max-height:85vh;overflow:auto;">' +
-        '<h3>🔗 Clientes — links de acceso</h3>' +
-        '<p style="font-size:.82rem;color:var(--muted);margin-top:-.5rem">Crea un cliente y comparte su link único; él verá solo sus propios conteos y fotos, sin necesitar contraseña.</p>' +
-        '<div style="display:flex;gap:.5rem;margin:1rem 0">' +
-          '<input id="nuevoClienteNombre" placeholder="Nombre del cliente (igual al que usas en \'Cliente\' al guardar el acta)" style="flex:1;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:7px;font-size:.85rem;font-family:inherit" />' +
-          '<button id="btnCrearCliente" class="btn-add">＋ Crear</button>' +
-        '</div>' +
-        '<div id="clientesTableWrap">Cargando...</div>' +
-        '<div class="modal-btns" style="margin-top:1.25rem"><button class="modal-btns btn-cancel" onclick="closeModal(\'modalClientes\')">Cerrar</button></div>' +
-      '</div>';
-    document.body.appendChild(modal);
-  }
-  openModal('modalClientes');
-  document.getElementById('btnCrearCliente').onclick = crearCliente;
-  await cargarListaClientes();
-}
-
-async function crearCliente() {
-  const input = document.getElementById('nuevoClienteNombre');
-  const nombre = input.value.trim();
-  if (!nombre) return;
-  const { error } = await sb.from('clientes').insert({ nombre });
-  if (error) { alert('Error creando cliente: ' + error.message); return; }
-  input.value = '';
-  await cargarListaClientes();
-}
-
-async function editarCliente(id, nombreActual) {
-  const nuevoNombre = prompt('Editar nombre del cliente:', nombreActual);
-  if (nuevoNombre === null) return;
-  const limpio = nuevoNombre.trim();
-  if (!limpio) return;
-  const { error } = await sb.from('clientes').update({ nombre: limpio }).eq('id', id);
-  if (error) { alert('Error editando cliente: ' + error.message); return; }
-  await cargarListaClientes();
-}
-
-async function eliminarCliente(id, nombre) {
-  if (!confirm('¿Eliminar al cliente "' + nombre + '"? Su link dejará de funcionar. Las actas guardadas no se borran.')) return;
-  const { error } = await sb.from('clientes').delete().eq('id', id);
-  if (error) { alert('Error eliminando cliente: ' + error.message); return; }
-  await cargarListaClientes();
-}
-
-async function cargarListaClientes() {
-  const wrap = document.getElementById('clientesTableWrap');
-  wrap.textContent = 'Cargando...';
-  const { data: clientes, error } = await sb.from('clientes').select('*').order('creado_en', { ascending: false });
-  if (error) { wrap.textContent = 'Error: ' + error.message; return; }
-  if (!clientes.length) { wrap.textContent = 'Aún no has creado ningún cliente.'; return; }
-  const baseUrl = location.origin + location.pathname;
-  wrap.innerHTML = clientes.map(c => {
-    const link = baseUrl + '?cliente=' + c.token;
-    const nombreEsc = c.nombre.replace(/"/g,'&quot;');
-    return '<div class="cliente-card">' +
-      '<div class="cliente-card-top"><span>' + c.nombre + '</span>' +
-        '<button class="prio-star" data-id="' + c.id + '" data-val="' + c.activo + '">' + (c.activo ? '✅ Activo' : '🚫 Inactivo') + '</button></div>' +
-      '<input readonly value="' + link + '" onclick="this.select()" />' +
-      '<div class="cliente-card-actions">' +
-        '<button class="btn-copy-link" data-link="' + link + '" style="background:var(--blue-mid)">Copiar</button>' +
-        '<button class="btn-edit-cliente" data-id="' + c.id + '" data-nombre="' + nombreEsc + '" style="background:#F9A825">Editar</button>' +
-        '<button class="btn-del-cliente" data-id="' + c.id + '" data-nombre="' + nombreEsc + '" style="background:#C62828">Eliminar</button>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-  wrap.querySelectorAll('.btn-copy-link').forEach(btn => {
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(btn.dataset.link);
-      btn.textContent = '¡Copiado!';
-      setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
-    });
-  });
-  wrap.querySelectorAll('.btn-edit-cliente').forEach(btn => {
-    btn.addEventListener('click', () => editarCliente(btn.dataset.id, btn.dataset.nombre));
-  });
-  wrap.querySelectorAll('.btn-del-cliente').forEach(btn => {
-    btn.addEventListener('click', () => eliminarCliente(btn.dataset.id, btn.dataset.nombre));
-  });
-  wrap.querySelectorAll('.prio-star').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const id = btn.dataset.id;
-      const nuevoVal = btn.dataset.val !== 'true';
-      await sb.from('clientes').update({ activo: nuevoVal }).eq('id', id);
-      cargarListaClientes();
-    });
-  });
-}
 
 async function abrirPanelAdmin() {
   let modal = document.getElementById('modalAdmin');
