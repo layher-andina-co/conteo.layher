@@ -1016,7 +1016,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
   display:flex; align-items:center; gap:.5rem; background: rgba(0,48,135,.08);
   padding:.35rem .7rem; border-radius:20px; font-size:.78rem; color:#003087;
 }
-.hdr-user .rolebadge { background:#C62828; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.68rem; text-transform:uppercase; }
+.hdr-user .rolebadge { background:#003087; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.68rem; text-transform:uppercase; }
 .hdr-user button { background:none; border:1px solid #003087; color:#003087; border-radius:14px; padding:.2rem .6rem; font-size:.72rem; cursor:pointer; }
 .pieza-thumb { width:34px; height:34px; object-fit:contain; border-radius:5px; border:1px solid var(--border); background:#fafafa; vertical-align:middle; margin-right:.4rem; }
 .preview-thumb { width:56px; height:56px; object-fit:contain; border-radius:7px; border:1px solid var(--border); background:#fafafa; float:left; margin-right:.7rem; }
@@ -3376,11 +3376,60 @@ function pintarBadgeUsuario() {
     (usuarioActual.rol === 'admin'
       ? '<button id="btnAbrirAdmin" class="rolebadge" style="border:none;cursor:pointer;font-family:inherit">' + usuarioActual.rol + '</button>'
       : '<span class="rolebadge">' + usuarioActual.rol + '</span>') +
+    (usuarioActual.rol !== 'invitado' ? '<button id="btnCambiarPass" title="Cambiar contraseña">🔑</button>' : '') +
     '<button id="btnLogout">Salir</button>';
   document.getElementById('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
   if (usuarioActual.rol === 'admin') {
     document.getElementById('btnAbrirAdmin').addEventListener('click', abrirPanelAdmin);
   }
+  if (usuarioActual.rol !== 'invitado') {
+    document.getElementById('btnCambiarPass').addEventListener('click', abrirModalCambiarPassword);
+  }
+}
+
+function abrirModalCambiarPassword() {
+  let modal = document.getElementById('modalCambiarPass');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modalCambiarPass';
+    modal.className = 'modal-bg hidden';
+    modal.innerHTML =
+      '<div class="modal" style="max-width:380px">' +
+        '<h3>🔑 Cambiar mi contraseña</h3>' +
+        '<label>Nueva contraseña</label>' +
+        '<input type="password" id="nuevaPass1" placeholder="Mínimo 6 caracteres" />' +
+        '<label>Repetir nueva contraseña</label>' +
+        '<input type="password" id="nuevaPass2" placeholder="Repite la contraseña" />' +
+        '<div id="cambiarPassError" style="color:#C62828;font-size:.8rem;margin-bottom:.5rem;display:none"></div>' +
+        '<div id="cambiarPassOk" style="color:#1c7a3c;font-size:.8rem;margin-bottom:.5rem;display:none">Contraseña actualizada.</div>' +
+        '<div class="modal-btns">' +
+          '<button class="btn-cancel" onclick="closeModal(\'modalCambiarPass\')">Cancelar</button>' +
+          '<button class="btn-confirm" id="btnConfirmarCambiarPass">Guardar</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(modal);
+    document.getElementById('btnConfirmarCambiarPass').addEventListener('click', confirmarCambiarPassword);
+  }
+  document.getElementById('nuevaPass1').value = '';
+  document.getElementById('nuevaPass2').value = '';
+  document.getElementById('cambiarPassError').style.display = 'none';
+  document.getElementById('cambiarPassOk').style.display = 'none';
+  openModal('modalCambiarPass');
+}
+
+async function confirmarCambiarPassword() {
+  const p1 = document.getElementById('nuevaPass1').value;
+  const p2 = document.getElementById('nuevaPass2').value;
+  const errBox = document.getElementById('cambiarPassError');
+  const okBox = document.getElementById('cambiarPassOk');
+  errBox.style.display = 'none';
+  okBox.style.display = 'none';
+  if (p1.length < 6) { errBox.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errBox.style.display = 'block'; return; }
+  if (p1 !== p2) { errBox.textContent = 'Las dos contraseñas no coinciden.'; errBox.style.display = 'block'; return; }
+  const { error } = await sb.auth.updateUser({ password: p1 });
+  if (error) { errBox.textContent = 'No se pudo cambiar la contraseña: ' + error.message; errBox.style.display = 'block'; return; }
+  okBox.style.display = 'block';
+  setTimeout(() => closeModal('modalCambiarPass'), 1200);
 }
 
 function aplicarRestriccionesRol() {
@@ -3521,7 +3570,7 @@ async function abrirPanelAdmin() {
   if (error) { wrap.textContent = 'Error cargando actas: ' + error.message; return; }
   if (!actas.length) { wrap.textContent = 'Aún no hay actas guardadas.'; return; }
   wrap.innerHTML = '<table class="admin-table"><thead><tr>' +
-    '<th>Prioridad</th><th>Usuario</th><th>Acta</th><th>Cliente</th><th>Obra</th><th>Bodega</th><th>Items</th><th>Peso (kg)</th><th>Fecha</th>' +
+    '<th>Prioridad</th><th>Usuario</th><th>Acta</th><th>Cliente</th><th>Obra</th><th>Bodega</th><th>Items</th><th>Peso (kg)</th><th>Fecha</th><th></th>' +
     '</tr></thead><tbody>' +
     actas.map(a => '<tr>' +
       '<td data-label="Prioridad"><button class="prio-star" data-id="' + a.id + '" data-val="' + a.prioridad + '">' + (a.prioridad ? '⭐' : '☆') + '</button></td>' +
@@ -3533,6 +3582,7 @@ async function abrirPanelAdmin() {
       '<td data-label="Items">' + a.total_items + '</td>' +
       '<td data-label="Peso (kg)">' + Number(a.peso_total).toFixed(2) + '</td>' +
       '<td data-label="Fecha">' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</td>' +
+      '<td data-label="Eliminar"><button class="btn-del-acta" data-id="' + a.id + '" data-nombre="' + a.nombre.replace(/"/g,'&quot;') + '" style="background:#C62828;color:#fff;border:none;border-radius:5px;padding:.3rem .6rem;font-size:.72rem;cursor:pointer">Eliminar</button></td>' +
       '</tr>').join('') +
     '</tbody></table>';
   wrap.querySelectorAll('.prio-star').forEach(btn => {
@@ -3540,6 +3590,16 @@ async function abrirPanelAdmin() {
       const id = btn.dataset.id;
       const nuevoVal = btn.dataset.val !== 'true';
       await sb.from('actas').update({ prioridad: nuevoVal }).eq('id', id);
+      abrirPanelAdmin();
+    });
+  });
+  wrap.querySelectorAll('.btn-del-acta').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const nombre = btn.dataset.nombre;
+      if (!confirm('¿Eliminar el acta "' + nombre + '"? Se borrarán también sus piezas y sus fotos registradas. Esta acción no se puede deshacer.')) return;
+      const { error } = await sb.from('actas').delete().eq('id', id);
+      if (error) { alert('Error eliminando acta: ' + error.message); return; }
       abrirPanelAdmin();
     });
   });
