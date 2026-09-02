@@ -885,7 +885,6 @@ footer em { color: var(--blue-mid); font-style: italic; }
   /* ── HEADER: todo en una sola fila ── */
   .hdr-inner { flex-wrap: nowrap; height: auto; padding: .6rem .8rem; justify-content: space-between; align-items: center; }
   .hdr-left { gap: 5px; min-width: 0; }
-  .hdr-logo-img { height: 30px !important; }
   .hdr-sep { display: none; }
   .hdr-right { gap: 6px; flex-shrink: 0; }
   .hdr-pill { font-size: .56rem !important; padding: 3px 6px !important; white-space: nowrap; }
@@ -3374,8 +3373,9 @@ function pintarBadgeUsuario() {
   }
   badge.innerHTML =
     '<span>👤 ' + usuarioActual.nombre + '</span>' +
-    '<span class="rolebadge">' + usuarioActual.rol + '</span>' +
-    (usuarioActual.rol === 'admin' ? '<button id="btnAbrirAdmin">Panel admin</button>' : '') +
+    (usuarioActual.rol === 'admin'
+      ? '<button id="btnAbrirAdmin" class="rolebadge" style="border:none;cursor:pointer;font-family:inherit">' + usuarioActual.rol + '</button>'
+      : '<span class="rolebadge">' + usuarioActual.rol + '</span>') +
     '<button id="btnLogout">Salir</button>';
   document.getElementById('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
   if (usuarioActual.rol === 'admin') {
