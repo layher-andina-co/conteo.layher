@@ -884,15 +884,16 @@ footer em { color: var(--blue-mid); font-style: italic; }
 
   /* ── HEADER: todo en una sola fila ── */
   .hdr-inner { flex-wrap: nowrap; height: auto; padding: .6rem .8rem; justify-content: space-between; align-items: center; }
-  .hdr-left { gap: 5px; min-width: 0; }
+  .hdr-left { gap: 5px; min-width: 0; flex-shrink: 0; }
   .hdr-sep { display: none; }
-  .hdr-right { gap: 6px; flex-shrink: 0; }
-  .hdr-pill { font-size: .56rem !important; padding: 3px 6px !important; white-space: nowrap; }
+  .hdr-right { gap: 4px; flex-shrink: 1; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .hdr-right::-webkit-scrollbar { display: none; }
+  .hdr-pill { font-size: .54rem !important; padding: 3px 5px !important; white-space: nowrap; flex-shrink: 0; }
   .hdr-pill .dot { display: none; }
-  .hdr-user { flex-wrap: nowrap; gap: 5px; padding: .25rem .45rem; }
+  .hdr-user { flex-wrap: nowrap; gap: 4px; padding: .25rem .4rem; flex-shrink: 0; }
   .hdr-user > span:first-child { display: none; }
-  .hdr-user .rolebadge { font-size: .6rem; padding: .1rem .4rem; }
-  .hdr-user button { font-size: .62rem; padding: .16rem .45rem; white-space: nowrap; }
+  .hdr-user .rolebadge { font-size: .58rem; padding: .1rem .35rem; }
+  .hdr-user button { font-size: .6rem; padding: .16rem .4rem; white-space: nowrap; }
 
   /* ── MODALES Y TABLAS DE PANELES ── */
   .modal { padding: 1.3rem; max-height: 92vh; }
