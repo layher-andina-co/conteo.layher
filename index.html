@@ -1014,8 +1014,8 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .login-guest-row button { font-size: .85rem; }
   .login-field input { font-size: 16px; }
 
-  #clientPortalRoot { padding: 0; }
-  #clientPortalRoot > div { max-width: 100%; border-radius: 0; min-height: 100vh; padding: 1.5rem 1.1rem !important; box-shadow: none; }
+  #clientPortalRoot { padding: 0 !important; }
+  #clientPortalRoot > div { max-width: 100% !important; margin: 0 !important; border-radius: 0; min-height: 100vh; padding: 1.5rem 1.1rem !important; box-shadow: none; }
   #portalLogoImg { height: 46px; }
 
   .hdr-inner { flex-wrap: nowrap; height: auto; padding: .6rem .8rem; justify-content: space-between; align-items: center; }
@@ -3518,9 +3518,9 @@ async function mostrarDetalleActaPortal(token, actaId, info) {
   let html = '<button id="portalBtnVolver" style="background:none;border:none;color:#003087;font-weight:700;cursor:pointer;margin-bottom:1rem;font-family:inherit">‹ Volver</button>';
   html += '<h4 style="margin:.2rem 0">' + acta.nombre + '</h4>';
   html += '<p style="font-size:.85rem;color:#6b7785;margin:0 0 1rem">' + (acta.obra || '') + ' · ' + (acta.bodega || '') + '<br>' + new Date(acta.creado_en).toLocaleDateString('es-CO') + '</p>';
-  html += '<table style="width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:1.5rem"><thead><tr style="background:#f4f6f8"><th style="padding:.5rem;text-align:left">Referencia</th><th style="padding:.5rem;text-align:left">Descripción</th><th style="padding:.5rem;text-align:right">Cantidad</th></tr></thead><tbody>' +
+  html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:1.5rem"><table style="width:100%;min-width:420px;border-collapse:collapse;font-size:.85rem"><thead><tr style="background:#f4f6f8"><th style="padding:.5rem;text-align:left">Referencia</th><th style="padding:.5rem;text-align:left">Descripción</th><th style="padding:.5rem;text-align:right">Cantidad</th></tr></thead><tbody>' +
     (items || []).map(it => '<tr style="border-bottom:1px solid #eee"><td style="padding:.5rem">' + it.referencia + '</td><td style="padding:.5rem">' + (it.descripcion || '') + '</td><td style="padding:.5rem;text-align:right">' + it.cantidad + '</td></tr>').join('') +
-    '</tbody></table>';
+    '</tbody></table></div>';
   html += '<div id="portalFotosWrap"></div>';
   wrap.innerHTML = html;
   document.getElementById('portalBtnVolver').addEventListener('click', () => mostrarListaActasPortal(token, info));
