@@ -3455,17 +3455,6 @@ sb.auth.getSession().then(({ data }) => {
 });
 
 
-// --- IMAGEN DE LA PIEZA en la vista previa (búsqueda por código) ---
-const _origSelectSuggestion = selectSuggestion;
-selectSuggestion = function(ref, desc, peso) {
-  _origSelectSuggestion(ref, desc, peso);
-  const img = document.createElement('img');
-  img.className = 'preview-thumb';
-  img.src = urlFotoReferencia(ref);
-  img.onerror = function(){ this.style.display='none'; };
-  preview.insertBefore(img, preview.firstChild);
-};
-
 
 // --- SUBIR FOTOS también a Supabase (además de guardarlas localmente) ---
 const _origSubirFotos = subirFotos;
