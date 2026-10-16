@@ -3735,14 +3735,16 @@ function pintarListaRefs() {
   document.getElementById('rfCount').textContent = cods.length;
   const cont = document.getElementById('rfLista');
   if (!cods.length) { cont.innerHTML = '<div style="font-size:.8rem;color:var(--muted)">Aún no has agregado referencias.</div>'; return; }
-  cont.innerHTML = '<table class="admin-table"><thead><tr><th>Código</th><th>Descripción</th><th>Peso (kg)</th><th></th></tr></thead><tbody>' +
-    cods.map(c => '<tr>' +
-      '<td data-label="Código">' + _esc(c) + '</td>' +
-      '<td data-label="Descripción">' + _esc(refsExtra[c].desc) + '</td>' +
-      '<td data-label="Peso (kg)">' + refsExtra[c].peso.toLocaleString('es-CO') + '</td>' +
-      '<td><button class="rf-edit" data-c="' + _esc(c) + '" style="border:none;border-radius:5px;padding:.3rem .6rem;font-size:.72rem;cursor:pointer">Editar</button> ' +
-      '<button class="rf-del" data-c="' + _esc(c) + '" style="background:#C62828;color:#fff;border:none;border-radius:5px;padding:.3rem .6rem;font-size:.72rem;cursor:pointer">Eliminar</button></td>' +
-      '</tr>').join('') + '</tbody></table>';
+  cont.innerHTML = cods.map(c =>
+    '<div style="box-sizing:border-box;width:100%;border:1px solid #cfd8e6;border-radius:8px;padding:.6rem .8rem;margin-bottom:.5rem;color:#1a2433;overflow-wrap:anywhere;word-break:break-word">' +
+      '<div style="font-weight:800;font-size:.95rem;color:#0d2b6b">' + _esc(c) + '</div>' +
+      '<div style="font-size:.85rem;margin:.15rem 0">' + _esc(refsExtra[c].desc) + '</div>' +
+      '<div style="font-size:.8rem;color:#55657a">Peso: <b style="color:#1a2433">' + refsExtra[c].peso.toLocaleString('es-CO') + ' kg</b></div>' +
+      '<div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap">' +
+        '<button class="rf-edit" data-c="' + _esc(c) + '" style="border:none;background:#e8edf5;color:#0047bb;border-radius:6px;padding:.4rem .8rem;font-size:.78rem;cursor:pointer">Editar</button>' +
+        '<button class="rf-del" data-c="' + _esc(c) + '" style="background:#C62828;color:#fff;border:none;border-radius:6px;padding:.4rem .8rem;font-size:.78rem;cursor:pointer">Eliminar</button>' +
+      '</div>' +
+    '</div>').join('');
   cont.querySelectorAll('.rf-edit').forEach(b => b.addEventListener('click', () => {
     const c = b.dataset.c;
     document.getElementById('rfCodigo').value = c;
