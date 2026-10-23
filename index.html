@@ -22,7 +22,9 @@
 
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: hidden; overscroll-behavior-x: none; }
+/* clip no crea contenedor de scroll, así el header sticky sigue funcionando */
+body { max-width: 100%; overflow-x: hidden; overflow-x: clip; overscroll-behavior-x: none; }
 
 :root {
   --fw-regular:400; --ref-stroke:.65px; --fw-medium:500; --fw-bold:700;
@@ -745,7 +747,8 @@ footer em { color: var(--blue-mid); font-style: italic; }
 
   /* Scroll horizontal en tabla */
   #tableWrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table { font-size: .69rem; min-width: 580px; }
+  table { font-size: .69rem; }
+  #mainTable { min-width: 580px; }
   td, thead th { padding: 8px 9px; }
 
   /* ── EXPORT BAR ── */
@@ -907,7 +910,10 @@ footer em { color: var(--blue-mid); font-style: italic; }
 
   /* ── MODALES Y TABLAS DE PANELES ── */
   .modal { padding: 1.3rem; max-height: 92vh; }
-  .admin-table { display: block; }
+  .admin-table { display: block; min-width: 0 !important; width: 100%; max-width: 100%; }
+  /* iOS hace zoom al tocar campos con letra menor a 16px y deja la pantalla corrida hacia un lado */
+  input:not([type=checkbox]):not([type=radio]):not([type=file]), select, textarea { font-size: 16px !important; }
+  img, canvas, svg, video { max-width: 100%; }
   #adminTableWrap { overflow-x: visible; }
   .admin-table thead { display: none; }
   .admin-table tbody, .admin-table tr { display: block; width: 100%; }
