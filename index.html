@@ -25,7 +25,7 @@
 html { scroll-behavior: smooth; }
 
 :root {
-  --fw-regular:400; --ref-stroke:.35px; --fw-medium:500; --fw-bold:700;
+  --fw-regular:400; --ref-stroke:.65px; --fw-medium:500; --fw-bold:700;
   --navy:      #001533;
   --blue:      #0047BB;
   --blue-mid:  #0047BB;
@@ -1283,38 +1283,6 @@ footer em { color: var(--blue-mid); font-style: italic; }
     </table>
   </div>
 
-  <!-- FOTOS DEL CONTEO — 4 carpetas -->
-  <div class="fotos-section" style="margin-top:1.5rem;">
-    <div class="nolayher-header">
-      <div class="nolayher-header-left">
-        <span class="nolayher-title">Fotos del <strong>Conteo</strong></span>
-        <span class="nolayher-sub">Evidencia fotográfica del conteo físico</span>
-      </div>
-    </div>
-    <div class="fotos-grid">
-      <button class="foto-folder" onclick="abrirFotos('conteo')">
-        <span class="foto-folder-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg></span>
-        <span class="foto-folder-label">Fotos del Conteo</span>
-        <span class="foto-folder-count" id="fcount-conteo">0</span>
-      </button>
-      <button class="foto-folder" onclick="abrirFotos('danos')">
-        <span class="foto-folder-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-        <span class="foto-folder-label">Daños</span>
-        <span class="foto-folder-count" id="fcount-danos">0</span>
-      </button>
-      <button class="foto-folder" onclick="abrirFotos('no_layher')">
-        <span class="foto-folder-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94Z"/></svg></span>
-        <span class="foto-folder-label">Piezas No Layher</span>
-        <span class="foto-folder-count" id="fcount-no_layher">0</span>
-      </button>
-      <button class="foto-folder" onclick="abrirFotos('limpieza')">
-        <span class="foto-folder-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h6l2-3h9"/><path d="M20 10v3"/><path d="M14 16l4 6"/><path d="M17 16l3 6"/><path d="M20 16l1.5 5"/></svg></span>
-        <span class="foto-folder-label">Piezas por Limpieza</span>
-        <span class="foto-folder-count" id="fcount-limpieza">0</span>
-      </button>
-    </div>
-  </div>
-
   <!-- MODAL GALERÍA DE FOTOS -->
   <div class="modal-bg hidden" id="modalFotos">
     <div class="modal" style="max-width:640px">
@@ -1421,7 +1389,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
 
 <!-- MODAL FIRMA DIGITAL -->
 <div class="modal-bg hidden" id="modalFirma">
-  <div class="modal" style="max-width:760px;width:97vw;padding:1.5rem">
+  <div class="modal" style="max-width:608px;width:97vw;padding:1.5rem">
     <h3>Firma Digital</h3>
     <p style="font-size:.718rem;color:var(--muted);margin-bottom:.75rem;line-height:1.5;">Dibuja tu firma en el recuadro. Se incrustará en el PDF exportado.</p>
     <canvas id="firmaCanvas" width="640" height="340"
