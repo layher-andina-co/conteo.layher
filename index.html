@@ -25,7 +25,7 @@
 html { scroll-behavior: smooth; }
 
 :root {
-  --fw-regular:400; --fw-medium:500; --fw-bold:700;
+  --fw-regular:400; --ref-stroke:.35px; --fw-medium:500; --fw-bold:700;
   --navy:      #001533;
   --blue:      #0047BB;
   --blue-mid:  #0047BB;
@@ -54,7 +54,7 @@ body {
   background: var(--off-white);
   color: var(--text);
   min-height: 100vh;
-  font-size: 14px;
+  font-size: 12.9px;
   line-height: 1.5;
 }
 /* Controles de formulario heredan la tipografía de la página (antes usaban la fuente por defecto del navegador) */
@@ -86,12 +86,12 @@ header {
 .hdr-sep { width: 1px; height: 34px; background: var(--border); }
 .hdr-titles { display: flex; flex-direction: column; gap: 1px; }
 .hdr-titles .sup {
-  font-size: .6rem; text-transform: uppercase;
+  font-size: .552rem; text-transform: uppercase;
   letter-spacing: 2.5px; color: var(--muted); font-weight:var(--fw-medium);
 }
 .hdr-titles .main {
   font-family: 'LayherTextWeb', sans-serif;
-  font-size: 1rem; font-weight:var(--fw-bold);
+  font-size: .92rem; font-weight:var(--fw-bold);
   color: var(--navy); letter-spacing: 1px; text-transform: uppercase;
 }
 .hdr-right { display: flex; align-items: center; gap: 12px; }
@@ -99,7 +99,7 @@ header {
   display: flex; align-items: center; gap: 7px;
   border: 1px solid var(--border);
   color: var(--muted);
-  font-size: .68rem; font-weight:var(--fw-medium);
+  font-size: .626rem; font-weight:var(--fw-medium);
   padding: 5px 12px; border-radius: 20px;
   letter-spacing: .5px;
   font-family: 'LayherTextWeb', sans-serif;
@@ -121,7 +121,7 @@ header {
   justify-content: center; gap: 2.5rem;
 }
 .info-strip span {
-  font-size: .68rem; color: rgba(255,255,255,.55);
+  font-size: .626rem; color: rgba(255,255,255,.55);
   display: flex; align-items: center; gap: 6px;
   font-weight:var(--fw-medium); letter-spacing: .3px;
   text-transform: uppercase;
@@ -147,7 +147,7 @@ header {
 .acta-hero-icon { display: none; }
 .acta-hero-eyebrow {
   font-family: 'LayherTextWeb', sans-serif;
-  font-size: .58rem; font-weight:var(--fw-medium);
+  font-size: .534rem; font-weight:var(--fw-medium);
   letter-spacing: 4px; text-transform: uppercase;
   color: rgba(255,255,255,.35);
 }
@@ -159,7 +159,7 @@ header {
 }
 .acta-hero-text {
   font-family: 'LayherTextWeb', sans-serif;
-  font-size: 1.5rem; font-weight:var(--fw-bold); font-style: normal;
+  font-size: 1.38rem; font-weight:var(--fw-bold); font-style: normal;
   letter-spacing: 3px; text-transform: uppercase;
   color: white;
   line-height: 1;
@@ -167,7 +167,7 @@ header {
 .acta-hero-divider { display: none; }
 .acta-hero-sub {
   font-family: 'LayherTextWeb', sans-serif;
-  font-size: .58rem; color: rgba(255,255,255,.28);
+  font-size: .534rem; color: rgba(255,255,255,.28);
   letter-spacing: 3.5px; text-transform: uppercase;
   font-weight:var(--fw-regular);
 }
@@ -193,13 +193,13 @@ header {
   border-bottom: 1px solid var(--border);
 }
 .nolayher-header-left { display: flex; flex-direction: column; gap: 2px; }
-.nolayher-title { font-size: .85rem; font-weight:var(--fw-bold); color: var(--text); }
+.nolayher-title { font-size: .782rem; font-weight:var(--fw-bold); color: var(--text); }
 .nolayher-title strong { color: var(--blue-mid); }
-.nolayher-sub { font-size: .68rem; color: var(--muted); letter-spacing: .3px; }
+.nolayher-sub { font-size: .626rem; color: var(--muted); letter-spacing: .3px; }
 .nolayher-add-btn {
   background: var(--blue-mid); color: white;
   border: none; border-radius: 6px;
-  padding: .38rem .9rem; font-size: .78rem; font-weight:var(--fw-medium);
+  padding: .38rem .9rem; font-size: .718rem; font-weight:var(--fw-medium);
   cursor: pointer; white-space: nowrap;
   transition: background .15s; flex-shrink: 0;
 }
@@ -233,13 +233,13 @@ header {
   font-family: inherit;
 }
 .foto-folder:hover { border-color: var(--blue-mid); background: #EEF4FF; }
-.foto-folder-ico { font-size: 1.6rem; color: var(--blue-mid); display:flex; align-items:center; justify-content:center; }
+.foto-folder-ico { font-size: 1.472rem; color: var(--blue-mid); display:flex; align-items:center; justify-content:center; }
 .foto-folder-ico svg { width: 28px; height: 28px; }
-.foto-folder-label { font-size: .74rem; font-weight:var(--fw-medium); color: var(--text); text-align: center; line-height: 1.25; }
+.foto-folder-label { font-size: .681rem; font-weight:var(--fw-medium); color: var(--text); text-align: center; line-height: 1.25; }
 .foto-folder-count {
   position: absolute; top: 6px; right: 8px;
   background: var(--blue-mid); color: white;
-  font-size: .65rem; font-weight:var(--fw-medium);
+  font-size: .598rem; font-weight:var(--fw-medium);
   min-width: 18px; height: 18px; border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
   padding: 0 4px;
@@ -265,7 +265,7 @@ header {
   width: 22px; height: 22px; border-radius: 50%;
   background: rgba(198,40,40,.92); color: white;
   border: none; cursor: pointer;
-  font-size: .75rem; line-height: 1;
+  font-size: .69rem; line-height: 1;
   display: flex; align-items: center; justify-content: center;
 }
 
@@ -274,12 +274,12 @@ header {
 }
 .nolayher-table {
   width: 100%; border-collapse: collapse;
-  font-size: .78rem;
+  font-size: .718rem;
 }
 .nolayher-table thead tr { background: var(--navy); }
 .nolayher-table th {
   padding: .38rem .75rem;
-  text-align: left; font-size: .65rem;
+  text-align: left; font-size: .598rem;
   font-weight:var(--fw-bold); color: rgba(255,255,255,.85);
   text-transform: uppercase; letter-spacing: .5px;
   border-bottom: 1px solid var(--navy);
@@ -292,19 +292,19 @@ header {
 .nl-qty-input {
   width: 70px; text-align: center;
   border: 1px solid var(--border); border-radius: 6px;
-  padding: .3rem .4rem; font-size: .85rem; font-weight:var(--fw-regular);
+  padding: .3rem .4rem; font-size: .782rem; font-weight:var(--fw-regular);
   color: var(--text); background: white;
 }
 .nl-qty-input:focus { outline: 2px solid var(--blue-mid); border-color: transparent; }
 .nl-name-input {
   width: 100%; border: 1px solid var(--border); border-radius: 6px;
-  padding: .3rem .6rem; font-size: .85rem; color: var(--text);
+  padding: .3rem .6rem; font-size: .782rem; color: var(--text);
   background: white; min-width: 0;
 }
 .nl-name-input:focus { outline: 2px solid var(--blue-mid); border-color: transparent; }
 .nl-del-btn {
   background: none; border: none; color: #DC2626;
-  font-size: 1rem; cursor: pointer; padding: .2rem .4rem;
+  font-size: .92rem; cursor: pointer; padding: .2rem .4rem;
   border-radius: 4px; transition: background .12s;
 }
 .nl-del-btn:hover { background: #FEE2E2; }
@@ -323,7 +323,7 @@ header {
   box-shadow: var(--shadow-sm);
 }
 .panel-label {
-  font-size: .6rem; text-transform: uppercase;
+  font-size: .552rem; text-transform: uppercase;
   letter-spacing: 2px; color: var(--navy);
   margin-bottom: 1.1rem; font-weight:var(--fw-bold);
   font-family: 'LayherTextWeb', sans-serif;
@@ -341,7 +341,7 @@ header {
   box-shadow: var(--shadow-sm);
 }
 .acta-datos-title {
-  font-size: .6rem; text-transform: uppercase;
+  font-size: .552rem; text-transform: uppercase;
   letter-spacing: 2px; color: var(--navy);
   margin-bottom: 1rem; font-weight:var(--fw-bold);
   font-family: 'LayherTextWeb', sans-serif;
@@ -352,14 +352,14 @@ header {
   gap: 14px;
 }
 .acta-field label {
-  display: block; font-size: .65rem;
+  display: block; font-size: .598rem;
   text-transform: uppercase; letter-spacing: 1px;
   color: var(--muted); font-weight:var(--fw-medium); margin-bottom: 4px;
 }
 .acta-field input {
   width: 100%; height: 42px;
   border: 1.5px solid var(--border); border-radius: 7px;
-  padding: 0 .9rem; font-size: .88rem;
+  padding: 0 .9rem; font-size: .81rem;
   font-family: inherit; color: var(--text);
   background: var(--off-white); outline: none;
   transition: all .2s;
@@ -379,7 +379,7 @@ header {
 }
 .stab {
   flex: 1; padding: 10px 0; text-align: center;
-  font-size: .82rem; font-weight:var(--fw-medium); cursor: pointer;
+  font-size: .754rem; font-weight:var(--fw-medium); cursor: pointer;
   background: white; color: var(--navy);
   border: none; font-family: inherit;
   transition: all .15s; letter-spacing: .3px;
@@ -396,7 +396,7 @@ header {
   width: 100%; height: 50px;
   border: 1.5px solid var(--border); border-radius: 8px;
   padding: 0 1rem 0 3.2rem;
-  font-size: 1rem; letter-spacing: 2px; font-weight:var(--fw-regular);
+  font-size: .92rem; letter-spacing: 2px; font-weight:var(--fw-regular);
   color: var(--text); background: var(--off-white);
   outline: none; transition: all .2s; font-family: inherit;
 }
@@ -404,18 +404,18 @@ header {
   border-color: var(--blue-mid); background: white;
   box-shadow: 0 0 0 3px rgba(0,71,187,.1);
 }
-.inp-wrap input::placeholder { letter-spacing: 0; font-weight:var(--fw-regular); font-size: .88rem; color: var(--steel-lt); }
+.inp-wrap input::placeholder { letter-spacing: 0; font-weight:var(--fw-regular); font-size: .81rem; color: var(--steel-lt); }
 .inp-icon {
   position: absolute; left: 1rem; top: 50%;
   transform: translateY(-50%);
-  color: var(--muted); font-size: 1rem; pointer-events: none;
+  color: var(--muted); font-size: .92rem; pointer-events: none;
 }
 .qty-wrap { display: flex; align-items: center; gap: 8px; }
-.qty-wrap label { font-size: .78rem; color: var(--muted); white-space: nowrap; font-weight:var(--fw-medium); }
+.qty-wrap label { font-size: .718rem; color: var(--muted); white-space: nowrap; font-weight:var(--fw-medium); }
 .qty-wrap input {
   width: 78px; height: 50px;
   border: 1.5px solid var(--border); border-radius: 8px;
-  padding: 0 .75rem; font-size: 1rem; font-weight:var(--fw-regular);
+  padding: 0 .75rem; font-size: .92rem; font-weight:var(--fw-regular);
   text-align: center; outline: none; transition: all .2s;
   font-family: inherit; background: var(--off-white);
 }
@@ -427,7 +427,7 @@ header {
   height: 50px; padding: 0 1.75rem;
   background: var(--blue-mid);
   color: white; border: none; border-radius: 8px;
-  font-size: .88rem; font-weight:var(--fw-medium); cursor: pointer;
+  font-size: .81rem; font-weight:var(--fw-medium); cursor: pointer;
   white-space: nowrap; font-family: 'LayherTextWeb', sans-serif;
   letter-spacing: 1.5px; text-transform: uppercase;
   display: flex; align-items: center; gap: 7px;
@@ -439,11 +439,11 @@ header {
 .btn-add:disabled { background: var(--steel-lt); cursor: not-allowed; box-shadow: none; transform: none; }
 
 /* ── PREVIEW ── */
-.preview { margin-top: 1rem; padding: .9rem 1.1rem; border-radius: 8px; display: none; font-size: .88rem; }
+.preview { margin-top: 1rem; padding: .9rem 1.1rem; border-radius: 8px; display: none; font-size: .81rem; }
 .preview.ok { background: #E3F2FD; border: 1.5px solid #90CAF9; color: #0D47A1; }
 .preview.no { background: #FFF8E1; border: 1.5px solid #FFD54F; color: var(--warn); }
-.preview .pname { font-weight:var(--fw-bold); font-size: .92rem; color: #0D47A1; margin-bottom: 3px; }
-.preview .pdet { font-size: .78rem; color: #1565C0; }
+.preview .pname { font-weight:var(--fw-bold); font-size: .846rem; color: #0D47A1; margin-bottom: 3px; }
+.preview .pdet { font-size: .718rem; color: #1565C0; }
 
 /* ── AUTOCOMPLETE ── */
 .suggest-box {
@@ -460,17 +460,17 @@ header {
 }
 .suggest-item:last-child { border-bottom: none; }
 .suggest-item:hover, .suggest-item.active { background: #EEF4FF; }
-.suggest-ref { font-weight:var(--fw-bold); letter-spacing: 1px; color: var(--blue-mid); font-size: .79rem; min-width: 80px; font-family: 'LayherTextWeb', sans-serif; }
-.suggest-desc { font-size: .83rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.suggest-peso { font-size: .76rem; color: var(--muted); white-space: nowrap; }
-.suggest-count { font-size: .72rem; color: var(--muted); padding: 6px 1rem; border-top: 1px solid #EBF0F8; background: #F7FAFF; border-radius: 0 0 8px 8px; }
+.suggest-ref { -webkit-text-stroke: var(--ref-stroke); font-weight:var(--fw-bold); letter-spacing: 1px; color: var(--blue-mid); font-size: .727rem; min-width: 80px; font-family: 'LayherTextWeb', sans-serif; }
+.suggest-desc { font-size: .764rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.suggest-peso { font-size: .699rem; color: var(--muted); white-space: nowrap; }
+.suggest-count { font-size: .662rem; color: var(--muted); padding: 6px 1rem; border-top: 1px solid #EBF0F8; background: #F7FAFF; border-radius: 0 0 8px 8px; }
 
 /* ── NAME SEARCH ── */
 .name-wrap { position: relative; }
 .name-wrap input {
   width: 100%; height: 50px;
   border: 1.5px solid var(--border); border-radius: 8px;
-  padding: 0 1rem 0 3.2rem; font-size: .92rem;
+  padding: 0 1rem 0 3.2rem; font-size: .846rem;
   color: var(--text); background: var(--off-white);
   outline: none; transition: all .2s; font-family: inherit;
 }
@@ -493,10 +493,10 @@ header {
 }
 .nr-item:last-child { border-bottom: none; }
 .nr-item:hover, .nr-item.sel { background: #EEF4FF; }
-.nr-ref { font-weight:var(--fw-bold); letter-spacing: 1px; color: var(--blue-mid); font-size: .78rem; min-width: 85px; flex-shrink: 0; font-family: 'LayherTextWeb', sans-serif; }
-.nr-desc { font-size: .84rem; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.nr-peso { font-size: .76rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
-.nr-count { font-size: .72rem; color: var(--muted); padding: 7px 1rem; border-top: 1px solid #EBF0F8; background: #F7FAFF; border-radius: 0 0 7px 7px; text-align: center; }
+.nr-ref { -webkit-text-stroke: var(--ref-stroke); font-weight:var(--fw-bold); letter-spacing: 1px; color: var(--blue-mid); font-size: .718rem; min-width: 85px; flex-shrink: 0; font-family: 'LayherTextWeb', sans-serif; }
+.nr-desc { font-size: .773rem; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nr-peso { font-size: .699rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.nr-count { font-size: .662rem; color: var(--muted); padding: 7px 1rem; border-top: 1px solid #EBF0F8; background: #F7FAFF; border-radius: 0 0 7px 7px; text-align: center; }
 mark { background: #DBEAFE; border-radius: 2px; padding: 0 1px; font-style: normal; color: var(--blue); }
 
 /* ── STATS ── */
@@ -516,8 +516,8 @@ mark { background: #DBEAFE; border-radius: 2px; padding: 0 1px; font-style: norm
 .stat:nth-child(2) { border-left-color: var(--blue-mid); }
 .stat:nth-child(3) { border-left-color: var(--green); }
 .stat:nth-child(4) { border-left-color: var(--steel); }
-.stat .lbl { font-size: .62rem; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 6px; font-weight:var(--fw-medium); font-family: 'LayherTextWeb', sans-serif; }
-.stat .val { font-size: 1.7rem; font-weight:var(--fw-bold); font-family: 'LayherTextWeb', sans-serif; color: var(--text); letter-spacing: 1px; }
+.stat .lbl { font-size: .57rem; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 6px; font-weight:var(--fw-medium); font-family: 'LayherTextWeb', sans-serif; }
+.stat .val { font-size: 1.564rem; font-weight:var(--fw-bold); font-family: 'LayherTextWeb', sans-serif; color: var(--text); letter-spacing: 1px; }
 .stat .val.r { color: var(--navy); }
 .stat .val.g { color: var(--green); }
 
@@ -531,57 +531,57 @@ mark { background: #DBEAFE; border-radius: 2px; padding: 0 1px; font-style: norm
   padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border);
   background: linear-gradient(90deg, #F0F6FF, white);
 }
-.thead-row h2 { font-size: .6rem; text-transform: uppercase; letter-spacing: 2px; color: var(--navy); font-weight:var(--fw-bold); font-family: 'LayherTextWeb', sans-serif; }
+.thead-row h2 { font-size: .552rem; text-transform: uppercase; letter-spacing: 2px; color: var(--navy); font-weight:var(--fw-bold); font-family: 'LayherTextWeb', sans-serif; }
 .btn-sec {
   height: 34px; padding: 0 1rem; background: white;
   color: var(--text); border: 1px solid var(--border);
-  border-radius: 6px; font-size: .79rem; cursor: pointer;
+  border-radius: 6px; font-size: .727rem; cursor: pointer;
   transition: all .15s; display: flex; align-items: center;
   gap: 5px; font-family: inherit; font-weight:var(--fw-medium);
 }
 .btn-sec:hover { background: var(--off-white); }
 .btn-del { color: #C62828; border-color: #EF9A9A; }
 .btn-del:hover { background: #FFEBEE; }
-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+table { width: 100%; border-collapse: collapse; font-size: .791rem; }
 thead th {
   background: var(--navy);
   color: rgba(255,255,255,.85); padding: 11px 14px;
   text-align: left; font-weight:var(--fw-bold);
-  font-size: .65rem; text-transform: uppercase; letter-spacing: 1px;
+  font-size: .598rem; text-transform: uppercase; letter-spacing: 1px;
   font-family: 'LayherTextWeb', sans-serif;
 }
 tbody tr { border-bottom: 1px solid #EBF0F8; transition: background .1s; }
 tbody tr:hover { background: #F5F9FF; }
 tbody tr:last-child { border-bottom: none; }
 td { padding: 11px 14px; vertical-align: middle; }
-td.ref { font-weight:var(--fw-bold); letter-spacing: 1px; color: var(--blue-mid); font-size: .79rem; font-family: 'LayherTextWeb', sans-serif; }
+td.ref { -webkit-text-stroke: var(--ref-stroke); font-weight:var(--fw-bold); letter-spacing: 1px; color: var(--blue-mid); font-size: .727rem; font-family: 'LayherTextWeb', sans-serif; }
 td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight:var(--fw-medium); }
-td.warn { text-align: right; color: var(--warn); font-style: italic; font-size: .79rem; }
+td.warn { text-align: right; color: var(--warn); font-style: italic; font-size: .727rem; }
 td.ctr { text-align: center; }
 .qty-cell { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
 .qbtn {
   width: 26px; height: 26px; border: 1.5px solid var(--border);
   background: white; border-radius: 5px; cursor: pointer;
-  font-size: .9rem; display: flex; align-items: center;
+  font-size: .828rem; display: flex; align-items: center;
   justify-content: center; color: var(--muted);
   transition: all .1s; line-height: 1;
 }
 .qbtn:hover { background: #EEF4FF; border-color: var(--blue-mid); color: var(--blue-mid); }
 .qdis { min-width: 34px; text-align: center; font-weight:var(--fw-bold); }
 .qty-input {
-  width: 58px; text-align: center; font-weight:var(--fw-regular); font-size: .95rem;
+  width: 58px; text-align: center; font-weight:var(--fw-regular); font-size: .874rem;
   border: 1.5px solid var(--border); border-radius: 7px;
   padding: .25rem .3rem; background: var(--off-white);
   color: var(--text); font-family: inherit;
   -moz-appearance: textfield;
 }
 .qty-input:focus { outline: 2px solid var(--blue-mid); border-color: transparent; background: white; }
-.btnx { background: none; border: none; cursor: pointer; color: #C62828; font-size: 1rem; padding: 4px 8px; border-radius: 4px; transition: background .1s; }
+.btnx { background: none; border: none; cursor: pointer; color: #C62828; font-size: .92rem; padding: 4px 8px; border-radius: 4px; transition: background .1s; }
 .btnx:hover { background: #FFEBEE; }
 .empty { text-align: center; padding: 3.5rem 2rem; color: var(--muted); }
-.empty .ico { font-size: 3rem; margin-bottom: 1rem; opacity: .15; }
-.empty p { font-size: .88rem; }
-.empty .tip { font-size: .77rem; margin-top: .5rem; color: var(--steel-lt); }
+.empty .ico { font-size: 2.76rem; margin-bottom: 1rem; opacity: .15; }
+.empty p { font-size: .81rem; }
+.empty .tip { font-size: .708rem; margin-top: .5rem; color: var(--steel-lt); }
 
 /* ── QTY STEPPER ── */
 .qty-stepper {
@@ -591,7 +591,7 @@ td.ctr { text-align: center; }
 }
 .qty-stepper button {
   width: 48px; height: 100%; border: none; background: var(--off-white);
-  font-size: 1.4rem; font-weight:var(--fw-medium); color: var(--primary);
+  font-size: 1.288rem; font-weight:var(--fw-medium); color: var(--primary);
   cursor: pointer; transition: background .12s; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   line-height: 1;
@@ -599,7 +599,7 @@ td.ctr { text-align: center; }
 .qty-stepper button:hover { background: var(--primary-light); }
 .qty-stepper button:active { background: #D0E0FF; }
 .qty-stepper input {
-  flex: 1; text-align: center; font-size: 1.1rem; font-weight:var(--fw-regular);
+  flex: 1; text-align: center; font-size: 1.012rem; font-weight:var(--fw-regular);
   color: var(--text); border: none; outline: none;
   background: transparent; font-family: 'LayherTextWeb', sans-serif;
   letter-spacing: 1px; min-width: 44px; width: 60px;
@@ -617,7 +617,7 @@ td.ctr { text-align: center; }
 .btn-exp {
   height: 38px; padding: 0 1.25rem;
   background: var(--steel); color: white; border: none;
-  border-radius: 6px; font-size: .8rem; font-weight:var(--fw-medium);
+  border-radius: 6px; font-size: .736rem; font-weight:var(--fw-medium);
   cursor: pointer; display: flex; align-items: center;
   gap: 6px; transition: all .15s; font-family: inherit;
   font-family: 'LayherTextWeb', sans-serif; letter-spacing: .8px; text-transform: uppercase;
@@ -629,7 +629,7 @@ td.ctr { text-align: center; }
 /* ── FOOTER ── */
 footer {
   text-align: center; padding: 1.6rem 1rem;
-  color: var(--muted); font-size: .7rem;
+  color: var(--muted); font-size: .644rem;
   border-top: 1px solid var(--border);
   margin-top: .5rem; background: white;
   letter-spacing: .3px;
@@ -641,44 +641,44 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .firma-ok { background: #E3F2FD !important; border-color: #1565C0 !important; color: #0D47A1 !important; }
 
 /* ── NOTAS ── */
-.nota-btn{background:none;border:1px dashed var(--border);border-radius:4px;cursor:pointer;color:var(--muted);font-size:.75rem;padding:2px 7px;transition:all .15s;white-space:nowrap}
+.nota-btn{background:none;border:1px dashed var(--border);border-radius:4px;cursor:pointer;color:var(--muted);font-size:.69rem;padding:2px 7px;transition:all .15s;white-space:nowrap}
 .nota-btn:hover{border-color:var(--blue-mid);color:var(--blue-mid);background:#EEF4FF}
 .nota-btn.has-nota{border-color:var(--blue-mid);color:var(--blue-mid);background:#EEF4FF}
-.nota-input{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;outline:none;transition:border-color .15s}
+.nota-input{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.736rem;font-family:inherit;outline:none;transition:border-color .15s}
 .nota-input:focus{border-color:var(--blue-mid)}
 
 /* ── MODALS ── */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
 .modal{background:white;border-radius:12px;padding:2rem;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:modalIn .2s ease}
 @keyframes modalIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-.modal h3{font-size:1rem;font-weight:var(--fw-bold);color:var(--navy);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;font-family:'LayherTextWeb',sans-serif;letter-spacing:.5px;text-transform:uppercase}
-.modal label{font-size:.68rem;font-weight:var(--fw-medium);text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px}
-.modal input,.modal textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.9rem;font-family:inherit;outline:none;transition:border-color .15s;margin-bottom:1rem}
+.modal h3{font-size:.92rem;font-weight:var(--fw-bold);color:var(--navy);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;font-family:'LayherTextWeb',sans-serif;letter-spacing:.5px;text-transform:uppercase}
+.modal label{font-size:.626rem;font-weight:var(--fw-medium);text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px}
+.modal input,.modal textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.828rem;font-family:inherit;outline:none;transition:border-color .15s;margin-bottom:1rem}
 .modal input:focus,.modal textarea:focus{border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(0,71,187,.08)}
 .modal textarea{resize:vertical;min-height:80px}
 .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:.5rem}
-.modal-btns button{height:38px;padding:0 1.25rem;border:none;border-radius:7px;font-size:.85rem;font-weight:var(--fw-medium);cursor:pointer;font-family:inherit;transition:all .15s}
+.modal-btns button{height:38px;padding:0 1.25rem;border:none;border-radius:7px;font-size:.782rem;font-weight:var(--fw-medium);cursor:pointer;font-family:inherit;transition:all .15s}
 .btn-cancel{background:var(--off-white);color:var(--muted);border:1px solid var(--border)!important}
 .btn-cancel:hover{background:#e5e7eb}
 .btn-confirm{background:var(--blue-mid);color:white}
 .btn-confirm:hover{background:var(--navy)}
-.btn-danger-sm{background:#FECACA;color:#C62828;border:none;border-radius:6px;padding:4px 10px;font-size:.75rem;font-weight:var(--fw-medium);cursor:pointer;transition:all .15s}
+.btn-danger-sm{background:#FECACA;color:#C62828;border:none;border-radius:6px;padding:4px 10px;font-size:.69rem;font-weight:var(--fw-medium);cursor:pointer;transition:all .15s}
 .btn-danger-sm:hover{background:#FCA5A5}
 
 /* ── HISTORIAL ── */
 .hist-panel{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);margin-top:1.5rem}
 .hist-header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;border-bottom:1px solid var(--border);background:linear-gradient(90deg,#F0F6FF,white)}
-.hist-header h2{font-size:.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--navy);font-weight:var(--fw-bold);font-family:'LayherTextWeb',sans-serif}
-.hist-empty{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem}
+.hist-header h2{font-size:.552rem;text-transform:uppercase;letter-spacing:2px;color:var(--navy);font-weight:var(--fw-bold);font-family:'LayherTextWeb',sans-serif}
+.hist-empty{text-align:center;padding:2rem;color:var(--muted);font-size:.782rem}
 .hist-item{padding:.9rem 1.5rem;border-bottom:.5px solid #EBF0F8;display:flex;align-items:center;gap:1rem;transition:background .1s;cursor:pointer}
 .hist-item:last-child{border-bottom:none}
 .hist-item:hover{background:#F5F9FF}
-.hist-icon{font-size:1.4rem;flex-shrink:0}
+.hist-icon{font-size:1.288rem;flex-shrink:0}
 .hist-info{flex:1;min-width:0}
-.hist-name{font-weight:var(--fw-bold);font-size:.88rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hist-meta{font-size:.74rem;color:var(--muted);margin-top:2px}
+.hist-name{font-weight:var(--fw-bold);font-size:.81rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-meta{font-size:.681rem;color:var(--muted);margin-top:2px}
 .hist-actions{display:flex;gap:6px;flex-shrink:0}
-.hist-tag{background:#EEF4FF;color:var(--blue-mid);font-size:.72rem;font-weight:var(--fw-medium);padding:2px 8px;border-radius:10px;white-space:nowrap;font-family:'LayherTextWeb',sans-serif}
+.hist-tag{background:#EEF4FF;color:var(--blue-mid);font-size:.662rem;font-weight:var(--fw-medium);padding:2px 8px;border-radius:10px;white-space:nowrap;font-family:'LayherTextWeb',sans-serif}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
@@ -694,15 +694,15 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .hdr-logo-img { height: 44px; }
   .hdr-sep { display: none; }
   .hdr-titles .sup { display: none; }
-  .hdr-titles .main { font-size: .82rem; }
+  .hdr-titles .main { font-size: .754rem; }
   .hdr-right { gap: 6px; }
-  .hdr-pill { font-size: .6rem; padding: 4px 8px; }
+  .hdr-pill { font-size: .552rem; padding: 4px 8px; }
   .hdr-pill:last-child { display: none; }
 
   /* ── INFO STRIP & HERO ── */
   .info-strip { display: none; }
   .acta-hero { padding: 1.2rem 1rem; gap: 5px; }
-  .acta-hero-text { font-size: 1.4rem; letter-spacing: 1px; }
+  .acta-hero-text { font-size: 1.288rem; letter-spacing: 1px; }
   .acta-hero-sub { display: none; }
   .acta-hero-rule { width: 20px; }
 
@@ -713,20 +713,20 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .acta-datos { padding: 1rem; margin-bottom: 1rem; }
   .acta-grid { grid-template-columns: 1fr; gap: 10px; }
   .acta-field input,
-  .acta-field select { height: 46px; font-size: .92rem; }
+  .acta-field select { height: 46px; font-size: .846rem; }
 
   /* ── PANEL BUSQUEDA ── */
   .panel { padding: 1rem; margin-bottom: 1rem; }
   .search-tabs { flex-direction: column; border-radius: 8px; }
-  .stab { border-bottom: 1px solid var(--border); padding: 11px; font-size: .8rem; }
+  .stab { border-bottom: 1px solid var(--border); padding: 11px; font-size: .736rem; }
   .stab:last-child { border-bottom: none; }
   .search-row { flex-direction: column; gap: 10px; }
   .inp-wrap { width: 100%; min-width: unset; }
-  .inp-wrap input { height: 48px; font-size: .95rem; }
+  .inp-wrap input { height: 48px; font-size: .874rem; }
   .qty-wrap { width: 100%; justify-content: space-between; }
   .qty-wrap input { flex: 1; max-width: 120px; height: 48px; }
-  .qty-wrap label { font-size: .85rem; }
-  .btn-add { width: 100%; height: 50px; justify-content: center; font-size: .95rem; }
+  .qty-wrap label { font-size: .782rem; }
+  .btn-add { width: 100%; height: 50px; justify-content: center; font-size: .874rem; }
 
   /* ── STATS ── */
   .stats {
@@ -735,17 +735,17 @@ footer em { color: var(--blue-mid); font-style: italic; }
     margin-bottom: 1rem;
   }
   .stat { padding: .9rem 1rem; }
-  .stat .val { font-size: 1.5rem; }
-  .stat .lbl { font-size: .58rem; }
+  .stat .val { font-size: 1.38rem; }
+  .stat .lbl { font-size: .534rem; }
 
   /* ── TABLE ── */
   .tpanel { border-radius: 8px; }
   .thead-row { padding: .85rem 1rem; }
-  .thead-row h2 { font-size: .58rem; }
+  .thead-row h2 { font-size: .534rem; }
 
   /* Scroll horizontal en tabla */
   #tableWrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table { font-size: .75rem; min-width: 580px; }
+  table { font-size: .69rem; min-width: 580px; }
   td, thead th { padding: 8px 9px; }
 
   /* ── EXPORT BAR ── */
@@ -759,14 +759,14 @@ footer em { color: var(--blue-mid); font-style: italic; }
     flex: 1 1 calc(50% - 4px);
     justify-content: center;
     height: 42px;
-    font-size: .78rem;
+    font-size: .718rem;
   }
 
   /* ── HISTORIAL ── */
   .hist-panel { margin-top: 1rem; }
   .hist-item { padding: .75rem 1rem; gap: .7rem; }
-  .hist-name { font-size: .82rem; }
-  .hist-meta { font-size: .7rem; }
+  .hist-name { font-size: .754rem; }
+  .hist-meta { font-size: .644rem; }
   .hist-actions { flex-direction: column; gap: 4px; }
 
   /* ── NAME RESULTS MOBILE: two-line layout ── */
@@ -784,7 +784,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
     white-space: normal;
     overflow: visible;
     text-overflow: unset;
-    font-size: .82rem;
+    font-size: .754rem;
     flex: 1 1 100%;
     order: 3;
     color: var(--text);
@@ -792,7 +792,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
   }
   .nr-peso {
     margin-left: auto;
-    font-size: .74rem;
+    font-size: .681rem;
   }
 
   /* ── SUGGEST BOX MOBILE: two-line layout ── */
@@ -813,7 +813,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
     white-space: normal;
     overflow: visible;
     text-overflow: unset;
-    font-size: .82rem;
+    font-size: .754rem;
     flex: 1 1 100%;
     order: 3;
     color: var(--text);
@@ -823,17 +823,17 @@ footer em { color: var(--blue-mid); font-style: italic; }
   /* ── NO LAYHER MOBILE ── */
   .nolayher-section { margin-top: .85rem; }
   .nolayher-header { padding: .6rem .85rem; gap: .5rem; }
-  .nolayher-title { font-size: .8rem; }
-  .nolayher-sub { font-size: .62rem; }
-  .nolayher-add-btn { padding: .35rem .75rem; font-size: .74rem; }
-  .nolayher-table { font-size: .75rem; min-width: 0; }
+  .nolayher-title { font-size: .736rem; }
+  .nolayher-sub { font-size: .57rem; }
+  .nolayher-add-btn { padding: .35rem .75rem; font-size: .681rem; }
+  .nolayher-table { font-size: .69rem; min-width: 0; }
   .nolayher-table td { padding: .4rem .55rem; }
-  .nolayher-table th { padding: .35rem .55rem; font-size: .6rem; }
+  .nolayher-table th { padding: .35rem .55rem; font-size: .552rem; }
   /* Columna cantidad más angosta en móvil */
   .nolayher-table th:first-child,
   .nolayher-table td:first-child { width: 68px !important; }
-  .nl-qty-input { width: 52px; font-size: .8rem; padding: .25rem .3rem; }
-  .nl-name-input { font-size: .8rem; padding: .28rem .45rem; }
+  .nl-qty-input { width: 52px; font-size: .736rem; padding: .25rem .3rem; }
+  .nl-name-input { font-size: .736rem; padding: .28rem .45rem; }
   /* Scroll horizontal si la tabla es muy ancha */
   #nlTable { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
@@ -841,7 +841,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .wizard-steps { display: flex !important; align-items: center; gap: 8px; margin-bottom: 1rem; }
   .wizard-step {
     flex: 1; text-align: center; padding: .55rem .5rem;
-    border-radius: 8px; font-size: .78rem; font-weight:var(--fw-medium);
+    border-radius: 8px; font-size: .718rem; font-weight:var(--fw-medium);
     background: var(--off-white); color: var(--muted);
     border: 1.5px solid var(--border);
     font-family: 'LayherTextWeb', sans-serif;
@@ -849,13 +849,13 @@ footer em { color: var(--blue-mid); font-style: italic; }
     transition: all .2s;
   }
   .wizard-step.active { background: var(--navy); color: white; border-color: var(--navy); }
-  .wizard-arrow { color: var(--muted); font-size: 1.2rem; flex-shrink: 0; }
+  .wizard-arrow { color: var(--muted); font-size: 1.104rem; flex-shrink: 0; }
   .wizard-next-btn {
     display: block !important;
     width: 100%; margin-top: 1rem; height: 52px;
     background: var(--blue-mid); color: white;
     border: none; border-radius: 10px;
-    font-size: 1rem; font-weight:var(--fw-medium);
+    font-size: .92rem; font-weight:var(--fw-medium);
     font-family: 'LayherTextWeb', sans-serif;
     letter-spacing: 1px; text-transform: uppercase;
     cursor: pointer; box-shadow: 0 4px 14px rgba(0,71,187,.3);
@@ -866,7 +866,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
     width: 100%; margin-bottom: 1rem; height: 52px;
     background: var(--blue-mid); color: white;
     border: none; border-radius: 10px;
-    font-size: 1rem; font-weight:var(--fw-medium);
+    font-size: .92rem; font-weight:var(--fw-medium);
     font-family: 'LayherTextWeb', sans-serif;
     letter-spacing: 1px; text-transform: uppercase;
     cursor: pointer; box-shadow: 0 4px 14px rgba(0,71,187,.3);
@@ -874,7 +874,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .wizard-back-btn:active { transform: scale(.98); }
 
   /* ── FOOTER ── */
-  footer { font-size: .65rem; padding: 1.2rem .75rem; line-height: 1.8; }
+  footer { font-size: .598rem; padding: 1.2rem .75rem; line-height: 1.8; }
 
   /* ── LOGIN ── */
   #loginGate { padding: 0; }
@@ -886,11 +886,11 @@ footer em { color: var(--blue-mid); font-style: italic; }
   }
   .login-card .login-logo { height: 90px; margin-bottom: 1.4rem; }
   .login-actions { flex-direction: column; align-items: stretch; gap: .7rem; }
-  .login-card button#btnLogin { width: 100%; padding: .8rem; font-size: .92rem; }
+  .login-card button#btnLogin { width: 100%; padding: .8rem; font-size: .846rem; }
   .login-forgot { text-align: center; }
   .login-guest-row { margin-top: 1.2rem; }
-  .login-guest-row button { font-size: .85rem; }
-  .login-field input { font-size: 16px; }
+  .login-guest-row button { font-size: .782rem; }
+  .login-field input { font-size: 14.7px; }
 
   /* ── HEADER: todo en una sola fila ── */
   .hdr-inner { flex-wrap: nowrap; height: auto; padding: .6rem .8rem; justify-content: space-between; align-items: center; }
@@ -898,12 +898,12 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .hdr-sep { display: none; }
   .hdr-right { gap: 4px; flex-shrink: 1; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .hdr-right::-webkit-scrollbar { display: none; }
-  .hdr-pill { font-size: .54rem !important; padding: 3px 5px !important; white-space: nowrap; flex-shrink: 0; }
+  .hdr-pill { font-size: .497rem !important; padding: 3px 5px !important; white-space: nowrap; flex-shrink: 0; }
   .hdr-pill .dot { display: none; }
   .hdr-user { flex-wrap: nowrap; gap: 4px; padding: .25rem .4rem; flex-shrink: 0; }
   .hdr-user > span:first-child { display: none; }
-  .hdr-user .rolebadge { font-size: .58rem; padding: .1rem .35rem; }
-  .hdr-user button { font-size: .6rem; padding: .16rem .4rem; white-space: nowrap; }
+  .hdr-user .rolebadge { font-size: .534rem; padding: .1rem .35rem; }
+  .hdr-user button { font-size: .552rem; padding: .16rem .4rem; white-space: nowrap; }
 
   /* ── MODALES Y TABLAS DE PANELES ── */
   .modal { padding: 1.3rem; max-height: 92vh; }
@@ -912,8 +912,8 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .admin-table thead { display: none; }
   .admin-table tbody, .admin-table tr { display: block; width: 100%; }
   .admin-table tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: .6rem; padding: .5rem .8rem; }
-  .admin-table td { display: flex; justify-content: space-between; align-items: center; gap: .6rem; border: none !important; padding: .35rem 0 !important; text-align: right; font-size: .78rem; }
-  .admin-table td::before { content: attr(data-label); font-weight:var(--fw-medium); font-size: .68rem; color: var(--muted); text-align: left; }
+  .admin-table td { display: flex; justify-content: space-between; align-items: center; gap: .6rem; border: none !important; padding: .35rem 0 !important; text-align: right; font-size: .718rem; }
+  .admin-table td::before { content: attr(data-label); font-weight:var(--fw-medium); font-size: .626rem; color: var(--muted); text-align: left; }
 
   /* ── VER IMAGEN DE PIEZA ── */
   #imgPreview { flex-direction: column; padding: 1rem !important; }
@@ -1000,7 +1000,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .login-field .field-icon svg { width: 17px; height: 17px; }
 .login-field input {
   width: 100%; box-sizing: border-box; padding: .75rem .85rem .75rem 2.3rem;
-  border: 1.5px solid #d8dee4; border-radius: 6px; font-size: .92rem; background:#fafbfc;
+  border: 1.5px solid #d8dee4; border-radius: 6px; font-size: .846rem; background:#fafbfc;
 }
 .login-field input:focus { outline: none; border-color: #003087; background:#fff; }
 .login-field .toggle-pass {
@@ -1008,34 +1008,34 @@ footer em { color: var(--blue-mid); font-style: italic; }
   background: none; border: none; cursor: pointer; color: #6b7785; padding: 2px; display:flex;
 }
 .login-field .toggle-pass svg { width: 17px; height: 17px; }
-#loginError { color: #C62828; font-size: .82rem; margin: -.3rem 0 .8rem; display:none; text-align:left; }
+#loginError { color: #C62828; font-size: .754rem; margin: -.3rem 0 .8rem; display:none; text-align:left; }
 .login-actions { display:flex; align-items:center; justify-content:space-between; margin-top:.4rem; gap: .75rem;}
 .login-card button#btnLogin {
   padding: .68rem 1.6rem; border: none; border-radius: 6px;
-  background: #003087; color: #fff; font-weight:var(--fw-medium); font-size: .88rem; cursor: pointer; white-space: nowrap;
+  background: #003087; color: #fff; font-weight:var(--fw-medium); font-size: .81rem; cursor: pointer; white-space: nowrap;
 }
 .login-card button#btnLogin:disabled { opacity: .6; cursor: default; }
-.login-forgot { font-size: .78rem; color: #009FE3; text-decoration: none; cursor: pointer; background:none; border:none; }
+.login-forgot { font-size: .718rem; color: #009FE3; text-decoration: none; cursor: pointer; background:none; border:none; }
 .login-forgot:hover { text-decoration: underline; }
 .login-guest-row { margin-top: 1rem; text-align: center; }
 .login-guest-row button {
-  background: none; border: none; color: #6b7785; font-size: .8rem; cursor: pointer; text-decoration: underline;
+  background: none; border: none; color: #6b7785; font-size: .736rem; cursor: pointer; text-decoration: underline;
 }
-.login-version { margin-top: 1.2rem; font-size: .7rem; color: #b7bfc7; text-align: right; }
+.login-version { margin-top: 1.2rem; font-size: .644rem; color: #b7bfc7; text-align: right; }
 #appRoot.hidden { display: none; }
 .hdr-user {
   display:flex; align-items:center; gap:.5rem; background: rgba(0,48,135,.08);
-  padding:.35rem .7rem; border-radius:20px; font-size:.78rem; color:#003087;
+  padding:.35rem .7rem; border-radius:20px; font-size:.718rem; color:#003087;
 }
-.hdr-user .rolebadge { background:#003087; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.68rem; text-transform:uppercase; }
-.hdr-user button { background:none; border:1px solid #003087; color:#003087; border-radius:14px; padding:.2rem .6rem; font-size:.72rem; cursor:pointer; }
+.hdr-user .rolebadge { background:#003087; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.626rem; text-transform:uppercase; }
+.hdr-user button { background:none; border:1px solid #003087; color:#003087; border-radius:14px; padding:.2rem .6rem; font-size:.662rem; cursor:pointer; }
 .pieza-thumb { width:34px; height:34px; object-fit:contain; border-radius:5px; border:1px solid var(--border); background:#fafafa; vertical-align:middle; margin-right:.4rem; }
 .preview-thumb { width:56px; height:56px; object-fit:contain; border-radius:7px; border:1px solid var(--border); background:#fafafa; float:left; margin-right:.7rem; }
 .solo-admin { display: none; }
-.admin-table { width:100%; border-collapse: collapse; font-size:.85rem; }
+.admin-table { width:100%; border-collapse: collapse; font-size:.782rem; }
 .admin-table th, .admin-table td { padding:.5rem .6rem; border-bottom:1px solid var(--border); text-align:left; }
 .admin-table th { background:#f4f6f8; }
-.prio-star { cursor:pointer; font-size:1.1rem; background:none; border:none; }
+.prio-star { cursor:pointer; font-size:1.012rem; background:none; border:none; }
 </style>
 </head>
 <body>
@@ -1155,7 +1155,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
       </div>
       <div class="acta-field">
         <label>Bodega Layher</label>
-        <select id="actaCargo" style="width:100%;height:42px;border:1.5px solid var(--border);border-radius:7px;padding:0 .9rem;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--off-white);outline:none;transition:all .2s;cursor:pointer;appearance:auto;">
+        <select id="actaCargo" style="width:100%;height:42px;border:1.5px solid var(--border);border-radius:7px;padding:0 .9rem;font-size:.81rem;font-family:inherit;color:var(--text);background:var(--off-white);outline:none;transition:all .2s;cursor:pointer;appearance:auto;">
           <option value="">-- SELECCIONAR BODEGA --</option>
           <option value="FUNZA">FUNZA</option>
           <option value="BARRANQUILLA">BARRANQUILLA</option>
@@ -1341,7 +1341,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
   <div class="modal-bg hidden" id="modalDelFoto">
     <div class="modal" style="max-width:380px">
       <h3>Eliminar foto</h3>
-      <p style="font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">¿Estás seguro de eliminar esta foto? Esta acción no se puede deshacer.</p>
+      <p style="font-size:.81rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">¿Estás seguro de eliminar esta foto? Esta acción no se puede deshacer.</p>
       <div class="modal-btns">
         <button class="modal-btns btn-cancel" onclick="closeModal('modalDelFoto')">Cancelar</button>
         <button class="btn-confirm" style="background:#C62828" onclick="confirmarEliminarFoto()">Eliminar</button>
@@ -1387,7 +1387,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
 <div class="modal-bg hidden" id="modalView">
   <div class="modal" style="max-width:640px">
     <h3 id="modalViewTitle">Listado</h3>
-    <div id="modalViewContent" style="max-height:340px;overflow-y:auto;font-size:.83rem;margin-bottom:1rem"></div>
+    <div id="modalViewContent" style="max-height:340px;overflow-y:auto;font-size:.764rem;margin-bottom:1rem"></div>
     <div class="modal-btns">
       <button class="modal-btns btn-cancel" onclick="closeModal('modalView')">Cerrar</button>
       <button class="btn-confirm" id="btnCargarHist">Cargar este listado</button>
@@ -1399,7 +1399,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
 <div class="modal-bg hidden" id="modalClear">
   <div class="modal" style="max-width:400px">
     <h3>Limpiar listado</h3>
-    <p style="font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">Esta acción eliminará todas las piezas del listado actual. Esta operación no se puede deshacer.</p>
+    <p style="font-size:.81rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">Esta acción eliminará todas las piezas del listado actual. Esta operación no se puede deshacer.</p>
     <div class="modal-btns">
       <button class="modal-btns btn-cancel" onclick="closeModal('modalClear')">Cancelar</button>
       <button class="btn-confirm" style="background:#C62828" onclick="confirmarLimpiar()">Limpiar todo</button>
@@ -1411,7 +1411,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
 <div class="modal-bg hidden" id="modalDelItem">
   <div class="modal" style="max-width:400px">
     <h3>Eliminar pieza</h3>
-    <p id="modalDelItemText" style="font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">¿Estás seguro de eliminar esta referencia del listado?</p>
+    <p id="modalDelItemText" style="font-size:.81rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">¿Estás seguro de eliminar esta referencia del listado?</p>
     <div class="modal-btns">
       <button class="modal-btns btn-cancel" onclick="closeModal('modalDelItem')">Cancelar</button>
       <button class="btn-confirm" style="background:#C62828" onclick="confirmarRmItem()">Eliminar</button>
@@ -1423,29 +1423,29 @@ footer em { color: var(--blue-mid); font-style: italic; }
 <div class="modal-bg hidden" id="modalFirma">
   <div class="modal" style="max-width:760px;width:97vw;padding:1.5rem">
     <h3>Firma Digital</h3>
-    <p style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem;line-height:1.5;">Dibuja tu firma en el recuadro. Se incrustará en el PDF exportado.</p>
+    <p style="font-size:.718rem;color:var(--muted);margin-bottom:.75rem;line-height:1.5;">Dibuja tu firma en el recuadro. Se incrustará en el PDF exportado.</p>
     <canvas id="firmaCanvas" width="640" height="340"
       style="border:1.5px solid var(--border);border-radius:8px;cursor:crosshair;display:block;width:100%;aspect-ratio:640/340;height:auto;max-height:65vh;touch-action:none;background:#fafbff;"></canvas>
     <div style="display:flex;gap:8px;margin-top:.75rem;justify-content:space-between;align-items:center">
-      <button id="btnLimpiarFirma" style="background:none;border:1px solid var(--border);border-radius:6px;padding:.35rem .9rem;font-size:.78rem;color:var(--muted);cursor:pointer;">Limpiar</button>
+      <button id="btnLimpiarFirma" style="background:none;border:1px solid var(--border);border-radius:6px;padding:.35rem .9rem;font-size:.718rem;color:var(--muted);cursor:pointer;">Limpiar</button>
       <div style="display:flex;gap:8px;">
         <button class="modal-btns btn-cancel" onclick="closeModal('modalFirma')">Cancelar</button>
         <button class="modal-btns btn-confirm" id="btnConfirmarFirma">Guardar firma</button>
       </div>
     </div>
     <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
-      <label style="font-size:.65rem;font-weight:var(--fw-medium);text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:6px;">Nombre del Cliente</label>
+      <label style="font-size:.598rem;font-weight:var(--fw-medium);text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:6px;">Nombre del Cliente</label>
       <input id="firmaNombre" type="text" maxlength="60"
         placeholder="NOMBRE COMPLETO"
-        style="width:100%;height:42px;border:1.5px solid var(--border);border-radius:7px;padding:0 .9rem;font-size:1rem;font-weight:var(--fw-regular);letter-spacing:1px;font-family:inherit;color:var(--text);background:var(--off-white);outline:none;transition:all .2s;text-transform:uppercase;margin-bottom:.75rem;"
+        style="width:100%;height:42px;border:1.5px solid var(--border);border-radius:7px;padding:0 .9rem;font-size:.92rem;font-weight:var(--fw-regular);letter-spacing:1px;font-family:inherit;color:var(--text);background:var(--off-white);outline:none;transition:all .2s;text-transform:uppercase;margin-bottom:.75rem;"
         oninput="this.value=this.value.toUpperCase()"
         onfocus="this.style.borderColor='var(--blue-mid)';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(0,71,187,.08)'"
         onblur="this.style.borderColor='';this.style.background='';this.style.boxShadow=''"
       />
-      <label style="font-size:.65rem;font-weight:var(--fw-medium);text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:6px;">Cédula del Cliente</label>
+      <label style="font-size:.598rem;font-weight:var(--fw-medium);text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:6px;">Cédula del Cliente</label>
       <input id="firmaCedula" type="tel" inputmode="numeric" maxlength="10"
         placeholder="N° DE CEDULA"
-        style="width:100%;height:42px;border:1.5px solid var(--border);border-radius:7px;padding:0 .9rem;font-size:1rem;font-weight:var(--fw-regular);letter-spacing:2px;font-family:inherit;color:var(--text);background:var(--off-white);outline:none;transition:all .2s;"
+        style="width:100%;height:42px;border:1.5px solid var(--border);border-radius:7px;padding:0 .9rem;font-size:.92rem;font-weight:var(--fw-regular);letter-spacing:2px;font-family:inherit;color:var(--text);background:var(--off-white);outline:none;transition:all .2s;"
         oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)"
         onfocus="this.style.borderColor='var(--blue-mid)';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(0,71,187,.08)'"
         onblur="this.style.borderColor='';this.style.background='';this.style.boxShadow=''"
@@ -1669,9 +1669,9 @@ function showImgPreview(val) {
   imgPreview.style.display = 'flex';
   imgPreview.innerHTML =
     '<div style="text-align:center">' +
-      '<div style="font-size:.75rem;font-weight:var(--fw-bold);color:var(--blue-mid);letter-spacing:.5px">' + val + '</div>' +
-      '<div style="font-weight:var(--fw-bold);margin:.25rem 0 .3rem;font-size:1.02rem">' + match.desc + '</div>' +
-      '<div style="font-size:.88rem;color:var(--muted);margin-bottom:1rem">Peso unitario: ' + (match.peso > 0 ? match.peso.toFixed(2) + ' kg/ud' : 'No disponible en tarifa') + '</div>' +
+      '<div style="font-size:.69rem;font-weight:var(--fw-bold);-webkit-text-stroke:var(--ref-stroke);color:var(--blue-mid);letter-spacing:.5px">' + val + '</div>' +
+      '<div style="font-weight:var(--fw-bold);margin:.25rem 0 .3rem;font-size:.938rem">' + match.desc + '</div>' +
+      '<div style="font-size:.81rem;color:var(--muted);margin-bottom:1rem">Peso unitario: ' + (match.peso > 0 ? match.peso.toFixed(2) + ' kg/ud' : 'No disponible en tarifa') + '</div>' +
       '<img src="' + urlFotoReferencia(val) + '" alt="' + match.desc + '" data-ref="' + val + '" data-try="0" ' +
       'style="width:220px;height:220px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff" ' +
       'onerror="fotoRefError(this)" />' +
@@ -2335,25 +2335,25 @@ function verListado(i) {
   viewingIdx = i;
   const h = historial[i];
   document.getElementById('modalViewTitle').textContent = '📋 ' + h.nombre;
-  let html = '<p style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem">' + h.fecha + ' · ' + h.pesoTotal + ' kg total</p>';
-  if (h.obs) html += '<p style="font-size:.78rem;color:#7B1FA2;margin-bottom:.75rem">📝 ' + h.obs + '</p>';
-  html += '<table style="width:100%;border-collapse:collapse;font-size:.8rem">' +
+  let html = '<p style="font-size:.718rem;color:var(--muted);margin-bottom:.75rem">' + h.fecha + ' · ' + h.pesoTotal + ' kg total</p>';
+  if (h.obs) html += '<p style="font-size:.718rem;color:#7B1FA2;margin-bottom:.75rem">📝 ' + h.obs + '</p>';
+  html += '<table style="width:100%;border-collapse:collapse;font-size:.736rem">' +
     '<thead><tr style="background:#F0F5FF">' +
-    '<th style="padding:6px 8px;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px">Ref</th>' +
-    '<th style="padding:6px 8px;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px">Descripción</th>' +
-    '<th style="padding:6px 8px;text-align:right;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px">Cant.</th>' +
-    '<th style="padding:6px 8px;text-align:right;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px">Kg/ud</th>' +
-    '<th style="padding:6px 8px;text-align:right;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px">Total kg</th>' +
-    '<th style="padding:6px 8px;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px">Nota</th>' +
+    '<th style="padding:6px 8px;text-align:left;font-size:.644rem;text-transform:uppercase;letter-spacing:.5px">Ref</th>' +
+    '<th style="padding:6px 8px;text-align:left;font-size:.644rem;text-transform:uppercase;letter-spacing:.5px">Descripción</th>' +
+    '<th style="padding:6px 8px;text-align:right;font-size:.644rem;text-transform:uppercase;letter-spacing:.5px">Cant.</th>' +
+    '<th style="padding:6px 8px;text-align:right;font-size:.644rem;text-transform:uppercase;letter-spacing:.5px">Kg/ud</th>' +
+    '<th style="padding:6px 8px;text-align:right;font-size:.644rem;text-transform:uppercase;letter-spacing:.5px">Total kg</th>' +
+    '<th style="padding:6px 8px;text-align:left;font-size:.644rem;text-transform:uppercase;letter-spacing:.5px">Nota</th>' +
     '</tr></thead><tbody>';
   h.listado.forEach(r => {
     html += '<tr style="border-bottom:.5px solid #EBF0F8">' +
-      '<td style="padding:6px 8px;color:var(--blue-mid);font-weight:var(--fw-bold)">' + r.ref + '</td>' +
+      '<td style="padding:6px 8px;color:var(--blue-mid);font-weight:var(--fw-bold);-webkit-text-stroke:var(--ref-stroke)">' + r.ref + '</td>' +
       '<td style="padding:6px 8px">' + r.desc + '</td>' +
       '<td style="padding:6px 8px;text-align:right">' + r.qty + '</td>' +
       '<td style="padding:6px 8px;text-align:right">' + (r.peso>0?r.peso.toFixed(2):'N/D') + '</td>' +
       '<td style="padding:6px 8px;text-align:right">' + (r.peso>0?(r.peso*r.qty).toFixed(2):'N/D') + '</td>' +
-      '<td style="padding:6px 8px;color:#7B1FA2;font-size:.76rem">' + (r.nota||'') + '</td>' +
+      '<td style="padding:6px 8px;color:#7B1FA2;font-size:.699rem">' + (r.nota||'') + '</td>' +
       '</tr>';
   });
   html += '</tbody></table>';
@@ -2471,7 +2471,7 @@ document.getElementById('btnPDF').addEventListener('click', () => {
     '<td style="padding:7px 10px;text-align:right">' + r.qty + '</td>' +
     '<td style="padding:7px 10px;text-align:right">' + (r.peso>0?r.peso.toFixed(2):'—') + '</td>' +
     '<td style="padding:7px 10px;text-align:right;font-weight:600">' + (r.peso>0?(r.peso*r.qty).toFixed(2):'—') + '</td>' +
-    (hayNotas ? '<td style="padding:7px 10px;color:#7B1FA2;font-size:11px">' + (r.nota||'') + '</td>' : '') +
+    (hayNotas ? '<td style="padding:7px 10px;color:#7B1FA2;font-size:10.1px">' + (r.nota||'') + '</td>' : '') +
     '</tr>'
   ).join('');
 
@@ -3326,7 +3326,7 @@ function fotoRefError(img) {
   }
   const ph = document.createElement('div');
   ph.textContent = 'Sin foto todavía';
-  ph.style.cssText = 'width:220px;height:220px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.85rem;color:var(--muted);border:1px dashed var(--border);border-radius:10px;background:#fff;margin:0 auto';
+  ph.style.cssText = 'width:220px;height:220px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.782rem;color:var(--muted);border:1px dashed var(--border);border-radius:10px;background:#fff;margin:0 auto';
   img.replaceWith(ph);
 }
 
@@ -3458,8 +3458,8 @@ function abrirModalCambiarPassword() {
         '<input type="password" id="nuevaPass1" placeholder="Mínimo 6 caracteres" />' +
         '<label>Repetir nueva contraseña</label>' +
         '<input type="password" id="nuevaPass2" placeholder="Repite la contraseña" />' +
-        '<div id="cambiarPassError" style="color:#C62828;font-size:.8rem;margin-bottom:.5rem;display:none"></div>' +
-        '<div id="cambiarPassOk" style="color:#1c7a3c;font-size:.8rem;margin-bottom:.5rem;display:none">Contraseña actualizada.</div>' +
+        '<div id="cambiarPassError" style="color:#C62828;font-size:.736rem;margin-bottom:.5rem;display:none"></div>' +
+        '<div id="cambiarPassOk" style="color:#1c7a3c;font-size:.736rem;margin-bottom:.5rem;display:none">Contraseña actualizada.</div>' +
         '<div class="modal-btns">' +
           '<button class="btn-cancel" onclick="closeModal(\'modalCambiarPass\')">Cancelar</button>' +
           '<button class="btn-confirm" id="btnConfirmarCambiarPass">Guardar</button>' +
@@ -3612,7 +3612,7 @@ async function abrirPanelAdmin() {
       '<td data-label="Items">' + a.total_items + '</td>' +
       '<td data-label="Peso (kg)">' + Number(a.peso_total).toFixed(2) + '</td>' +
       '<td data-label="Fecha">' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</td>' +
-      '<td data-label="Eliminar"><button class="btn-del-acta" data-id="' + a.id + '" data-nombre="' + a.nombre.replace(/"/g,'&quot;') + '" style="background:#C62828;color:#fff;border:none;border-radius:5px;padding:.3rem .6rem;font-size:.72rem;cursor:pointer">Eliminar</button></td>' +
+      '<td data-label="Eliminar"><button class="btn-del-acta" data-id="' + a.id + '" data-nombre="' + a.nombre.replace(/"/g,'&quot;') + '" style="background:#C62828;color:#fff;border:none;border-radius:5px;padding:.3rem .6rem;font-size:.662rem;cursor:pointer">Eliminar</button></td>' +
       '</tr>').join('') +
     '</tbody></table>';
   wrap.querySelectorAll('.prio-star').forEach(btn => {
@@ -3683,12 +3683,12 @@ function abrirGestionRefs() {
         '<label>Código</label><input id="rfCodigo" inputmode="numeric" placeholder="Ej: 2616000" />' +
         '<label>Descripción</label><input id="rfDesc" style="text-transform:uppercase" placeholder="Ej: EMPALME GIRATORIO" />' +
         '<label>Peso (kg)</label><input id="rfPeso" inputmode="decimal" placeholder="Ej: 1,0" />' +
-        '<div id="rfMsg" style="font-size:.8rem;margin:.4rem 0;display:none"></div>' +
+        '<div id="rfMsg" style="font-size:.736rem;margin:.4rem 0;display:none"></div>' +
         '<div class="modal-btns" style="justify-content:flex-start;gap:.5rem">' +
           '<button class="btn-confirm" id="rfGuardar">Guardar referencia</button>' +
           '<button class="btn-cancel" id="rfLimpiar">Limpiar</button>' +
         '</div>' +
-        '<div style="margin-top:1rem;font-weight:var(--fw-bold);font-size:.8rem">Mis referencias (<span id="rfCount">0</span>)</div>' +
+        '<div style="margin-top:1rem;font-weight:var(--fw-bold);font-size:.736rem">Mis referencias (<span id="rfCount">0</span>)</div>' +
         '<div id="rfLista" style="margin-top:.4rem"></div>' +
         '<div class="modal-btns" style="margin-top:1rem"><button class="btn-cancel" onclick="closeModal(\'modalRefs\')">Cerrar</button></div>' +
       '</div>';
@@ -3744,15 +3744,15 @@ function pintarListaRefs() {
   const cods = Object.keys(refsExtra).sort();
   document.getElementById('rfCount').textContent = cods.length;
   const cont = document.getElementById('rfLista');
-  if (!cods.length) { cont.innerHTML = '<div style="font-size:.8rem;color:var(--muted)">Aún no has agregado referencias.</div>'; return; }
+  if (!cods.length) { cont.innerHTML = '<div style="font-size:.736rem;color:var(--muted)">Aún no has agregado referencias.</div>'; return; }
   cont.innerHTML = cods.map(c =>
     '<div style="box-sizing:border-box;width:100%;border:1px solid #cfd8e6;border-radius:8px;padding:.6rem .8rem;margin-bottom:.5rem;color:#1a2433;overflow-wrap:anywhere;word-break:break-word">' +
-      '<div style="font-weight:var(--fw-bold);font-size:.95rem;color:#0d2b6b">' + _esc(c) + '</div>' +
-      '<div style="font-size:.85rem;margin:.15rem 0">' + _esc(refsExtra[c].desc) + '</div>' +
-      '<div style="font-size:.8rem;color:#55657a">Peso: <b style="color:#1a2433">' + refsExtra[c].peso.toLocaleString('es-CO') + ' kg</b></div>' +
+      '<div style="font-weight:var(--fw-bold);font-size:.874rem;color:#0d2b6b">' + _esc(c) + '</div>' +
+      '<div style="font-size:.782rem;margin:.15rem 0">' + _esc(refsExtra[c].desc) + '</div>' +
+      '<div style="font-size:.736rem;color:#55657a">Peso: <b style="color:#1a2433">' + refsExtra[c].peso.toLocaleString('es-CO') + ' kg</b></div>' +
       '<div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap">' +
-        '<button class="rf-edit" data-c="' + _esc(c) + '" style="border:none;background:#e8edf5;color:#0047bb;border-radius:6px;padding:.4rem .8rem;font-size:.78rem;cursor:pointer">Editar</button>' +
-        '<button class="rf-del" data-c="' + _esc(c) + '" style="background:#C62828;color:#fff;border:none;border-radius:6px;padding:.4rem .8rem;font-size:.78rem;cursor:pointer">Eliminar</button>' +
+        '<button class="rf-edit" data-c="' + _esc(c) + '" style="border:none;background:#e8edf5;color:#0047bb;border-radius:6px;padding:.4rem .8rem;font-size:.718rem;cursor:pointer">Editar</button>' +
+        '<button class="rf-del" data-c="' + _esc(c) + '" style="background:#C62828;color:#fff;border:none;border-radius:6px;padding:.4rem .8rem;font-size:.718rem;cursor:pointer">Eliminar</button>' +
       '</div>' +
     '</div>').join('');
   cont.querySelectorAll('.rf-edit').forEach(b => b.addEventListener('click', () => {
