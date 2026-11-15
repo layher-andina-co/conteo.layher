@@ -3558,9 +3558,11 @@ async function abrirPanelAdmin() {
     modal.className = 'modal-bg hidden';
     modal.innerHTML =
       '<div class="modal" style="max-width:900px;max-height:85vh;overflow:auto;">' +
-        '<h3>📊 Panel Admin — Actas de todos los usuarios</h3>' +
+        '<div style="position:sticky;top:-2rem;z-index:5;background:white;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-2rem -2rem 1.25rem;padding:1rem 2rem;border-bottom:1px solid var(--border)">' +
+          '<h3 style="margin:0">📊 Panel Admin — Actas de todos los usuarios</h3>' +
+          '<button class="btn-cancel" style="height:38px;padding:0 1.25rem;border-radius:7px;font-size:.782rem;font-weight:var(--fw-medium);cursor:pointer;font-family:inherit;flex-shrink:0" onclick="closeModal(\'modalAdmin\')">Cerrar</button>' +
+        '</div>' +
         '<div id="adminTableWrap">Cargando...</div>' +
-        '<div class="modal-btns" style="margin-top:1.25rem"><button class="modal-btns btn-cancel" onclick="closeModal(\'modalAdmin\')">Cerrar</button></div>' +
       '</div>';
     document.body.appendChild(modal);
   }
@@ -3653,7 +3655,10 @@ function abrirGestionRefs() {
     modal.className = 'modal-bg hidden';
     modal.innerHTML =
       '<div class="modal" style="max-width:760px;max-height:88vh;overflow:auto;">' +
-        '<h3>➕ Referencias agregadas por mí</h3>' +
+        '<div style="position:sticky;top:-2rem;z-index:5;background:white;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-2rem -2rem 1.25rem;padding:1rem 2rem;border-bottom:1px solid var(--border)">' +
+          '<h3 style="margin:0">➕ Referencias agregadas por mí</h3>' +
+          '<button class="btn-cancel" style="height:38px;padding:0 1.25rem;border-radius:7px;font-size:.782rem;font-weight:var(--fw-medium);cursor:pointer;font-family:inherit;flex-shrink:0" onclick="closeModal(\'modalRefs\')">Cerrar</button>' +
+        '</div>' +
         '<label>Código</label><input id="rfCodigo" inputmode="numeric" placeholder="Ej: 2616000" />' +
         '<label>Descripción</label><input id="rfDesc" style="text-transform:uppercase" placeholder="Ej: EMPALME GIRATORIO" />' +
         '<label>Peso (kg)</label><input id="rfPeso" inputmode="decimal" placeholder="Ej: 1,0" />' +
@@ -3664,7 +3669,6 @@ function abrirGestionRefs() {
         '</div>' +
         '<div style="margin-top:1rem;font-weight:var(--fw-bold);font-size:.736rem">Mis referencias (<span id="rfCount">0</span>)</div>' +
         '<div id="rfLista" style="margin-top:.4rem"></div>' +
-        '<div class="modal-btns" style="margin-top:1rem"><button class="btn-cancel" onclick="closeModal(\'modalRefs\')">Cerrar</button></div>' +
       '</div>';
     document.body.appendChild(modal);
     document.getElementById('rfGuardar').addEventListener('click', guardarRefExtra);
