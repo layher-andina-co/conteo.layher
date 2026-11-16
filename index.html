@@ -2029,10 +2029,10 @@ document.getElementById('btnCSV').addEventListener('click', () => {
   const cliente = document.getElementById('actaCliente').value.trim() || '—';
   const obra    = document.getElementById('actaObra').value.trim()    || '—';
   const fechaRaw = document.getElementById('actaFecha').value;
-  const fecha   = fechaRaw ? new Date(fechaRaw+'T12:00:00').toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'}) : new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'});
-  const hora    = new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const fecha   = fechaRaw ? new Date(fechaRaw+'T12:00:00').toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'}) : new Date().toLocaleDateString('es-CO',{timeZone:'America/Bogota',day:'2-digit',month:'2-digit',year:'numeric'});
+  const hora    = new Date().toLocaleTimeString('es-CO',{timeZone:'America/Bogota',hour:'2-digit',minute:'2-digit',second:'2-digit'});
   const nombre  = document.getElementById('actaNombre').value.trim() || '—';
-  const cedula  = document.getElementById('actaCedula').value.trim() || '—';
+  const cedula  = document.getElementById('actaCedula').value.trim().slice(0,10) || '—';
   const bodega  = document.getElementById('actaCargo').value.trim()  || '—';
   const totP    = listado.reduce((s,r)=>s+(r.peso*r.qty),0);
   const totU    = listado.reduce((s,r)=>s+r.qty,0);
@@ -2286,8 +2286,8 @@ function confirmarGuardar() {
   registrarSugerenciasActa();
   const totP = listado.reduce((s,r) => s + r.peso*r.qty, 0);
   const now = new Date();
-  const fecha = now.toLocaleDateString('es-CO', {day:'2-digit',month:'2-digit',year:'numeric'}) +
-    ' ' + now.toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
+  const fecha = now.toLocaleDateString('es-CO', {timeZone:'America/Bogota',day:'2-digit',month:'2-digit',year:'numeric'}) +
+    ' ' + now.toLocaleTimeString('es-CO', {timeZone:'America/Bogota',hour:'2-digit',minute:'2-digit'});
   historial.push({
     nombre, obs, fecha,
     items: listado.length,
@@ -2360,7 +2360,7 @@ document.getElementById('btnCargarHist').addEventListener('click', () => {
     if (document.getElementById('actaObra'))    document.getElementById('actaObra').value    = h.acta.obra    || '';
     if (document.getElementById('actaFecha'))   document.getElementById('actaFecha').value   = h.acta.fecha   || '';
     if (document.getElementById('actaNombre'))  document.getElementById('actaNombre').value  = h.acta.nombre  || '';
-    if (document.getElementById('actaCedula'))  document.getElementById('actaCedula').value  = h.acta.cedula  || '';
+    if (document.getElementById('actaCedula'))  document.getElementById('actaCedula').value  = (h.acta.cedula || '').replace(/\D/g,'').slice(0,10);
     if (document.getElementById('actaBodega'))  document.getElementById('actaBodega').value  = h.acta.bodega  || '';
     if (document.getElementById('actaCargo'))   document.getElementById('actaCargo').value   = h.acta.cargo   || '';
   }
@@ -2427,15 +2427,15 @@ document.getElementById('btnPDF').addEventListener('click', () => {
   registrarSugerenciasActa();
   const cliente = document.getElementById('actaCliente').value.trim() || '—';
   const obra    = document.getElementById('actaObra').value.trim()    || '—';
-  const fecha   = document.getElementById('actaFecha').value ? new Date(document.getElementById('actaFecha').value + 'T12:00:00').toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'}) : new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const fecha   = document.getElementById('actaFecha').value ? new Date(document.getElementById('actaFecha').value + 'T12:00:00').toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'}) : new Date().toLocaleDateString('es-CO',{timeZone:'America/Bogota',day:'2-digit',month:'2-digit',year:'numeric'});
   const nombre  = document.getElementById('actaNombre').value.trim() || '—';
-  const cedula  = document.getElementById('actaCedula').value.trim() || '—';
+  const cedula  = document.getElementById('actaCedula').value.trim().slice(0,10) || '—';
   const cargo   = document.getElementById('actaCargo').value.trim()  || '—';
   const actaNum = generarNumeroActa(document.getElementById('actaCargo').value.trim());
   const totU = listado.reduce((s,r)=>s+r.qty,0);
   const totP = listado.reduce((s,r)=>s+(r.peso*r.qty),0);
   const now = new Date();
-  const hora  = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  const hora  = now.toLocaleTimeString('es-CO',{timeZone:'America/Bogota',hour:'2-digit',minute:'2-digit'});
 
   const nlRows = (noLayher && noLayher.length)
     ? noLayher.map((nl,i) =>
@@ -3262,7 +3262,10 @@ function poblarDatalist(campo, arr) {
 }
 
 function obtenerSugerencias(campo) {
-  try { return JSON.parse(localStorage.getItem('layher_sug_' + campo) || '[]'); }
+  try {
+    const arr = JSON.parse(localStorage.getItem('layher_sug_' + campo) || '[]');
+    return campo === 'cedula' ? arr.map(v => String(v).replace(/\D/g,'').slice(0,10)).filter((v,i,a) => v && a.indexOf(v) === i) : arr;
+  }
   catch(e) { return []; }
 }
 
@@ -3280,7 +3283,7 @@ function registrarSugerencia(campo, valor) {
 function registrarSugerenciasActa() {
   registrarSugerencia('cliente', document.getElementById('actaCliente').value);
   registrarSugerencia('nombre',  document.getElementById('actaNombre').value);
-  registrarSugerencia('cedula',  document.getElementById('actaCedula').value);
+  registrarSugerencia('cedula',  document.getElementById('actaCedula').value.replace(/\D/g,'').slice(0,10));
 }
 
 ['cliente', 'nombre', 'cedula'].forEach(campo => poblarDatalist(campo, obtenerSugerencias(campo)));
@@ -3612,7 +3615,7 @@ async function abrirPanelAdmin() {
     btn.addEventListener('click', async () => {
       const id = btn.dataset.id;
       const nombre = btn.dataset.nombre;
-      if (!confirm('¿Eliminar el acta "' + nombre + '"? Se borrarán también sus piezas y sus fotos registradas. Esta acción no se puede deshacer.')) return;
+      if (!confirm('¿Eliminar el acta "' + nombre + '"? Se borrarán sus piezas registradas. Esta acción no se puede deshacer.')) return;
       const { error } = await sb.from('actas').delete().eq('id', id);
       if (error) { alert('Error eliminando acta: ' + error.message); return; }
       abrirPanelAdmin();
