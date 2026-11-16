@@ -650,7 +650,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .nota-input:focus{border-color:var(--blue-mid)}
 
 /* ── MODALS ── */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-bg{overflow:hidden;touch-action:pan-y;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
 .modal{background:white;border-radius:12px;padding:2rem;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:modalIn .2s ease}
 @keyframes modalIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 .modal h3{font-size:.92rem;font-weight:var(--fw-bold);color:var(--navy);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;font-family:'LayherTextWeb',sans-serif;letter-spacing:.5px;text-transform:uppercase}
@@ -662,6 +662,12 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .modal-btns button{height:38px;padding:0 1.25rem;border:none;border-radius:7px;font-size:.782rem;font-weight:var(--fw-medium);cursor:pointer;font-family:inherit;transition:all .15s}
 .btn-cancel{background:var(--off-white);color:var(--muted);border:1px solid var(--border)!important}
 .btn-cancel:hover{background:#e5e7eb}
+
+.modal-noside{overflow-x:hidden!important;overscroll-behavior:contain;box-sizing:border-box;max-width:100%}
+.modal-stick{position:sticky;top:-2rem;z-index:5;background:white;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-2rem -2rem 1.25rem;padding:1rem 2rem;border-bottom:1px solid var(--border)}
+.modal-stick h3{margin:0!important;min-width:0}
+.btn-cerrar-azul{background:var(--blue);color:#fff;border:none;border-radius:7px;height:38px;padding:0 1.25rem;font-size:.782rem;font-weight:var(--fw-medium);cursor:pointer;font-family:inherit;flex-shrink:0;transition:all .15s}
+.btn-cerrar-azul:hover{filter:brightness(1.12)}
 .btn-confirm{background:var(--blue-mid);color:white}
 .btn-confirm:hover{background:var(--navy)}
 .btn-danger-sm{background:#FECACA;color:#C62828;border:none;border-radius:6px;padding:4px 10px;font-size:.69rem;font-weight:var(--fw-medium);cursor:pointer;transition:all .15s}
@@ -910,6 +916,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
 
   /* ── MODALES Y TABLAS DE PANELES ── */
   .modal { padding: 1.3rem; max-height: 92vh; }
+  .modal-stick { top: -1.3rem; margin: -1.3rem -1.3rem 1rem; padding: .8rem 1.3rem; }
   .admin-table { display: block; min-width: 0 !important; width: 100%; max-width: 100%; }
   /* iOS hace zoom al tocar campos con letra menor a 16px y deja la pantalla corrida hacia un lado */
   input:not([type=checkbox]):not([type=radio]):not([type=file]), select, textarea { font-size: 16px !important; }
@@ -3557,10 +3564,10 @@ async function abrirPanelAdmin() {
     modal.id = 'modalAdmin';
     modal.className = 'modal-bg hidden';
     modal.innerHTML =
-      '<div class="modal" style="max-width:900px;max-height:85vh;overflow:auto;">' +
-        '<div style="position:sticky;top:-2rem;z-index:5;background:white;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-2rem -2rem 1.25rem;padding:1rem 2rem;border-bottom:1px solid var(--border)">' +
+      '<div class="modal modal-noside" style="max-width:900px;max-height:85vh;overflow-y:auto;overflow-x:hidden;">' +
+        '<div class="modal-stick">' +
           '<h3 style="margin:0">📊 Panel Admin — Actas de todos los usuarios</h3>' +
-          '<button class="btn-cancel" style="height:38px;padding:0 1.25rem;border-radius:7px;font-size:.782rem;font-weight:var(--fw-medium);cursor:pointer;font-family:inherit;flex-shrink:0" onclick="closeModal(\'modalAdmin\')">Cerrar</button>' +
+          '<button class="btn-cerrar-azul" onclick="closeModal(\'modalAdmin\')">Cerrar</button>' +
         '</div>' +
         '<div id="adminTableWrap">Cargando...</div>' +
       '</div>';
@@ -3654,10 +3661,10 @@ function abrirGestionRefs() {
     modal.id = 'modalRefs';
     modal.className = 'modal-bg hidden';
     modal.innerHTML =
-      '<div class="modal" style="max-width:760px;max-height:88vh;overflow:auto;">' +
-        '<div style="position:sticky;top:-2rem;z-index:5;background:white;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-2rem -2rem 1.25rem;padding:1rem 2rem;border-bottom:1px solid var(--border)">' +
+      '<div class="modal modal-noside" style="max-width:760px;max-height:88vh;overflow-y:auto;overflow-x:hidden;">' +
+        '<div class="modal-stick">' +
           '<h3 style="margin:0">➕ Referencias agregadas por mí</h3>' +
-          '<button class="btn-cancel" style="height:38px;padding:0 1.25rem;border-radius:7px;font-size:.782rem;font-weight:var(--fw-medium);cursor:pointer;font-family:inherit;flex-shrink:0" onclick="closeModal(\'modalRefs\')">Cerrar</button>' +
+          '<button class="btn-cerrar-azul" onclick="closeModal(\'modalRefs\')">Cerrar</button>' +
         '</div>' +
         '<label>Código</label><input id="rfCodigo" inputmode="numeric" placeholder="Ej: 2616000" />' +
         '<label>Descripción</label><input id="rfDesc" style="text-transform:uppercase" placeholder="Ej: EMPALME GIRATORIO" />' +
