@@ -99,14 +99,14 @@ header {
 .hdr-right { display: flex; align-items: center; gap: 12px; }
 .hdr-pill {
   display: flex; align-items: center; gap: 7px;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-size: .626rem; font-weight:var(--fw-medium);
-  padding: 5px 12px; border-radius: 20px;
-  letter-spacing: .5px;
+  border: none;
+  color: var(--navy);
+  font-size: .754rem; font-weight:var(--fw-medium);
+  height: 43px; box-sizing: border-box; padding: 0 1rem; border-radius: 20px;
+  letter-spacing: .3px;
   font-family: 'LayherTextWeb', sans-serif;
   text-transform: uppercase;
-  background: var(--off-white);
+  background: rgba(0,48,135,.08);
 }
 .hdr-pill .dot {
   width: 5px; height: 5px; border-radius: 50%;
@@ -1057,6 +1057,9 @@ button.btn-navy-out:hover{background:#EEF4FF}
 button.btn-red{background:#C62828;color:#fff;border:none;border-radius:8px;height:38px;padding:0 1.4rem;font-size:.754rem;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;text-transform:uppercase}
 button.btn-red:hover{filter:brightness(1.15)}
 button.btn-navy.btn-sm,button.btn-navy-out.btn-sm,button.btn-red.btn-sm{height:32px;padding:0 .95rem;font-size:.68rem;border-radius:7px}
+/* ── Tipografía unificada: textos de apoyo en mayúscula con la fuente de la página ── */
+input::placeholder, textarea::placeholder { text-transform: uppercase; letter-spacing: .3px; font-family: 'LayherTextWeb', Arial, sans-serif; }
+.qty-wrap label, .empty p, .empty .tip, .nolayher-sub, .nolayher-empty, .hist-empty, .acta-hero-sub { text-transform: uppercase; letter-spacing: .3px; font-family: 'LayherTextWeb', Arial, sans-serif; }
 button.btn-navy{background:var(--navy);color:#fff;border:none;border-radius:8px;height:38px;padding:0 1.4rem;font-size:.754rem;text-transform:uppercase;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
 button.btn-navy:hover{filter:brightness(1.25)}
 .btn-cerrar-foto{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px 28px;font-size:.754rem;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s}
