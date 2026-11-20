@@ -930,7 +930,9 @@ footer em { color: var(--blue-mid); font-style: italic; }
 
   /* ── VER IMAGEN DE PIEZA ── */
   #imgPreview { flex-direction: column; padding: 1rem !important; }
-  #imgPreview img { width: 160px !important; height: 160px !important; }
+}
+@media (max-width: 600px) {
+  #imgPreview img.img-pieza-grande { width: 160px !important; height: 160px !important; max-height: none !important; }
 }
 @page {
   margin: 12mm 10mm;
@@ -1051,6 +1053,12 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .admin-table thead th:first-child{border-top-left-radius:8px}
 .admin-table thead th:last-child{border-top-right-radius:8px}
 .prio-star { cursor:pointer; font-size:1.012rem; background:none; border:none; }
+
+/* ── Imagen de pieza grande (PC y tablet) — se muestra el archivo original, sin recorte ni reducción ── */
+.btn-cerrar-foto{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px 28px;font-size:.754rem;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s}
+.btn-cerrar-foto:hover{filter:brightness(1.25)}
+.img-pieza-grande{cursor:zoom-in;display:block;margin:0 auto;width:min(420px,100%);aspect-ratio:1/1;height:auto;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff;image-rendering:auto}
+#imgPreview{width:100%;box-sizing:border-box}
 </style>
 </head>
 <body>
@@ -1315,8 +1323,8 @@ footer em { color: var(--blue-mid); font-style: italic; }
   <!-- MODAL VISOR DE FOTO EN GRANDE -->
   <div class="modal-bg hidden" id="modalFotoView" onclick="if(event.target===this) closeModal('modalFotoView')">
     <div style="max-width:92vw;max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:.75rem;">
-      <img id="fotoViewImg" src="" style="max-width:92vw;max-height:82vh;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.4);" />
-      <button class="modal-btns btn-cancel" style="background:white" onclick="closeModal('modalFotoView')">Cerrar</button>
+      <img id="fotoViewImg" src="" style="max-width:92vw;max-height:82vh;background:#fff;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.4);" />
+      <button class="btn-cerrar-foto" onclick="closeModal('modalFotoView')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-2px;margin-right:6px"><path d="M18 6 6 18M6 6l12 12"/></svg>CERRAR</button>
     </div>
   </div>
 
@@ -1651,12 +1659,12 @@ function showImgPreview(val) {
   }
   imgPreview.style.display = 'flex';
   imgPreview.innerHTML =
-    '<div style="text-align:center">' +
+    '<div style="text-align:center;width:100%">' +
       '<div style="font-size:.69rem;font-weight:var(--fw-bold);-webkit-text-stroke:var(--ref-stroke);color:var(--blue-mid);letter-spacing:.5px">' + val + '</div>' +
       '<div style="font-weight:var(--fw-bold);margin:.25rem 0 .3rem;font-size:.938rem">' + match.desc + '</div>' +
       '<div style="font-size:.81rem;color:var(--muted);margin-bottom:1rem">Peso unitario: ' + (match.peso > 0 ? match.peso.toFixed(2) + ' kg/ud' : 'No disponible en tarifa') + '</div>' +
       '<img src="' + urlFotoReferencia(val) + '" alt="' + match.desc + '" data-ref="' + val + '" data-try="0" ' +
-      'style="width:220px;height:220px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff" ' +
+      'class="img-pieza-grande" title="Clic para ampliar" onclick="verFotoGrande(this.src)" ' +
       'onerror="fotoRefError(this)" />' +
     '</div>';
 }
@@ -2269,6 +2277,17 @@ function renderHist() {
 
 function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+// Atajo: Esc cierra la ventana de foto ampliada
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const m = document.getElementById('modalFotoView');
+  if (m && !m.classList.contains('hidden')) {
+    closeModal('modalFotoView');
+    e.stopPropagation();
+    e.preventDefault();
+  }
+}, true);
 
 document.getElementById('btnSave').addEventListener('click', () => {
   if (!validarCamposObligatorios()) return;
