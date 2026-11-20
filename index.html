@@ -542,7 +542,7 @@ mark { background: #DBEAFE; border-radius: 2px; padding: 0 1px; font-style: norm
   gap: 5px; font-family: inherit; font-weight:var(--fw-medium);
 }
 .btn-sec:hover { background: var(--off-white); }
-.btn-del { color: #C62828; border-color: #EF9A9A; }
+.btn-del { color: #C62828; border-color: #EF9A9A; text-transform: uppercase; letter-spacing: .3px; }
 .btn-del:hover { background: #FFEBEE; }
 table { width: 100%; border-collapse: collapse; font-size: .791rem; }
 thead th {
@@ -895,10 +895,10 @@ footer em { color: var(--blue-mid); font-style: italic; }
   }
   .login-card .login-logo { height: 90px; margin-bottom: 1.4rem; }
   .login-actions { flex-direction: column; align-items: stretch; gap: .7rem; }
-  .login-card button#btnLogin { width: 100%; padding: .8rem; font-size: .846rem; }
+  .login-card button#btnLogin { width: 100%; height: 42px; }
   .login-forgot { text-align: center; }
   .login-guest-row { margin-top: 1.2rem; }
-  .login-guest-row button { font-size: .782rem; }
+  .login-guest-row button { height: 42px; }
   .login-field input { font-size: 14.7px; }
 
   /* ── HEADER: todo en una sola fila ── */
@@ -1025,17 +1025,10 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .login-field .toggle-pass svg { width: 17px; height: 17px; }
 #loginError { color: #C62828; font-size: .754rem; margin: -.3rem 0 .8rem; display:none; text-align:left; }
 .login-actions { display:flex; align-items:center; justify-content:space-between; margin-top:.4rem; gap: .75rem;}
-.login-card button#btnLogin {
-  padding: .68rem 1.6rem; border: none; border-radius: 6px;
-  background: #003087; color: #fff; font-weight:var(--fw-medium); font-size: .81rem; cursor: pointer; white-space: nowrap;
-}
 .login-card button#btnLogin:disabled { opacity: .6; cursor: default; }
 .login-forgot { font-size: .718rem; color: #009FE3; text-decoration: none; cursor: pointer; background:none; border:none; }
-.login-forgot:hover { text-decoration: underline; }
 .login-guest-row { margin-top: 1rem; text-align: center; }
-.login-guest-row button {
-  background: none; border: none; color: #6b7785; font-size: .736rem; cursor: pointer; text-decoration: underline;
-}
+.login-guest-row button { width: 100%; }
 .login-version { margin-top: 1.2rem; font-size: .644rem; color: #b7bfc7; text-align: right; }
 #appRoot.hidden { display: none; }
 .hdr-user {
@@ -1043,7 +1036,9 @@ footer em { color: var(--blue-mid); font-style: italic; }
   padding:.35rem .7rem; border-radius:20px; font-size:.718rem; color:#003087;
 }
 .hdr-user .rolebadge { background:#003087; color:#fff; padding:.15rem .5rem; border-radius:10px; font-size:.626rem; text-transform:uppercase; }
-.hdr-user button { background:none; border:1px solid #003087; color:#003087; border-radius:14px; padding:.2rem .6rem; font-size:.662rem; cursor:pointer; }
+.hdr-user > span:first-child { text-transform:uppercase; font-family:'LayherTextWeb', Arial, sans-serif; font-weight:var(--fw-medium); font-size:.754rem; letter-spacing:.3px; color:var(--navy); }
+.hdr-user button { box-shadow:0 1px 2px rgba(0,21,51,.12); }
+.hdr-user button:active { transform:translateY(1px); box-shadow:none; }
 .pieza-thumb { width:34px; height:34px; object-fit:contain; border-radius:5px; border:1px solid var(--border); background:#fafafa; vertical-align:middle; margin-right:.4rem; }
 .preview-thumb { width:56px; height:56px; object-fit:contain; border-radius:7px; border:1px solid var(--border); background:#fafafa; float:left; margin-right:.7rem; }
 .solo-admin { display: none; }
@@ -1055,10 +1050,20 @@ footer em { color: var(--blue-mid); font-style: italic; }
 .prio-star { cursor:pointer; font-size:1.012rem; background:none; border:none; }
 
 /* ── Imagen de pieza grande (PC y tablet) — se muestra el archivo original, sin recorte ni reducción ── */
+.btn-navy-sec{background:#E6EDF8;color:var(--navy);border:1.5px solid #C5D3E8;border-radius:8px;height:38px;padding:0 1.4rem;font-size:.754rem;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
+.btn-navy-sec:hover{background:#D6E2F4;border-color:#A9BEDD}
+button.btn-navy-out{background:#fff;color:var(--blue-mid);border:1.5px solid var(--blue-mid);border-radius:8px;height:38px;padding:0 1.4rem;font-size:.754rem;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;text-transform:uppercase}
+button.btn-navy-out:hover{background:#EEF4FF}
+button.btn-red{background:#C62828;color:#fff;border:none;border-radius:8px;height:38px;padding:0 1.4rem;font-size:.754rem;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;text-transform:uppercase}
+button.btn-red:hover{filter:brightness(1.15)}
+button.btn-navy.btn-sm,button.btn-navy-out.btn-sm,button.btn-red.btn-sm{height:32px;padding:0 .95rem;font-size:.68rem;border-radius:7px}
+button.btn-navy{background:var(--navy);color:#fff;border:none;border-radius:8px;height:38px;padding:0 1.4rem;font-size:.754rem;text-transform:uppercase;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
+button.btn-navy:hover{filter:brightness(1.25)}
 .btn-cerrar-foto{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px 28px;font-size:.754rem;font-weight:var(--fw-medium);letter-spacing:.3px;font-family:inherit;cursor:pointer;transition:all .15s}
 .btn-cerrar-foto:hover{filter:brightness(1.25)}
 .img-pieza-grande{cursor:zoom-in;display:block;margin:0 auto;width:min(420px,100%);aspect-ratio:1/1;height:auto;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff;image-rendering:auto}
 #imgPreview{width:100%;box-sizing:border-box}
+@media (max-width:768px){ .hdr-user button.btn-sm{height:26px;padding:0 .55rem;font-size:.58rem;border-radius:6px;letter-spacing:.2px} }
 </style>
 </head>
 <body>
@@ -1081,11 +1086,11 @@ footer em { color: var(--blue-mid); font-style: italic; }
     </div>
     <div id="loginError"></div>
     <div class="login-actions">
-      <button id="btnLogin">Iniciar sesión</button>
-      <button type="button" class="login-forgot" id="btnForgotPass">Olvidé mi contraseña</button>
+      <button id="btnLogin" class="btn-navy">Iniciar sesión</button>
+      <button type="button" class="login-forgot btn-navy-out" id="btnForgotPass">Olvidé mi contraseña</button>
     </div>
     <div class="login-guest-row">
-      <button type="button" id="btnGuestLogin">Continuar como invitado →</button>
+      <button type="button" id="btnGuestLogin" class="btn-navy-out">Continuar como invitado →</button>
     </div>
     <div class="login-version">v.1.0.0</div>
   </div>
@@ -1291,7 +1296,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
         <span class="nolayher-title">Material <strong>NO Layher</strong></span>
         <span class="nolayher-sub">Material de terceros identificado en el conteo</span>
       </div>
-      <button class="nolayher-add-btn" onclick="nlAgregar()">+ Agregar pieza</button>
+      <button class="btn-navy" onclick="nlAgregar()">+ Agregar pieza</button>
     </div>
     <div id="nlEmpty" class="nolayher-empty">Sin piezas externas registradas</div>
     <table id="nlTable" class="nolayher-table hidden">
@@ -1315,7 +1320,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
       <div id="fotosGrid" class="fotos-view-grid"></div>
       <div id="fotosEmpty" class="nolayher-empty hidden">Sin fotos en esta categoría</div>
       <div class="modal-btns" style="margin-top:1.25rem">
-        <button class="modal-btns btn-cancel" onclick="closeModal('modalFotos')">Cerrar</button>
+        <button class="modal-btns btn-cancel" title="Cerrar (tecla Escape)" onclick="closeModal('modalFotos')">Cerrar</button>
       </div>
     </div>
   </div>
@@ -1324,7 +1329,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
   <div class="modal-bg hidden" id="modalFotoView" onclick="if(event.target===this) closeModal('modalFotoView')">
     <div style="max-width:92vw;max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:.75rem;">
       <img id="fotoViewImg" src="" style="max-width:92vw;max-height:82vh;background:#fff;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.4);" />
-      <button class="btn-cerrar-foto" onclick="closeModal('modalFotoView')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-2px;margin-right:6px"><path d="M18 6 6 18M6 6l12 12"/></svg>CERRAR</button>
+      <button class="btn-cerrar-foto" title="Cerrar (tecla Escape)" onclick="closeModal('modalFotoView')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-2px;margin-right:6px"><path d="M18 6 6 18M6 6l12 12"/></svg>CERRAR</button>
     </div>
   </div>
 
@@ -1380,7 +1385,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
     <h3 id="modalViewTitle">Listado</h3>
     <div id="modalViewContent" style="max-height:340px;overflow-y:auto;font-size:.764rem;margin-bottom:1rem"></div>
     <div class="modal-btns">
-      <button class="modal-btns btn-cancel" onclick="closeModal('modalView')">Cerrar</button>
+      <button class="modal-btns btn-cancel" title="Cerrar (tecla Escape)" onclick="closeModal('modalView')">Cerrar</button>
       <button class="btn-confirm" id="btnCargarHist">Cargar este listado</button>
     </div>
   </div>
@@ -1418,10 +1423,10 @@ footer em { color: var(--blue-mid); font-style: italic; }
     <canvas id="firmaCanvas" width="640" height="340"
       style="border:1.5px solid var(--border);border-radius:8px;cursor:crosshair;display:block;width:100%;aspect-ratio:640/340;height:auto;max-height:65vh;touch-action:none;background:#fafbff;"></canvas>
     <div style="display:flex;gap:8px;margin-top:.75rem;justify-content:space-between;align-items:center">
-      <button id="btnLimpiarFirma" style="background:none;border:1px solid var(--border);border-radius:6px;padding:.35rem .9rem;font-size:.718rem;color:var(--muted);cursor:pointer;">Limpiar</button>
+      <button id="btnLimpiarFirma" class="btn-navy-sec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="margin-right:6px"><path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14"/></svg>LIMPIAR</button>
       <div style="display:flex;gap:8px;">
-        <button class="modal-btns btn-cancel" onclick="closeModal('modalFirma')">Cancelar</button>
-        <button class="modal-btns btn-confirm" id="btnConfirmarFirma">Guardar firma</button>
+        <button class="btn-navy-sec" title="Cancelar (tecla Escape)" onclick="closeModal('modalFirma')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="margin-right:6px"><path d="M18 6 6 18M6 6l12 12"/></svg>CANCELAR</button>
+        <button class="btn-navy" id="btnConfirmarFirma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-2px;margin-right:6px"><path d="M20 6 9 17l-5-5"/></svg>GUARDAR FIRMA</button>
       </div>
     </div>
     <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
@@ -2278,15 +2283,16 @@ function renderHist() {
 function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-// Atajo: Esc cierra la ventana de foto ampliada
+// Atajo: Esc cierra la ventana (modal) que esté arriba de todas, incluso con el cursor dentro de un campo
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  const m = document.getElementById('modalFotoView');
-  if (m && !m.classList.contains('hidden')) {
-    closeModal('modalFotoView');
-    e.stopPropagation();
-    e.preventDefault();
-  }
+  // Si hay una lista de sugerencias abierta (búsqueda), Esc la cierra como siempre
+  if (document.querySelector('.suggest-box')) return;
+  const abiertos = Array.from(document.querySelectorAll('.modal-bg')).filter(m => !m.classList.contains('hidden'));
+  if (!abiertos.length) return;
+  closeModal(abiertos[abiertos.length - 1].id);
+  e.stopPropagation();
+  e.preventDefault();
 }, true);
 
 document.getElementById('btnSave').addEventListener('click', () => {
@@ -3433,11 +3439,11 @@ function pintarBadgeUsuario() {
   badge.innerHTML =
     '<span>👤 ' + usuarioActual.nombre + '</span>' +
     (usuarioActual.rol === 'admin'
-      ? '<button id="btnAbrirAdmin" class="rolebadge" style="border:none;cursor:pointer;font-family:inherit">' + usuarioActual.rol + '</button>'
+      ? '<button id="btnAbrirAdmin" class="btn-navy btn-sm" title="Abrir Panel Admin">' + usuarioActual.rol + '</button>'
       : '<span class="rolebadge">' + usuarioActual.rol + '</span>') +
-    (esDuenoRefs() ? '<button id="btnGestionRefs" title="Agregar / editar referencias">➕ Refs</button>' : '') +
-    (usuarioActual.rol !== 'invitado' ? '<button id="btnCambiarPass" title="Cambiar contraseña">🔑</button>' : '') +
-    '<button id="btnLogout">Salir</button>';
+    (esDuenoRefs() ? '<button id="btnGestionRefs" class="btn-navy-out btn-sm" title="Agregar / editar referencias">➕ Refs</button>' : '') +
+    (usuarioActual.rol !== 'invitado' ? '<button id="btnCambiarPass" class="btn-navy-out btn-sm" title="Cambiar contraseña">🔑</button>' : '') +
+    '<button id="btnLogout" class="btn-red btn-sm" title="Cerrar sesión">Salir</button>';
   document.getElementById('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
   if (usuarioActual.rol === 'admin') {
     document.getElementById('btnAbrirAdmin').addEventListener('click', abrirPanelAdmin);
@@ -3466,8 +3472,8 @@ function abrirModalCambiarPassword() {
         '<div id="cambiarPassError" style="color:#C62828;font-size:.736rem;margin-bottom:.5rem;display:none"></div>' +
         '<div id="cambiarPassOk" style="color:#1c7a3c;font-size:.736rem;margin-bottom:.5rem;display:none">Contraseña actualizada.</div>' +
         '<div class="modal-btns">' +
-          '<button class="btn-cancel" onclick="closeModal(\'modalCambiarPass\')">Cancelar</button>' +
-          '<button class="btn-confirm" id="btnConfirmarCambiarPass">Guardar</button>' +
+          '<button class="btn-navy-out" title="Cancelar (tecla Escape)" onclick="closeModal(\'modalCambiarPass\')">Cancelar</button>' +
+          '<button class="btn-navy" id="btnConfirmarCambiarPass">Guardar</button>' +
         '</div>' +
       '</div>';
     document.body.appendChild(modal);
@@ -3591,7 +3597,7 @@ async function abrirPanelAdmin() {
       '<div class="modal modal-noside" style="max-width:900px;max-height:85vh;overflow-y:auto;overflow-x:hidden;">' +
         '<div class="modal-stick">' +
           '<h3 style="margin:0">📊 Panel Admin — Actas de todos los usuarios</h3>' +
-          '<button class="btn-cerrar-azul" onclick="closeModal(\'modalAdmin\')">Cerrar</button>' +
+          '<button class="btn-navy" title="Cerrar (tecla Escape)" onclick="closeModal(\'modalAdmin\')">Cerrar</button>' +
         '</div>' +
         '<div id="adminTableWrap">Cargando...</div>' +
       '</div>';
@@ -3619,7 +3625,7 @@ async function abrirPanelAdmin() {
       '<td data-label="Items">' + a.total_items + '</td>' +
       '<td data-label="Peso (kg)">' + Number(a.peso_total).toFixed(2) + '</td>' +
       '<td data-label="Fecha">' + new Date(a.creado_en).toLocaleDateString('es-CO') + '</td>' +
-      '<td data-label="Eliminar"><button class="btn-del-acta" data-id="' + a.id + '" data-nombre="' + a.nombre.replace(/"/g,'&quot;') + '" style="background:#C62828;color:#fff;border:none;border-radius:5px;padding:.3rem .6rem;font-size:.662rem;cursor:pointer">Eliminar</button></td>' +
+      '<td data-label="Eliminar"><button class="btn-red btn-sm btn-del-acta" data-id="' + a.id + '" data-nombre="' + a.nombre.replace(/"/g,'&quot;') + '">Eliminar</button></td>' +
       '</tr>').join('') +
     '</tbody></table>';
   wrap.querySelectorAll('.prio-star').forEach(btn => {
@@ -3688,15 +3694,15 @@ function abrirGestionRefs() {
       '<div class="modal modal-noside" style="max-width:760px;max-height:88vh;overflow-y:auto;overflow-x:hidden;">' +
         '<div class="modal-stick">' +
           '<h3 style="margin:0">➕ Referencias agregadas por mí</h3>' +
-          '<button class="btn-cerrar-azul" onclick="closeModal(\'modalRefs\')">Cerrar</button>' +
+          '<button class="btn-navy" title="Cerrar (tecla Escape)" onclick="closeModal(\'modalRefs\')">Cerrar</button>' +
         '</div>' +
         '<label>Código</label><input id="rfCodigo" inputmode="numeric" placeholder="Ej: 2616000" />' +
         '<label>Descripción</label><input id="rfDesc" style="text-transform:uppercase" placeholder="Ej: EMPALME GIRATORIO" />' +
         '<label>Peso (kg)</label><input id="rfPeso" inputmode="decimal" placeholder="Ej: 1,0" />' +
         '<div id="rfMsg" style="font-size:.736rem;margin:.4rem 0;display:none"></div>' +
         '<div class="modal-btns" style="justify-content:flex-start;gap:.5rem">' +
-          '<button class="btn-confirm" id="rfGuardar">Guardar referencia</button>' +
-          '<button class="btn-cancel" id="rfLimpiar">Limpiar</button>' +
+          '<button class="btn-navy" id="rfGuardar">Guardar referencia</button>' +
+          '<button class="btn-navy-out" id="rfLimpiar">Limpiar</button>' +
         '</div>' +
         '<div style="margin-top:1rem;font-weight:var(--fw-bold);font-size:.736rem">Mis referencias (<span id="rfCount">0</span>)</div>' +
         '<div id="rfLista" style="margin-top:.4rem"></div>' +
@@ -3760,8 +3766,8 @@ function pintarListaRefs() {
       '<div style="font-size:.782rem;margin:.15rem 0">' + _esc(refsExtra[c].desc) + '</div>' +
       '<div style="font-size:.736rem;color:#55657a">Peso: <b style="color:#1a2433">' + refsExtra[c].peso.toLocaleString('es-CO') + ' kg</b></div>' +
       '<div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap">' +
-        '<button class="rf-edit" data-c="' + _esc(c) + '" style="border:none;background:#e8edf5;color:#0047bb;border-radius:6px;padding:.4rem .8rem;font-size:.718rem;cursor:pointer">Editar</button>' +
-        '<button class="rf-del" data-c="' + _esc(c) + '" style="background:#C62828;color:#fff;border:none;border-radius:6px;padding:.4rem .8rem;font-size:.718rem;cursor:pointer">Eliminar</button>' +
+        '<button class="rf-edit btn-navy-out btn-sm" data-c="' + _esc(c) + '">Editar</button>' +
+        '<button class="rf-del btn-red btn-sm" data-c="' + _esc(c) + '">Eliminar</button>' +
       '</div>' +
     '</div>').join('');
   cont.querySelectorAll('.rf-edit').forEach(b => b.addEventListener('click', () => {
