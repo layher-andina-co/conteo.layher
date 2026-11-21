@@ -897,7 +897,7 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .login-actions { flex-direction: column; align-items: stretch; gap: .7rem; }
   .login-card button#btnLogin { width: 100%; height: 42px; }
   .login-forgot { text-align: center; }
-  .login-guest-row { margin-top: 1.2rem; }
+  .login-guest-row { margin-top: .7rem; }
   .login-guest-row button { height: 42px; }
   .login-field input { font-size: 14.7px; }
 
@@ -1024,10 +1024,11 @@ footer em { color: var(--blue-mid); font-style: italic; }
 }
 .login-field .toggle-pass svg { width: 17px; height: 17px; }
 #loginError { color: #C62828; font-size: .754rem; margin: -.3rem 0 .8rem; display:none; text-align:left; }
-.login-actions { display:flex; align-items:center; justify-content:space-between; margin-top:.4rem; gap: .75rem;}
+.login-actions { display:flex; flex-direction:column; align-items:stretch; margin-top:.4rem; gap:.7rem; }
+.login-card .login-actions button, .login-card .login-guest-row button { width:100%; height:42px; box-sizing:border-box; }
 .login-card button#btnLogin:disabled { opacity: .6; cursor: default; }
 .login-forgot { font-size: .718rem; color: #009FE3; text-decoration: none; cursor: pointer; background:none; border:none; }
-.login-guest-row { margin-top: 1rem; text-align: center; }
+.login-guest-row { margin-top: .7rem; text-align: center; }
 .login-guest-row button { width: 100%; }
 .login-version { margin-top: 1.2rem; font-size: .644rem; color: #b7bfc7; text-align: right; }
 #appRoot.hidden { display: none; }
@@ -1067,6 +1068,12 @@ button.btn-navy:hover{filter:brightness(1.25)}
 .img-pieza-grande{cursor:zoom-in;display:block;margin:0 auto;width:min(420px,100%);aspect-ratio:1/1;height:auto;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff;image-rendering:auto}
 #imgPreview{width:100%;box-sizing:border-box}
 @media (max-width:768px){ .hdr-user button.btn-sm{height:26px;padding:0 .55rem;font-size:.58rem;border-radius:6px;letter-spacing:.2px} }
+@media (max-width:600px){
+  .firma-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:8px!important}
+  .firma-actions-right{display:contents!important}
+  .firma-actions button{width:100%;min-width:0;padding:0 .5rem!important}
+  #btnConfirmarFirma{grid-column:1 / -1}
+}
 </style>
 </head>
 <body>
@@ -1425,9 +1432,9 @@ button.btn-navy:hover{filter:brightness(1.25)}
     <p style="font-size:.718rem;color:var(--muted);margin-bottom:.75rem;line-height:1.5;">Dibuja tu firma en el recuadro. Se incrustará en el PDF exportado.</p>
     <canvas id="firmaCanvas" width="640" height="340"
       style="border:1.5px solid var(--border);border-radius:8px;cursor:crosshair;display:block;width:100%;aspect-ratio:640/340;height:auto;max-height:65vh;touch-action:none;background:#fafbff;"></canvas>
-    <div style="display:flex;gap:8px;margin-top:.75rem;justify-content:space-between;align-items:center">
+    <div class="firma-actions" style="display:flex;gap:8px;margin-top:.75rem;justify-content:space-between;align-items:center">
       <button id="btnLimpiarFirma" class="btn-navy-sec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="margin-right:6px"><path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14"/></svg>LIMPIAR</button>
-      <div style="display:flex;gap:8px;">
+      <div class="firma-actions-right" style="display:flex;gap:8px;">
         <button class="btn-navy-sec" title="Cancelar (tecla Escape)" onclick="closeModal('modalFirma')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="margin-right:6px"><path d="M18 6 6 18M6 6l12 12"/></svg>CANCELAR</button>
         <button class="btn-navy" id="btnConfirmarFirma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-2px;margin-right:6px"><path d="M20 6 9 17l-5-5"/></svg>GUARDAR FIRMA</button>
       </div>
