@@ -839,8 +839,8 @@ footer em { color: var(--blue-mid); font-style: italic; }
   .nolayher-table td { padding: .4rem .55rem; }
   .nolayher-table th { padding: .35rem .55rem; font-size: .552rem; }
   /* Columna cantidad más angosta en móvil */
-  .nolayher-table th:first-child,
-  .nolayher-table td:first-child { width: 68px !important; }
+  .nolayher-table th:nth-child(2),
+  .nolayher-table td:nth-child(2) { width: 68px !important; }
   .nl-qty-input { width: 52px; font-size: .736rem; padding: .25rem .3rem; }
   .nl-name-input { font-size: .736rem; padding: .28rem .45rem; }
   /* Scroll horizontal si la tabla es muy ancha */
@@ -1312,8 +1312,8 @@ button.btn-navy:hover{filter:brightness(1.25)}
     <table id="nlTable" class="nolayher-table hidden">
       <thead>
         <tr>
-          <th style="width:110px;text-align:center">Cantidad</th>
           <th>Nombre / Descripción de la pieza</th>
+          <th style="width:110px;text-align:center">Cantidad</th>
           <th style="width:50px;text-align:center">—</th>
         </tr>
       </thead>
@@ -1427,8 +1427,11 @@ button.btn-navy:hover{filter:brightness(1.25)}
 
 <!-- MODAL FIRMA DIGITAL -->
 <div class="modal-bg hidden" id="modalFirma">
-  <div class="modal" style="max-width:608px;width:97vw;padding:1.5rem">
-    <h3>Firma Digital</h3>
+  <div class="modal modal-noside" style="max-width:608px;width:97vw;padding:1.5rem;max-height:92vh;overflow-y:auto;overflow-x:hidden">
+    <div class="modal-stick" style="top:-1.5rem;margin:-1.5rem -1.5rem 1rem;padding:.9rem 1.5rem">
+      <h3>Firma Digital</h3>
+      <button class="btn-navy" title="Cerrar (tecla Escape)" onclick="closeModal('modalFirma')">Cerrar</button>
+    </div>
     <p style="font-size:.718rem;color:var(--muted);margin-bottom:.75rem;line-height:1.5;">Dibuja tu firma en el recuadro. Se incrustará en el PDF exportado.</p>
     <canvas id="firmaCanvas" width="640" height="340"
       style="border:1.5px solid var(--border);border-radius:8px;cursor:crosshair;display:block;width:100%;aspect-ratio:640/340;height:auto;max-height:65vh;touch-action:none;background:#fafbff;"></canvas>
@@ -2475,8 +2478,8 @@ document.getElementById('btnPDF').addEventListener('click', () => {
   const nlRows = (noLayher && noLayher.length)
     ? noLayher.map((nl,i) =>
         '<tr style="border-bottom:1px solid #C8D9EE;' + (i%2===0?'background:#EEF5FB':'') + '">' +
-        '<td style="padding:7px 10px;text-align:center;font-weight:700;color:#003087">' + (nl.qty||0) + '</td>' +
-        '<td colspan="5" style="padding:7px 10px">' + (nl.nombre||'').toUpperCase() + '</td>' +
+        '<td style="padding:7px 10px">' + (nl.nombre||'').toUpperCase() + '</td>' +
+        '<td style="padding:7px 10px;text-align:right;font-weight:700;color:#003087;width:100px">' + (nl.qty||0) + '</td>' +
         '</tr>'
       ).join('')
     : '';
@@ -2620,7 +2623,7 @@ document.getElementById('btnPDF').addEventListener('click', () => {
         ${hayNotas ? '<td></td>' : ''}
       </tr></tfoot>
     </table>
-    ${nlRows ? `<div class="nl-section"><h3>&#9888; Piezas NO Layher</h3><table class="nl-table"><thead><tr><th style="width:100px;text-align:center">Cantidad</th><th>Nombre / Descripci&oacute;n</th></tr></thead><tbody>${nlRows}</tbody></table></div>` : ""}
+    ${nlRows ? `<div class="nl-section"><h3>&#9888; Piezas NO Layher</h3><table class="nl-table"><thead><tr><th>Nombre / Descripci&oacute;n</th><th style="width:100px;text-align:right">Cantidad</th></tr></thead><tbody>${nlRows}</tbody></table></div>` : ""}
     <!-- FIRMA -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:28px;border-top:2px solid #003087">
       <tr>
@@ -2964,7 +2967,6 @@ function nlRender() {
     qtyInput.value = item.qty;
     qtyInput.addEventListener('input', (function(idx){ return function(){ this.value = this.value.replace(/[^0-9]/g,''); noLayher[idx].qty = parseInt(this.value) || 0; }; })(i));
     qtyCell.appendChild(qtyInput);
-    tr.appendChild(qtyCell);
 
     var nameCell = document.createElement('td');
     var nameInput = document.createElement('input');
@@ -2976,6 +2978,7 @@ function nlRender() {
     nameInput.addEventListener('input', (function(idx){ return function(){ this.value = this.value.toUpperCase(); noLayher[idx].nombre = this.value; }; })(i));
     nameCell.appendChild(nameInput);
     tr.appendChild(nameCell);
+    tr.appendChild(qtyCell);
 
     var delCell = document.createElement('td');
     delCell.style.textAlign = 'center';
